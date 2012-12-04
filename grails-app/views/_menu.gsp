@@ -1,34 +1,99 @@
 <div id="menu">
+
     <ul class="sf-menu Menu">
         <li class="MenuItem current">
-            <a href="#a" class="sf-top-level-anchor toplevel">اطلاعات پايه</a>
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="basic.information"/></a>
             <ul>
                 <li>
-                    <a href="#aa">صفات عمومی</a>
-                    <ul>
-                        <li><g:link controller="color">رنگ ها</g:link></li>
-                        <li><g:link controller="deviceStatus">وضعيت دستگاه</g:link></li>
-                        <li><g:link controller="gasType">انواع سوخت</g:link></li>
-                        <li><g:link controller="placeType">انواع مکان</g:link></li>
-                        <li><g:link controller="posType">انواع POS</g:link></li>
-                        <li><g:link controller="busBrand">انواع برند</g:link></li>
-                    </ul>
+                    <a href="<g:createLink controller="Branch"/>"><g:message code="branches"/></a>
                 </li>
                 <li>
-                    <g:link controller="place">مکان ها</g:link>
+                    <a href="<g:createLink controller="BranchHead"/>"><g:message code="branchHead"/></a>
                 </li>
-                <li class="current">
-                    <a href="#ab">Test</a>
-                    <ul>
-                        <li><g:link controller="bus"><g:message code="${vehicle}"/> ها</g:link></li>
-                        <li><g:link controller="busLine"><g:message code="${vehicle}.lines"/></g:link></li>
-                        <li><g:link controller="busDriver"><g:message code="${vehicle}.drivers"/></g:link></li>
-                    </ul>
+                <li>
+                    <a href="<g:createLink controller="BankRegion"/>"><g:message code="bankRegion"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="LoanType"/>"><g:message code="loanType"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="LoanGroup"/>"><g:message code="loanGroup"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="GLCode"/>"><g:message code="glCode"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="SystemParametersController"/>"><g:message code="systemParameter"/></a>
+                </li>
+            </ul>
+
+        </li>
+        <li class="MenuItem">
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh"/></a>
+            <ul>
+                <li>
+                    <a href="<g:createLink controller="LoanRequest_NT"/>"><g:message code="LoanRequest"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="ListForBranchHead" />"><g:message code="ListForBranchHead"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="ListForBankRegion" />"><g:message code="ListForBankRegion"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="ListForHeadOffice" />"><g:message code="ListForHeadOffice"/></a>
                 </li>
             </ul>
         </li>
-        <li class="MenuItem">
-            <a href="#a" class="sf-top-level-anchor toplevel">Menu 2</a>
+
+        <li class="MenuItem2 ">
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh"/></a>
+            <ul>
+                <li>
+                    <a href="<g:createLink controller="LoanRequest_T"/>"><g:message code="LoanRequest"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="AssignToBranch" />"><g:message code="AssignToBranch"/></a>
+                </li>
+
+            </ul>
         </li>
+
+        <li class="MenuItem3 ">
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane"/></a>
+            <ul>
+                <li>
+                    <a href="<g:createLink controller="LoanRequest_GH"/>"><g:message code="LoanRequest"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="AssignToBranch" />"><g:message code="AssignToBranch"/></a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="MenuItemReport ">
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>
+            <ul>
+                <li>
+                    <a href="<g:createLink controller="ListResources"/>"><g:message code="ListResources"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="Dashboard" />"><g:message code="Dashboard"/></a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="MenuItemUsers">
+            <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
+            <ul>
+                <li>
+                    <a href="<g:createLink controller="UserDefinition"/>"><g:message code="UserDefinition"/></a>
+                </li>
+
+            </ul>
+        </li>
+
     </ul>
 </div>

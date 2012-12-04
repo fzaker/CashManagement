@@ -27,7 +27,12 @@
                 <rg:cancelButton/>
             </rg:dialog>
 
-            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}" idPostfix="PendingList" caption="PendingList">
+            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}"
+                     idPostfix="PendingList"
+                     caption="PendingList"
+                     showCommand="false"
+                     firstColumnWidth="30"
+                     commands="${[[handler:'reject(#id#)',icon:'cancel'],[handler:'accept(#id#)',icon:'accept']]}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
                 </rg:criteria>
@@ -45,5 +50,30 @@
                 </rg:criteria>
             </rg:grid>
         </div>
+    <g:javascript>
+        function reject(id){
+            if(confirm('<g:message code="are.you.sure.to.reject.reuqest" />')){
+                $.ajax({
+                    type:'post',
+                    url:'<g:createLink action="reject" />',
+                    data:{id:id}
+                }).success(function(){
+                    $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
+                })
+            }
+        }
+        function accept(id){
+            if(confirm('<g:message code="are.you.sure.to.accept.reuqest" />')){
+                $.ajax({
+                    type:'post',
+                    url:'<g:createLink action="accept" />',
+                    data:{id:id}
+                }).success(function(){
+                    $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
+                    $("#LoanRequest_NTSentListGrid").trigger("reloadGrid")
+                })
+            }
+        }
+    </g:javascript>
     </body>
 </html>

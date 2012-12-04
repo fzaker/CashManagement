@@ -6,7 +6,7 @@ class LoanRequest_NTController {
     def principalService
     def loanService
 
-    static allowedMethods = [ update: "POST", delete: "POST"]
+    static allowedMethods = [update: "POST", delete: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
@@ -19,18 +19,38 @@ class LoanRequest_NTController {
         [loanRequest_NTInstance: new LoanRequest_NT(params)]
     }
 
+    def accept() {
+        def req = LoanRequest_NT.get(params.id)
+        if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
+            def loanReqBranch = new LoanRequestNT_BranchHead(loanReqStatus: LoanRequest_NT.Pending, loanRequest_nt: req)
+            loanReqBranch.save(true)
+            req.loanRequestStatus = LoanRequest_NT.Sent
+            req.save()
+        }
+        render 0
+    }
+
+    def reject() {
+        def req = LoanRequest_NT.get(params.id)
+        if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
+            req.loanRequestStatus = LoanRequest_NT.Cancel
+            req.save()
+        }
+        render 0
+    }
+
     def save() {
         def branch = principalService.getBranch()
 
         def loanRequest_NTInstance = new LoanRequest_NT(params)
         loanRequest_NTInstance.branch = branch
         loanRequest_NTInstance.loanIDCode = loanService.generateLoanId()
-        loanRequest_NTInstance.requestDate=new Date()
-        if(loanService.checkResourceAvailability(branch,loanRequest_NTInstance.loanAmount)){
-            loanRequest_NTInstance.loanRequestStatus=LoanRequest_NT.Confirm
+        loanRequest_NTInstance.requestDate = new Date()
+        if (loanService.checkResourceAvailability(branch, loanRequest_NTInstance.loanAmount)) {
+            loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Confirm
         }
-        else{
-            loanRequest_NTInstance.loanRequestStatus=LoanRequest_NT.Pending
+        else {
+            loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Pending
 
         }
 
