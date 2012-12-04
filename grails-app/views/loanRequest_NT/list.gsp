@@ -14,11 +14,6 @@
         <div id="list-loanRequest_NT" ng-controller="loanRequest_NTController" class="content scaffold-list" role="main">
             <input type="button" ng-click="openLoanRequest_NTCreateDialog()" value="Create LoanRequest_NT"/>
             %{--<input type="button" ng-click="openLoanRequest_NTEditDialog()" value="Edit LoanRequest_NT"/>--}%
-            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}">
-                <rg:criteria>
-                    <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
-                </rg:criteria>
-            </rg:grid>
             <rg:dialog id="loanRequest_NT" title="LoanRequest_NT Dialog">
                 <rg:fields bean="${new cashmanagement.LoanRequest_NT()}">
                     <rg:modify>
@@ -31,6 +26,24 @@
                 <rg:saveButton domainClass="${cashmanagement.LoanRequest_NT}" conroller="loanRequest_NT"/>
                 <rg:cancelButton/>
             </rg:dialog>
+
+            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}" idPostfix="PendingList" caption="PendingList">
+                <rg:criteria>
+                    <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
+                </rg:criteria>
+            </rg:grid>
+            <br>
+            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}" idPostfix="ConfirmList" caption="ConfirmList">
+                <rg:criteria>
+                    <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                </rg:criteria>
+            </rg:grid>
+            <br>
+            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}" idPostfix="SentList" caption="SentList">
+                <rg:criteria>
+                    <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
+                </rg:criteria>
+            </rg:grid>
         </div>
     </body>
 </html>

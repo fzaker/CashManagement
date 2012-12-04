@@ -15,9 +15,11 @@ class PrincipalService {
 
     def getBranch() {
         def user = getUser()
+        def branch
         user.authorities.each {
             if(it instanceof BranchRole)
-                return it.branch
+                branch = it.branch
         }
+        return branch
     }
 }

@@ -49,6 +49,10 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/../RapidGrails/lib" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.liquibase/liquibase-core/jars/liquibase-core-2.0.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.jodd/jodd/jars/jodd-3.3.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.jodd/jodd-wot/jars/jodd-wot-3.3.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
