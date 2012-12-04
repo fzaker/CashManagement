@@ -1,0 +1,22 @@
+/* blue color  */
+#jquerymenu { background-color: #336eb0; overflow: hidden; width: 960px;}
+
+#jquerymenu ul li { width: 137px; float: right; list-style: inside none; padding: 5px 8px; }
+#jquerymenu ul li:hover { background: url(../images/reportMenuImages/bg-blue.jpg) repeat-y; }
+#jquerymenu ul li.selected {background: #000; }
+#jquerymenu ul li a { height: 60px; text-align:center;  font-size: 12pt; font-weight: bold; color: #fff; text-transform: uppercase; display: block; text-shadow: 1px 1px 1px #111;}
+#jquerymenu ul li a span { font-size: 8pt;margin-top:10px; font-weight: normal; color: #ffd900; display: block; text-transform: lowercase; text-shadow: 1px 1px 1px #000; border-top: 1px dotted #ffd900; padding-top: 5px ;margin-top: 5px; }
+
+#jquerymenububble { display: none;  position: absolute; background-color: #336eb0; ; overflow: hidden; width: 960px; z-index: 1000; }
+#jquerymenububble .slider { overflow: hidden; height: 305px; top: 0px; left: 0px; position: relative; }
+#jquerymenububble .slider .set { overflow: hidden; width: 960px; float: left; }
+#jquerymenububble .slider .set ul { margin: 0; padding: 0;float:right; }
+#jquerymenububble .slider .set ul li { width: 160px; height: 295px; float: right; list-style: inside none; padding: 5px 0; text-align: center; }
+#jquerymenububble .slider .set ul li:hover { background: url(../images/reportMenuImages/bg-blue.jpg) repeat-y; }
+#jquerymenububble .slider .set ul li:hover a { color: #ffd900; }
+#jquerymenububble .slider .set ul li a { font-size: 8pt; color: #fff; display: block; line-height: 1.6em; text-shadow: 1px 1px 1px #000; }
+#jquerymenububble .slider .set ul li a:hover { color: #fff; }
+#jquerymenububble .slider .set ul li span { padding: 15px 10px; display: block; } 
+/*#jquerymenububble .slider .set ul li:hover span { background: url(../images/reportMenuImages/shadow-default.jpg) no-repeat 0px 6px; }*/
+
+#jquerymenu a, #jquerymenububble a { font-family: tahoma; text-decoration: none; }

@@ -1,0 +1,5 @@
+package cashmanagement
+
+class ResourceTransferService {
+
+}

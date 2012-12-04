@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots>
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/fields-1.3/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-ui-1.8.24/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1/web-app" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/database-migration-1.2/grails-app/views" relative="/" />
+        </webroots>
+        <sourceRoots />
+      </configuration>
+    </facet>
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="Gorm" />
+          <unit-entry name="sessionFactory" />
+        </datasource-map>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/database-migration-1.2">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/database-migration-1.2/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/database-migration-1.2/grails-app/controllers" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/grails-app/controllers" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/fields-1.3">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/fields-1.3/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/fields-1.3/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/fields-1.3/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/hibernate-2.0.4" />
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-1.7.1/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-ui-1.8.24">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-ui-1.8.24/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-ui-1.8.24/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/resources-1.1.6">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/resources-1.1.6/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/resources-1.1.6/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/resources-1.1.6/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/resources-1.1.6/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/tomcat-2.0.4" />
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/webxml-1.4.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.0.4" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library name="Grails User Library (CashManagement-grailsPlugins)">
+        <CLASSES>
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/lib" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.liquibase/liquibase-core/jars/liquibase-core-2.0.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.jodd/jodd/jars/jodd-3.3.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.jodd/jodd-wot/jars/jodd-wot-3.3.4.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-web/jars/spring-security-web-3.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework.security/spring-security-core/jars/spring-security-core-3.0.7.RELEASE.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/lib" recursive="false" />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+

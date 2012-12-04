@@ -1,0 +1,465 @@
+﻿body
+{
+    margin: 0px;
+    font-family:Tahoma;
+    font-size:12px;
+    direction:rtl;
+}
+
+.MainContainer
+{
+    padding-bottom:5px;
+    min-height:400px;
+}
+
+.Header
+{
+    height: 105px;
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    position:relative;
+}
+.MonitorHeader
+{
+    height: 20px;
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    position:relative;
+}
+
+.HeaderLines
+{
+    background:url(../images/layout/headerpatern.png) no-repeat;
+}
+
+.HeaderRight
+{
+    float:right;
+    width:700px;
+    z-index:10000;
+}
+
+.HeaderLeft
+{
+    float:left;
+}
+
+.BreadCrumb div
+{
+    text-align:left;
+    padding-top:4px;
+}
+
+.nav
+{
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 2px;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.nav .InnerDiv
+{
+    border-radius: 3px;
+    padding: 8px;
+}
+
+.WidthController
+{
+    width: 980px;
+}
+
+.Clear
+{
+    clear:both;
+}
+
+.Logo
+{
+    background:url(../images/layout/logo.png) no-repeat;
+    width:138px;
+    height:59px;
+    float:right;
+    margin-top:3px;
+}
+
+.yazdLogo
+{
+    background:url(../images/layout/yazdlogo.png) no-repeat;
+    width:200px;
+    height:59px;
+    float:right;
+    margin-top:3px;
+}
+
+.BannerImage
+{
+    margin-top:15px;
+    float:left;
+}
+
+.Menu
+{
+    margin-bottom:10px;
+    margin-top:10px;
+    height:23px;   
+    float:right;
+    background:url(../images/layout/header.png) repeat-x;
+    border-radius:5px;
+    padding:2px;
+    padding-left:20px;
+    text-align:right;
+    border-width:1px;
+    border-style:solid;
+}
+
+.Menu ul
+{
+    border-radius:5px;
+    border-width:1px;
+    border-style:solid;
+    padding:3px;
+}
+
+.MenuItem
+{
+    float:right;
+    height:18px;
+    cursor:pointer;
+    margin-right:7px;
+    margin-left:7px;
+    padding-top:4px;
+    padding-right:20px;
+    font-size:11px; 
+    font-weight:bold;
+    list-style:none;
+}
+
+.MenuItem:Hover
+{
+    float:right;
+    height:18px;
+    cursor:pointer;
+    margin-right:7px;
+    margin-left:7px;
+    padding-top:4px;
+    padding-right:20px;
+    font-size:11px; 
+    font-weight:bold;
+    list-style:none;
+    background:url('../images/layout/menuitemhover.png') center right no-repeat;
+}
+
+.MenuItem a.toplevel
+{
+    padding:0px;
+    padding-top:2px;
+}
+
+.MenuItem a:hover
+{
+    background-image:url(../images/layout/header.png);
+    background-repeat:repeat-x;
+    background-position:top left;
+    border-radius:3px;
+}
+
+.MenuItemHover a.toplevel
+{
+    padding:0px;
+    padding-top:2px;
+}
+
+.MenuItemHover a:hover
+{
+    text-decoration:none;
+}
+.MenuItem a.toplevel:hover
+{
+    background:none;
+}
+
+.RightColumn
+{
+    min-height:300px;
+    width:300px;
+    float:right;
+}
+
+.message.error
+{
+    border-color:#ec9b9b;
+    background:#fae2e3 url('../images/layout/error.png') no-repeat top right;
+}
+
+.message.success
+{
+    border-color:#72cb67;
+    background:#dffad3 url('../images/layout/success.png') no-repeat top right;
+}
+
+.message
+{
+    border:1px solid #50b0ec;
+    border-radius:5px;
+    background:#dde9f7 url('../images/layout/info.png') no-repeat top right;
+    padding:10px;
+    padding-right:40px;
+    margin-top:5px;
+    margin-bottom:5px;
+    text-align:right;
+}
+
+.message.warning
+{
+    border-color:#d3c200;
+    background:#fffac6 url('../images/layout/warning.png') no-repeat top right;
+}
+
+.Panel
+{
+    border-width:1px;
+    border-style: solid;
+    border-radius:5px;
+    padding:2px;
+    margin-bottom:10px;
+}
+
+.Panel .Header
+{
+    height:15px;
+    padding:10px;
+    padding-right:20px;
+    font-weight:bold;
+    text-align:right;
+    border-radius:3px 3px 0 0;
+    -moz-box-shadow:inset 0 0 0px #ffffff;
+}
+
+.Panel .Body
+{
+    border-radius:3px;
+    border-top-width:1px;
+    border-top-style: solid;
+    text-align:right;
+    padding:10px;
+}
+
+.SimplePanel
+{
+    margin-bottom:10px;
+}
+
+.SimplePanel .Header
+{
+    background :none;
+    height:15px;
+    padding:10px;
+    padding-right:0px;
+    font-weight:bold;
+    text-align:right;
+    border-bottom-width:3px;
+    border-bottom-style: solid;
+}
+
+.SimplePanel .Body
+{
+    text-align:right;
+    padding:10px;
+    border-bottom-width:1px;
+    border-bottom-style: dashed;
+}
+
+.WhitePanel
+{
+    margin-bottom:10px;
+}
+
+.WhitePanel .Header
+{
+    border:none;
+    background :none;
+    height:15px;
+    padding:10px;
+    padding-right:3px;
+    font-weight:bold;
+    text-align:right;
+}
+
+.WhitePanel .Body
+{
+    text-align:right;
+    padding:10px;
+    border-width:1px;
+    border-style: solid;
+    border-radius:5px;
+    margin-bottom:5px;
+}
+
+.SimpleBorder
+{
+    border-width:1px;
+    border-style: solid;
+    border-radius:5px;
+    padding:10px;
+    /*margin-bottom:20px; */
+}
+
+input[type=submit], input[type=button]
+{
+    border:0px;
+    cursor:pointer;
+    background:#00a5c4 url('../images/layout/buttonbg.png') repeat-x;
+    color:White;
+    font-size:11px;
+    font-family:Tahoma;
+    border-radius:5px;
+    padding-top:3px;
+    padding-bottom:6px;
+    padding-right:15px;
+    padding-left:15px;
+    display:inline;
+}
+
+input[type=submit].ButtonBlue, input[type=button].ButtonBlue
+{
+    background:#00a5c4 url('../images/layout/buttonbg.png') repeat-x;
+}
+
+input[type=submit].ButtonRed, input[type=button].ButtonRed
+{
+    background:#d80017 url('../images/layout/buttonbg.png') repeat-x;
+}
+
+input[type=submit].ButtonGreen, input[type=button].ButtonGreen
+{
+    background:#4db800 url('../images/layout/buttonbg.png') repeat-x;
+}
+
+input[type=submit].ButtonGray, input[type=button].ButtonGray
+{
+    background:#bbbbbb url('../images/layout/buttonbg.png') repeat-x;
+}
+
+input[type=submit].ButtonBlack, input[type=button].ButtonBlack
+{
+    background:#333333 url('../images/layout/buttonbg.png') repeat-x;
+}
+
+td.value
+{
+    clear:both;
+}
+
+.controlWrapper
+{
+    display:inline-block;
+    padding:3px;
+    border-radius:5px;
+    border:1px solid #84b6cd;
+    margin-left:2px;
+    background:white;
+}
+
+.controlWrapper input
+{
+    border:none;
+    background:transparent;
+}
+
+.controlWrapper select
+{
+    border:none;
+    background:transparent;
+}
+
+td.value div.controlWrapper textarea
+{
+    border:none;
+    background:transparent;
+}
+
+.Footer
+{
+    border-top-width:4px;
+    border-top-style: solid;
+    min-height:100px;
+    padding:30px;
+}
+
+.FooterLogoContainer
+{
+    padding:10px;
+}
+
+.FooterLogoContainer .AnsarLogo
+{
+    background:url('../images/layout/AnsarLogoWhite.png') no-repeat;
+    width:49px;
+    height:50px;
+}
+
+.right
+{
+    float:right;
+}
+
+.left
+{
+    float:left;
+}
+
+.FullWidth
+{
+    padding:0 10px 0 10px;
+}
+
+.TableCell
+{
+    display:table-cell;
+    padding-right:2px;
+    padding-left:2px;
+    vertical-align:middle;
+}
+
+.TableCell.label
+{
+    padding-right:20px;
+}
+
+.TableCell.button
+{
+    padding-right:20px;
+}
+
+.guagelabel
+{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.searchText
+{
+    position:absolute;
+    top:40px;
+    left:0px;
+    height:14px;
+    z-index:9999;
+}
+
+.ManagementReportPanelBody
+{
+    /*height:270px;*/
+    position:relative;
+    overflow:auto;
+    padding-bottom:100px;
+}
+
+.ManagementReportBottom
+{
+    position:absolute;
+    bottom:10px;
+    left:5px;
+}
