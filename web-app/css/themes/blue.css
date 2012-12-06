@@ -50,7 +50,7 @@
 
 .Menu
 {
-    border-color:#064792;
+    border-color:White;
 }
 
 .Menu ul
@@ -72,7 +72,7 @@
 
 .MenuItem a.toplevel:hover
 {
-    color:#064792;
+    /*color:#064792;*/
 }
 
 .MenuItemHover a.toplevel
@@ -144,5 +144,5 @@
 }
 
 .sf-menu a.sf-top-level-anchor {
-    color:#064792 !important;
+    /*color:#064792 !important;*/
 }

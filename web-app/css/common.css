@@ -307,21 +307,21 @@
     /*margin-bottom:20px; */
 }
 
-input[type=submit], input[type=button]
-{
-    border:0px;
-    cursor:pointer;
-    background:#00a5c4 url('../images/layout/buttonbg.png') repeat-x;
-    color:White;
-    font-size:11px;
-    font-family:Tahoma;
-    border-radius:5px;
-    padding-top:3px;
-    padding-bottom:6px;
-    padding-right:15px;
-    padding-left:15px;
-    display:inline;
-}
+/*input[type=submit], input[type=button]*/
+/*{*/
+    /*border:0px;*/
+    /*cursor:pointer;*/
+    /*background:#00a5c4 url('../images/layout/buttonbg.png') repeat-x;*/
+    /*color:White;*/
+    /*font-size:11px;*/
+    /*font-family:Tahoma;*/
+    /*border-radius:5px;*/
+    /*padding-top:3px;*/
+    /*padding-bottom:6px;*/
+    /*padding-right:15px;*/
+    /*padding-left:15px;*/
+    /*display:inline;*/
+/*}*/
 
 input[type=submit].ButtonBlue, input[type=button].ButtonBlue
 {

@@ -1,4 +1,4 @@
-<div id="menu">
+<div id="menu" style="float: left;margin-top: -45px;">
 
     <ul class="sf-menu Menu">
         <li class="MenuItem current">
@@ -46,7 +46,7 @@
             </ul>
         </li>
 
-        <li class="MenuItem2 ">
+        <li class="MenuItem">
             <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh"/></a>
             <ul>
                 <li>
@@ -59,7 +59,7 @@
             </ul>
         </li>
 
-        <li class="MenuItem3 ">
+        <li class="MenuItem">
             <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane"/></a>
             <ul>
                 <li>
@@ -72,7 +72,7 @@
             </ul>
         </li>
 
-        <li class="MenuItemReport ">
+        <li class="MenuItem">
             <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>
             <ul>
                 <li>
@@ -85,7 +85,7 @@
             </ul>
         </li>
 
-        <li class="MenuItemUsers">
+        <li class="MenuItem">
             <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
             <ul>
                 <li>
