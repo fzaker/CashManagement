@@ -92,6 +92,8 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+cashmanagement.messages.file = new File("messageCodes")
+
 rapidgrails.application.direction="rtl"
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'cashmanagement.User'
