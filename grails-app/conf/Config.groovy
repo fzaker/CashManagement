@@ -1,3 +1,5 @@
+import grails.plugins.springsecurity.SecurityConfigType
+
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
@@ -99,3 +101,16 @@ rapidgrails.application.direction="rtl"
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'cashmanagement.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'cashmanagement.UserRole'
 grails.plugins.springsecurity.authority.className = 'cashmanagement.Role'
+
+grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+
+grails.plugins.springsecurity.interceptUrlMap = [
+        '/logout': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/j_spring_security_check': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/favico.ico': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/**': ['IS_AUTHENTICATED_REMEMBERED']
+]
