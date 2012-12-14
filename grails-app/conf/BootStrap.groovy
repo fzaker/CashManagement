@@ -9,6 +9,9 @@ import cashmanagement.BankRegionRole
 import cashmanagement.UserRole
 import cashmanagement.LoanType
 import grails.util.GrailsUtil
+import cashmanagement.GLCode
+import cashmanagement.GLGroup
+import cashmanagement.GLTransaction
 
 class BootStrap {
 
@@ -33,6 +36,14 @@ class BootStrap {
             def br = new BankRegion(bankRegionCode: "01", bankRegionName: "منطقه 1").save()
             def bh = new BranchHead(branchHeadCode: "011", branchHeadName: "سرپرستی 1", bankRegion: br).save()
             def b = new Branch(branchCode: "0111", branchName: "شعبه 1", branchHead: bh).save()
+
+            def glGroup = new GLGroup(glGroupCode: "1", glGroupName: "1").save()
+            def glCode = new GLCode(glCode: "1", glFlag: 1L, glGroup: glGroup, branch: b)
+            glCode.validate()
+            glCode=glCode.save()
+            def glCode1 = new GLCode(glCode: "2", glFlag: -1L, glGroup: glGroup, branch: b).save()
+            def glT=new GLTransaction(glCode: glCode,glAmount: 1000,branch: b,tranDate: new Date()).save()
+            def glT1=new GLTransaction(glCode: glCode1,glAmount: 2000,branch: b,tranDate: new Date()).save()
 
             def branchRole = new BranchRole(branch: b, authority: "user").save()
             def branchHeadRole = new BranchHeadRole(branchHead: bh, authority: "user").save()

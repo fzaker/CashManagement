@@ -8,8 +8,8 @@ class GLCode {
 
     static constraints = {
         glGroup()
-        glCode(unique: true)
-        glFlag(inList:[1,-1] )
+        glCode()
+        glFlag(inList:[1L,-1L] )
         branch(nullable: false)
     }
     String toString(){

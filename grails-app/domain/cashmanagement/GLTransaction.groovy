@@ -3,7 +3,8 @@ package cashmanagement
 class GLTransaction {
     GLCode glCode
     Date tranDate
-    Number glAmount
+    Double glAmount
+    Branch branch
 
     static constraints = {
     }

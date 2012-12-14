@@ -24,7 +24,7 @@ class LoanRequest_TController {
 
         def loanRequest_TInstance = new LoanRequest_T(params)
         loanRequest_TInstance.branch = branch
-        loanRequest_TInstance.loanIDCode = loanService.generateLoanId()
+        loanRequest_TInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_TInstance.requestDate = new Date()
         if (loanService.checkResourceAvailability(branch, loanRequest_TInstance.loanAmount)) {
             loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Confirm

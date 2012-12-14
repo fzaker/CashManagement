@@ -23,7 +23,7 @@ class LoanRequest_GHController {
 
         def loanRequest_GHInstance = new LoanRequest_GH(params)
         loanRequest_GHInstance.branch = branch
-        loanRequest_GHInstance.loanIDCode = loanService.generateLoanId()
+        loanRequest_GHInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_GHInstance.requestDate = new Date()
         if (loanService.checkResourceAvailability(branch, loanRequest_GHInstance.loanAmount)) {
             loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Confirm
