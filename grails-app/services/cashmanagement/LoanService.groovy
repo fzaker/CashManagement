@@ -7,6 +7,7 @@ class LoanService {
     }
 
     def checkResourceAvailability(Branch branch, double amt) {
-        Math.random() > 0.5
+//        Math.random() > 0.5
+
     }
 }

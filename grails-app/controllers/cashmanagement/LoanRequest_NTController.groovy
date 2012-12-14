@@ -61,9 +61,12 @@ class LoanRequest_NTController {
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
-        redirect(action: "show", id: loanRequest_NTInstance.id)
+        redirect(action: "list")
     }
+    def branchHead()
+    {
 
+    }
     def show() {
         def loanRequest_NTInstance = LoanRequest_NT.get(params.id)
         if (!loanRequest_NTInstance) {
