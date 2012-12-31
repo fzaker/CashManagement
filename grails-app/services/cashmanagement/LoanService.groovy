@@ -14,35 +14,29 @@ class LoanService {
     }
 
     def checkResourceAvailability(Branch branch, double amt) {
-//        try {
-        def gt0 = GLTransaction.createCriteria().get {
-            projections {
-                sum("glAmount")
-            }
-            and {
-                glCode {
-                    gte("glFlag", 0L)
-                }
-                eq("branch", branch)
-            }
-        }
-        def lt0 = GLTransaction.createCriteria().get {
-            projections {
-                sum("glAmount")
-            }
-            and {
-                glCode {
-                    lt("glFlag", 0L)
-                }
-                eq("branch", branch)
-            }
-        }
-        def darsad = gt0 / lt0
+        def cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, -1)
+        cal.set(Calendar.MILLISECOND, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        def date = cal.getTime()
+
+        def manabeGLGroup = GLGroup.findByGlGroupCode("02")
+        def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
+        def manabe = GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glManabe, branch, date).sum {it.glAmount * it.glCode.glFlag}
+
+        def masarefGLGroup = GLGroup.findByGlGroupCode("03")
+        def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
+        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glMasaref, branch, date).sum {it.glAmount * it.glCode.glFlag}
+
+
+        def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
+
+        def darsad = (masaref + amt + mojavezSadere) / manabe
+
         SystemParameters sysParam = SystemParameters.findAll().first()
         return (sysParam?.permitToward > darsad)
-//        } catch (e) {
-//
-//            return false
-//        }
+
     }
 }
