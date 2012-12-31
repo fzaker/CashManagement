@@ -19,7 +19,7 @@
                 </rg:criteria>
             </rg:grid>
             <br>
-            <rg:grid domainClass="${cashmanagement.LoanRequest_T}" caption="RejectedList" idPostfix="RejectedList">>
+            <rg:grid domainClass="${cashmanagement.LoanRequest_T}" caption="RejectedList" idPostfix="RejectedList">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
                 </rg:criteria>
@@ -33,10 +33,15 @@
                         <rg:hiddenReference field="requestDate"/>
                     </rg:modify>
                 </rg:fields>
-                <rg:saveButton domainClass="${cashmanagement.LoanRequest_T}" conroller="loanRequest_T"/>
+                <rg:saveButton domainClass="${cashmanagement.LoanRequest_T}" conroller="loanRequest_T"  params="[saveCallback:'saveGridCallback']"/>
                 <rg:cancelButton/>
             </rg:dialog>
-
+            <g:javascript>
+                function saveGridCallback(resp){
+                    $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
+                    $("#LoanRequest_TApprovedListGrid").trigger("reloadGrid")
+                }
+            </g:javascript>
             %{--<input type="button" ng-click="openLoanRequest_TEditDialog()" value="Edit LoanRequest_T"/>--}%
         </div>
     </body>

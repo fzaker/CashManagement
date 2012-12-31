@@ -12,7 +12,24 @@ class LoanService {
 
         return "${branch.branchCode}-${loanType.loanTypeCode}-${d}-${loanNo}"
     }
-
+    def checkResourceAvailabilityGH(Branch branch, double amt){
+        def cal = Calendar.getInstance()
+        cal.setTime(new Date())
+        def jc = new JalaliCalendar(cal)
+        def year=jc.year
+        def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch,LoanRequest_GH.Confirm).sum{it.loanAmount})?:0
+        def permAmount = (PermissionAmount_GH.findByBranchAndYear(branch,year)?.permAmount)?:0
+        return permAmount>=(sumBranch+amt)
+    }
+    def checkResourceAvailabilityT(Branch branch, double amt){
+        def cal = Calendar.getInstance()
+        cal.setTime(new Date())
+        def jc = new JalaliCalendar(cal)
+        def year=jc.year
+        def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch,LoanRequest_T.Confirm).sum{it.loanAmount})?:0
+        def permAmount = (PermissionAmount_T.findByBranchAndYear(branch,year)?.permAmount)?:0
+        return permAmount>=(sumBranch+amt)
+    }
     def checkResourceAvailability(Branch branch, double amt) {
         def avail=getAvailable(branch)
         return amt <= avail

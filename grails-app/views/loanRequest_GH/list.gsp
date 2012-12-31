@@ -33,9 +33,15 @@
                         <rg:hiddenReference field="requestDate"/>
                     </rg:modify>
                 </rg:fields>
-                <rg:saveButton domainClass="${cashmanagement.LoanRequest_GH}" conroller="loanRequest_GH"/>
+                <rg:saveButton domainClass="${cashmanagement.LoanRequest_GH}" conroller="loanRequest_GH" params="[saveCallback:'saveGridCallback']"/>
                 <rg:cancelButton/>
             </rg:dialog>
+            <g:javascript>
+                function saveGridCallback(resp){
+                    $("#LoanRequest_GHRejectedListGrid").trigger("reloadGrid")
+                    $("#LoanRequest_GHApprovedListGrid").trigger("reloadGrid")
+                }
+            </g:javascript>
 
             %{--<input type="button" ng-click="openLoanRequest_GHEditDialog()" value="Edit LoanRequest_GH"/>--}%
         </div>

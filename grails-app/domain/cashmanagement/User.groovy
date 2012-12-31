@@ -11,9 +11,23 @@ class User {
     boolean accountLocked
     boolean passwordExpired
 
+
+    transient def getBranch(){
+        (authorities?.find {it instanceof BranchRole} as BranchRole)?.branch
+    }
+    transient def getBranchHead(){
+        (authorities?.find {it instanceof BranchHeadRole} as BranchHeadRole)?.branchHead
+    }
+    transient def getBankRegion(){
+        (authorities?.find {it instanceof BankRegionRole} as BankRegionRole)?.bankRegion
+    }
     static constraints = {
+        name()
         username blank: false, unique: true
         password blank: false
+        branch()
+        branchHead()
+        bankRegion()
     }
 
     static mapping = {
@@ -21,7 +35,8 @@ class User {
     }
 
     Set<Role> getAuthorities() {
-        UserRole.findAllByUser(this).collect { it.role } as Set
+        if(this.id)
+            UserRole.findAllByUser(this).collect { it.role } as Set
     }
 
     def beforeInsert() {

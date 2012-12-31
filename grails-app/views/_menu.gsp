@@ -61,7 +61,7 @@
                     <a href="<g:createLink controller="LoanRequest_T"/>"><g:message code="LoanRequest.register.t"/></a>
                 </li>
                 <li>
-                    <a href="<g:createLink controller="AssignToBranch"/>"><g:message code="Branch.PermitAssign.t"/></a>
+                    <a href="<g:createLink controller="permissionAmount_T"/>"><g:message code="Branch.PermitAssign.t"/></a>
                 </li>
 
             </ul>
@@ -75,7 +75,7 @@
                             code="LoanRequest.register.gh"/></a>
                 </li>
                 <li>
-                    <a href="<g:createLink controller="AssignToBranch"/>"><g:message code="Branch.PermitAssign.gh"/></a>
+                    <a href="<g:createLink controller="permissionAmount_GH"/>"><g:message code="Branch.PermitAssign.gh"/></a>
                 </li>
 
             </ul>

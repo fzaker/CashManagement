@@ -25,7 +25,7 @@ class LoanRequest_GHController {
         loanRequest_GHInstance.branch = branch
         loanRequest_GHInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_GHInstance.requestDate = new Date()
-        if (loanService.checkResourceAvailability(branch, loanRequest_GHInstance.loanAmount)) {
+        if (loanService.checkResourceAvailabilityGH(branch, loanRequest_GHInstance.loanAmount)) {
             loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Confirm
         }
         else {
@@ -34,13 +34,8 @@ class LoanRequest_GHController {
         }
 
 
-        if (!loanRequest_GHInstance.save(flush: true)) {
-            render(view: "create", model: [loanRequest_NTInstance: loanRequest_GHInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_GH.label', default: 'LoanRequest_NT'), loanRequest_GHInstance.id])
-        redirect(action: "show", id: loanRequest_GHInstance.id)
+        loanRequest_GHInstance.save(flush: true)
+        render 1
     }
 
     def show() {

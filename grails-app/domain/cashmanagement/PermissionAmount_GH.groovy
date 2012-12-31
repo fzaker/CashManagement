@@ -1,9 +1,9 @@
 package cashmanagement
 
 class PermissionAmount_GH {
-    Branch branchCode
-    Number PermAmount
-    Number year
+    Branch branch
+    Double permAmount
+    Integer year
 
     static constraints = {
     }

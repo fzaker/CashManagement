@@ -26,22 +26,19 @@ class LoanRequest_TController {
         loanRequest_TInstance.branch = branch
         loanRequest_TInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_TInstance.requestDate = new Date()
-        if (loanService.checkResourceAvailability(branch, loanRequest_TInstance.loanAmount)) {
+        if (loanService.checkResourceAvailabilityT(branch, loanRequest_TInstance.loanAmount)) {
             loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Confirm
         }
         else {
             loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Cancel
 
         }
+        loanRequest_TInstance.save(flush: true)
 
-
-        if (!loanRequest_TInstance.save(flush: true)) {
-            render(view: "create", model: [loanRequest_NTInstance: loanRequest_TInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_NT'), loanRequest_TInstance.id])
-        redirect(action: "show", id: loanRequest_TInstance.id)
+        render 1;
+//
+//        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_NT'), loanRequest_TInstance.id])
+//        redirect(action: "show", id: loanRequest_TInstance.id)
     }
 
     def show() {

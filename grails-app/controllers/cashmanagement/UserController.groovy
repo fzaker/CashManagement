@@ -1,6 +1,7 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
 
 class UserController {
 
@@ -17,15 +18,58 @@ class UserController {
         [userInstance: new User(params)]
     }
 
+    def form() {
+        def user
+        def branch
+        def branchHead
+        def bankRegion
+        if (params.id) {
+            user = User.get(params.id)
+            branch = (user.authorities?.find {it instanceof BranchRole} as BranchRole)?.branch
+            branchHead = (user.authorities?.find {it instanceof BranchHeadRole} as BranchHeadRole)?.branchHead
+            bankRegion = (user.authorities?.find {it instanceof BankRegionRole} as BankRegionRole)?.bankRegion
+        }
+        else {
+            user = new User()
+        }
+        render(template: "form", model: [userInstance: user, branch: branch, branchHead: branchHead, bankRegion: bankRegion])
+    }
+
     def save() {
-        def userInstance = new User(params)
-        if (!userInstance.save(flush: true)) {
-            render(view: "create", model: [userInstance: userInstance])
-            return
+        def user
+        if (params.id) {
+            user = User.get(params.id)
+            user.properties = params
+        }
+        else {
+            user = new User(params)
+            user.accountExpired = false
+            user.accountLocked = false
+            user.enabled = true
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
-        redirect(action: "show", id: userInstance.id)
+        user.save()
+
+        if (params.branchId) {
+            def branch = Branch.get(params.branchId)
+            def branchRole = BranchRole.findByBranch(branch) ?: new BranchRole(branch: branch, authority: "branch_${branch.id}").save()
+            if(branchRole)
+                UserRole.create(user, branchRole)
+        }
+        if (params.branchHeadId) {
+            def branchH = BranchHead.get(params.branchHeadId)
+            def branchRole = BranchHeadRole.findByBranchHead(branchH) ?: new BranchHeadRole(branchHead: branchH, authority: "branchHead_${branchH.id}").save()
+            if(branchRole)
+                UserRole.create(user, branchRole)
+        }
+
+        if (params.bankRegionId) {
+            def bankRegion = BankRegion.get(params.bankRegionId)
+            def branchRole = BankRegionRole.findByBankRegion(bankRegion) ?: new BankRegionRole(bankRegion: bankRegion, authority: "bankRegion_${bankRegion.id}").save()
+            if (branchRole)
+                UserRole.create(user, branchRole)
+        }
+        render user as JSON
     }
 
     def show() {

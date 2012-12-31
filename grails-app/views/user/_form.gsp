@@ -1,6 +1,13 @@
 <%@ page import="cashmanagement.User" %>
 
 
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'name', 'error')} required">
+    <label for="name">
+        <g:message code="user.name.label" default="Name" />
+        <span class="required-indicator">*</span>
+    </label>
+    <g:textField name="name" required="" value="${userInstance?.name}"/>
+</div>
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'username', 'error')} required">
 	<label for="username">
@@ -18,43 +25,24 @@
 	<g:textField name="password" required="" value="${userInstance?.password}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'accountExpired', 'error')} ">
-	<label for="accountExpired">
-		<g:message code="user.accountExpired.label" default="Account Expired" />
-		
-	</label>
-	<g:checkBox name="accountExpired" value="${userInstance?.accountExpired}" />
-</div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'accountLocked', 'error')} ">
-	<label for="accountLocked">
-		<g:message code="user.accountLocked.label" default="Account Locked" />
-		
-	</label>
-	<g:checkBox name="accountLocked" value="${userInstance?.accountLocked}" />
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'branch', 'error')} required">
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'branch', 'error')}">
 	<label for="branch">
 		<g:message code="user.branch.label" default="Branch" />
-		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="branch" name="branch.id" from="${cashmanagement.Branch.list()}" optionKey="id" required="" value="${userInstance?.branch?.id}" class="many-to-one"/>
+	<g:select name="branchId" from="${cashmanagement.Branch.list()}" optionKey="id" value="${branch?.id}" class="many-to-one" noSelection="['':'']"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'enabled', 'error')} ">
-	<label for="enabled">
-		<g:message code="user.enabled.label" default="Enabled" />
-		
-	</label>
-	<g:checkBox name="enabled" value="${userInstance?.enabled}" />
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'branchHead', 'error')}">
+    <label for="branchHead">
+        <g:message code="user.branchHead.label" default="branchHead" />
+    </label>
+    <g:select name="branchHeadId" from="${cashmanagement.BranchHead.list()}" optionKey="id"  value="${branchHead?.id}" class="many-to-one" noSelection="['':'']"/>
 </div>
-
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordExpired', 'error')} ">
-	<label for="passwordExpired">
-		<g:message code="user.passwordExpired.label" default="Password Expired" />
-		
-	</label>
-	<g:checkBox name="passwordExpired" value="${userInstance?.passwordExpired}" />
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'bankRegion', 'error')}">
+    <label for="bankRegion">
+        <g:message code="user.bankRegion.label" default="bankRegion" />
+    </label>
+    <g:select name="bankRegionId" from="${cashmanagement.BankRegion.list()}" optionKey="id" value="${bankRegion?.id}" class="many-to-one" noSelection="['':'']"/>
 </div>
 
