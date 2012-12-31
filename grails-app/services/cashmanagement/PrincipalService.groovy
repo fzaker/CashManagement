@@ -22,4 +22,22 @@ class PrincipalService {
         }
         return branch
     }
+    def getBranchHead() {
+        def user = getUser()
+        def branchhead
+        user.authorities.each {
+            if(it instanceof BranchHeadRole)
+                branchhead = it.branchHead
+        }
+        return branchhead
+    }
+    def getBankRegion() {
+        def user = getUser()
+        def bankRegion
+        user.authorities.each {
+            if(it instanceof BankRegionRole)
+                bankRegion = it.bankRegion
+        }
+        return bankRegion
+    }
 }

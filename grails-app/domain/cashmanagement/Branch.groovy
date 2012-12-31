@@ -1,17 +1,28 @@
 package cashmanagement
 
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
 class Branch {
     BranchHead branchHead
     String branchCode
     String branchName
 
-  static constraints = {
-       branchHead()
-       branchCode(unique: true)
-       branchName(nullable: false)
-
+    transient def getAvailable() {
+        if (this?.id) {
+            def service = ApplicationHolder.application.getMainContext().getBean("loanService")
+            service.getAvailable(this)
+        }
     }
-    String toString(){
-        branchName+"("+branchCode+")"
+
+
+    static constraints = {
+        branchHead()
+        branchCode(unique: true)
+        branchName(nullable: false)
+        available()
+    }
+
+    String toString() {
+        branchName + "(" + branchCode + ")"
     }
 }

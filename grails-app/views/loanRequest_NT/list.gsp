@@ -42,10 +42,10 @@
                     <label for="loanAmount"> <g:message code="loanAmount"/> </label>
                     <g:textField name="loanAmount" required="true" />
                 </div>
-                <div class="fieldcontain">
-                    <label for="loanIDCode"> <g:message code="loanIDCode"/> </label>
-                    <g:textField name="loanIDCode"  />
-                </div>
+                %{--<div class="fieldcontain">--}%
+                    %{--<label for="loanIDCode"> <g:message code="loanIDCode"/> </label>--}%
+                    %{--<g:textField name="loanIDCode"  />--}%
+                %{--</div>--}%
                 <g:submitButton name="save"/>
 
             </div>
@@ -61,7 +61,7 @@
                 <a href="#Confirm"><g:message code="Confirm"/></a>
             </li>
             <li>
-                <a href="#Test"><g:message code="Test"/></a>
+                <a href="#Test"><g:message code="Sent"/></a>
             </li>
         </ul>
 
@@ -72,7 +72,7 @@
                      caption="PendingList"
                      showCommand="false"
                      firstColumnWidth="30"
-                     commands="${[[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'accept']]}">
+                     commands="${[[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
                 </rg:criteria>

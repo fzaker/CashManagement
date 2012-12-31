@@ -14,6 +14,11 @@ class LoanService {
     }
 
     def checkResourceAvailability(Branch branch, double amt) {
+        def avail=getAvailable(branch)
+        return amt <= avail
+
+    }
+    def getAvailable(Branch branch){
         def cal = Calendar.getInstance()
         cal.add(Calendar.DATE, -1)
         cal.set(Calendar.MILLISECOND, 0)
@@ -24,19 +29,22 @@ class LoanService {
 
         def manabeGLGroup = GLGroup.findByGlGroupCode("02")
         def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
-        def manabe = GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glManabe, branch, date).sum {it.glAmount * it.glCode.glFlag}
+        def manabe = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glManabe, branch, date).sum {it.glAmount * it.glCode.glFlag})?:0
 
         def masarefGLGroup = GLGroup.findByGlGroupCode("03")
         def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
-        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glMasaref, branch, date).sum {it.glAmount * it.glCode.glFlag}
+        def masaref = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDate(glMasaref, branch, date).sum {it.glAmount * it.glCode.glFlag})?:0
 
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
 
-        def darsad = (masaref + amt + mojavezSadere) / manabe
+        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
+        def sumDebit = (barrows.sum {it.debit ?: 0})?:0
+        def sumCredit = (barrows.sum {it.credit ?: 0})?:0
 
         SystemParameters sysParam = SystemParameters.findAll().first()
-        return (sysParam?.permitToward > darsad)
 
+        def avail=(sysParam.permitToward * manabe)-(masaref+mojavezSadere-sumDebit+sumCredit)
+        return avail
     }
 }

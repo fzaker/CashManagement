@@ -18,7 +18,11 @@
                 </rg:commands>
             </rg:grid>
             <rg:dialog id="branch" title="Branch Dialog">
-                <rg:fields bean="${new cashmanagement.Branch()}"></rg:fields>
+                <rg:fields bean="${new cashmanagement.Branch()}">
+                    <rg:modify>
+                        <rg:ignoreField field="available"/>
+                    </rg:modify>
+                </rg:fields>
                 <rg:saveButton domainClass="${cashmanagement.Branch}"/>
                 <rg:cancelButton/>
             </rg:dialog>

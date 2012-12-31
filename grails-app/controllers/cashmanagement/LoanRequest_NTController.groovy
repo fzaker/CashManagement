@@ -1,6 +1,7 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 
 class LoanRequest_NTController {
     def principalService
@@ -39,6 +40,50 @@ class LoanRequest_NTController {
         render 0
     }
 
+    def acceptBranchHead() {
+        def req = LoanRequestNT_BranchHead.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            def loanReqRegion = new LoanRequestNT_BankRegion(loanReqStatus: LoanRequest_NT.Pending, loanRequest_nt: req.loanRequest_nt)
+            loanReqRegion.save(true)
+            req.loanReqStatus = LoanRequest_NT.Sent
+            req.save()
+        }
+        render 0
+    }
+
+    def rejectBranchHead() {
+        def req = LoanRequestNT_BranchHead.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            req.loanReqStatus = LoanRequest_NT.Cancel
+            req.save()
+            req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Cancel
+            req.save()
+        }
+        render 0
+    }
+
+    def acceptBankRegion() {
+        def req = LoanRequestNT_BankRegion.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            def loanReqHead = new LoanRequestNT_HeadOffice(loanReqStatus: LoanRequest_NT.Pending, loanRequest_nt: req.loanRequest_nt)
+            loanReqHead.save(true)
+            req.loanReqStatus = LoanRequest_NT.Sent
+            req.save()
+        }
+        render 0
+    }
+
+    def rejectBankRegion() {
+        def req = LoanRequestNT_BankRegion.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            req.loanReqStatus = LoanRequest_NT.Cancel
+            req.save()
+            req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Cancel
+            req.save()
+        }
+        render 0
+    }
+
     def save() {
         def branch = principalService.getBranch()
 
@@ -63,10 +108,59 @@ class LoanRequest_NTController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
         redirect(action: "list")
     }
-    def branchHead()
-    {
 
+    def branchHead() {
+        def branchHead = principalService.getBranchHead()
+        [branchHead: branchHead]
     }
+
+    def bankRegion() {
+        def bankRegion = principalService.getBankRegion()
+        [bankRegion: bankRegion]
+    }
+
+    def linkBranchRequest() {
+        try {
+            def destBranch = Branch.get(params.branchId)
+            def req = LoanRequestNT_BranchHead.get(params.reqId)
+            if (req.loanAmount >= destBranch.available) {
+                render message(code: 'branch-available-is-less-than-request')
+            }
+            else {
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: req.loanAmount, request: req.loanRequest_nt).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: req.loanAmount, request: req.loanRequest_nt).save()
+                req.loanReqStatus = LoanRequest_NT.Confirm
+                req.save()
+                req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+                req.loanRequest_nt.save()
+                render message(code: 'request-assign-successfull')
+            }
+        } catch (e) {
+            render(message(code: 'error') + e.message)
+        }
+    }
+
+    def linkBranchRequestRegion() {
+        try {
+            def destBranch = Branch.get(params.branchId)
+            def req = LoanRequestNT_BankRegion.get(params.reqId)
+            if (req.loanAmount >= destBranch.available) {
+                render message(code: 'branch-available-is-less-than-request')
+            }
+            else {
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: req.loanAmount, request: req.loanRequest_nt).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: req.loanAmount, request: req.loanRequest_nt).save()
+                req.loanReqStatus = LoanRequest_NT.Confirm
+                req.save()
+                req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+                req.loanRequest_nt.save()
+                render message(code: 'request-assign-successfull')
+            }
+        } catch (e) {
+            render(message(code: 'error') + e.message)
+        }
+    }
+
     def show() {
         def loanRequest_NTInstance = LoanRequest_NT.get(params.id)
         if (!loanRequest_NTInstance) {

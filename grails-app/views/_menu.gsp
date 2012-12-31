@@ -44,7 +44,7 @@
                             code="loanList.branchHead"/></a>
                 </li>
                 <li>
-                    <a href="<g:createLink controller="LoanRequestNT_BankRegion"/>"><g:message
+                    <a href="<g:createLink controller="LoanRequest_NT" action="bankRegion"/>"><g:message
                             code="loanList.BankRegion"/></a>
                 </li>
                 <li>
@@ -98,7 +98,7 @@
             <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
             <ul>
                 <li>
-                    <a href="<g:createLink controller="UserDefinition"/>"><g:message code="User.definition"/></a>
+                    <a href="<g:createLink controller="User"/>"><g:message code="User.definition"/></a>
                 </li>
 
             </ul>

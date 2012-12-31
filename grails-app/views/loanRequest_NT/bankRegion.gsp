@@ -14,7 +14,7 @@
 
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
 
-    <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
+    <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
              showCommand="false"
              firstColumnWidth="30"
              commands="${[[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
@@ -23,7 +23,9 @@
             <rg:nest name="loanRequest_nt">
                 <rg:nest name="branch">
                     <rg:nest name="branchHead">
-                        <rg:eq name="id" value="${branchHead?.id}"/>
+                        <rg:nest name="bankRegion">
+                            <rg:eq name="id" value="${bankRegion?.id}"/>
+                        </rg:nest>
                     </rg:nest>
                 </rg:nest>
             </rg:nest>
@@ -33,7 +35,11 @@
     <rg:grid domainClass="${cashmanagement.Branch}"
              showCommand="false">
         <rg:criteria>
-            <rg:eq name="branchHead.id" value="${branchHead?.id}"/>
+            <rg:nest name="branchHead">
+                <rg:nest name="bankRegion">
+                    <rg:eq name="id" value="${bankRegion?.id}"/>
+                </rg:nest>
+            </rg:nest>
         </rg:criteria>
     </rg:grid>
 
@@ -41,7 +47,7 @@
 
     <g:javascript>
         function linkRequest(){
-            var reqId=$("#LoanRequestNT_BranchHeadGrid").getGridParam('selrow')
+            var reqId=$("#LoanRequestNT_BankRegionGrid").getGridParam('selrow')
             var branchId=$("#BranchGrid").getGridParam('selrow')
             if(!reqId){
                 alert("<g:message code="please-select-a-request" />")
@@ -52,14 +58,14 @@
                 return false;
             }
             $.ajax({
-                url:'<g:createLink action="linkBranchRequest" />',
+                url:'<g:createLink action="linkBranchRequestRegion" />',
                 data:{
                  branchId:branchId,
                  reqId:reqId
                 }
             }).done(function (response) {
                 alert(response)
-                $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
                 $("#BranchGrid").trigger("reloadGrid")
             })
         }
@@ -67,10 +73,10 @@
             if(confirm('<g:message code="are.you.sure.to.reject.reuqest"/>')){
                 $.ajax({
                     type:'post',
-                    url:'<g:createLink action="rejectBranchHead"/>',
+                    url:'<g:createLink action="rejectBankRegion"/>',
                     data:{id:id}
                 }).success(function(){
-                    $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                    $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
                 })
             }
         }
@@ -78,10 +84,10 @@
             if(confirm('<g:message code="are.you.sure.to.accept.reuqest"/>')){
                 $.ajax({
                     type:'post',
-                    url:'<g:createLink action="acceptBranchHead"/>',
+                    url:'<g:createLink action="acceptBankRegion"/>',
                     data:{id:id}
                 }).success(function(){
-                    $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                    $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
                 })
             }
         }
