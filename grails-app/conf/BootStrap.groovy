@@ -21,17 +21,17 @@ class BootStrap {
 
     def init = { servletContext ->
         if (GrailsUtil.environment == "development") {
-//            def validationTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib')
-//            Closure messageClosure = { attrs ->
-//                //println "${attrs.code}"
-//                def messagesFile = grailsApplication.config.cashmanagement.messages.file
-//                messagesFile.append("${attrs.code}\n")
-//
-//                messageImpl(attrs)
-//            }
-//            messageClosure.setResolveStrategy(Closure.DELEGATE_ONLY)
-//            messageClosure.setDelegate(validationTagLib)
-//            validationTagLib.message = messageClosure
+            def validationTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib')
+            Closure messageClosure = { attrs ->
+                //println "${attrs.code}"
+                def messagesFile = grailsApplication.config.cashmanagement.messages.file
+                messagesFile.append("${attrs.code}\n")
+
+                messageImpl(attrs)
+            }
+            messageClosure.setResolveStrategy(Closure.DELEGATE_ONLY)
+            messageClosure.setDelegate(validationTagLib)
+            validationTagLib.message = messageClosure
 //
 //            def lg = new LoanGroup(loanGroupCode: "01", loanGroupName: "تستی").save()
 //            def lt = new LoanType(loanGroup: lg, loanTypeCode: "011", loanTypeName: "تست").save()
