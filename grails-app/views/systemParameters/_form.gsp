@@ -26,6 +26,14 @@
 	<g:field type="number" name="permitToward" step="any" required="" value="${systemParametersInstance.permitToward}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'numofDays', 'error')} required">
+    <label for="numofDays">
+        <g:message code="systemParameters.numofDays.label" default="Number of Days" />
+        <span class="required-indicator">*</span>
+    </label>
+    <g:field type="number" name="numofDays" step="any" required="" value="${systemParametersInstance.numofDays}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'permitReceivePercent', 'error')} required">
 	<label for="permitReceivePercent">
 		<g:message code="systemParameters.permitReceivePercent.label" default="Permit Receive Percent" />
