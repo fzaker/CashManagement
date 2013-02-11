@@ -10,7 +10,7 @@
 	<body>
         <h2><g:message code="default.list.label" args="[entityName]" /></h2>
 		<a href="#list-permissionAmount_T" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-
+        ${resultParm}
         <div id="list-permissionAmount_T" ng-controller="permissionAmount_TController" class="content scaffold-list" role="main">
             <rg:grid domainClass="${cashmanagement.PermissionAmount_T}"></rg:grid>
             <rg:dialog id="permissionAmount_T" title="PermissionAmount_T Dialog">

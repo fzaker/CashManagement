@@ -3,7 +3,8 @@ package cashmanagement
 import org.springframework.dao.DataIntegrityViolationException
 
 class PermissionAmount_TController {
-
+    def loanService
+    def principalService
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -11,6 +12,14 @@ class PermissionAmount_TController {
     }
 
     def list() {
+        def br=principalService.getBranchHead()
+        def result
+        if (br)
+            result= loanService.getVosooli(br)?:0
+        else
+            result=0
+
+        [resultParm:result]
     }
 
     def create() {

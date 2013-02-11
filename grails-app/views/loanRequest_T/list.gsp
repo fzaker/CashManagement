@@ -19,7 +19,7 @@
                 </rg:criteria>
             </rg:grid>
             <br>
-            <rg:grid domainClass="${cashmanagement.LoanRequest_T}" caption="RejectedList" idPostfix="RejectedList">
+            <rg:grid domainClass="${cashmanagement.LoanRequest_T}"  caption="RejectedList" idPostfix="RejectedList">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
                 </rg:criteria>
