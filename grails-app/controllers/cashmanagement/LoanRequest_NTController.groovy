@@ -14,7 +14,8 @@ class LoanRequest_NTController {
     }
 
     def list() {
-    }
+
+         }
 
     def create() {
         [loanRequest_NTInstance: new LoanRequest_NT(params)]
