@@ -18,7 +18,11 @@
                 </rg:commands>
             </rg:grid>
             <rg:dialog id="loanGroup" title="LoanGroup Dialog">
-                <rg:fields bean="${new cashmanagement.LoanGroup()}"></rg:fields>
+                <rg:fields bean="${new cashmanagement.LoanGroup()}">
+                    <rg:modify>
+                        <rg:ignoreField field="loanTypes"/>
+                    </rg:modify>
+                </rg:fields>
                 <rg:saveButton domainClass="${cashmanagement.LoanGroup}"/>
                 <rg:cancelButton/>
             </rg:dialog>

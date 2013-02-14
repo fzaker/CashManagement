@@ -18,7 +18,11 @@
                 </rg:commands>
             </rg:grid>
             <rg:dialog id="bankRegion" title="BankRegion Dialog">
-                <rg:fields bean="${new cashmanagement.BankRegion()}"></rg:fields>
+                <rg:fields bean="${new cashmanagement.BankRegion()}">
+                    <rg:modify>
+                        <rg:ignoreField field="branchHeads"/>
+                    </rg:modify>
+                </rg:fields>
                 <rg:saveButton domainClass="${cashmanagement.BankRegion}"/>
                 <rg:cancelButton/>
             </rg:dialog>

@@ -30,6 +30,8 @@
 
     <g:javascript plugin="rapid-grails" src="utils.js"></g:javascript>
     <g:javascript plugin="rapid-grails" src="grid_utils.js"></g:javascript>
+    <g:javascript plugin="rapid-grails" src="jquery.json-2.3.min.js"></g:javascript>
+    <g:javascript plugin="rapid-grails" src="jquery.form.js"></g:javascript>
 
     <link rel="stylesheet"
           href="${resource(dir: 'css/datepicker', file: 'ui.datepicker.css', plugin: 'rapid-grails')}"/>
