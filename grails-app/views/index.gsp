@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
-    <title>Report Menu</title>
+    <title><g:message code="cashmanagementsystem" /></title>
     <link rel="stylesheet" href="${resource(dir: 'css', file: (setting?setting.siteColor:'blue') + 'Style.css')}"/>
 
 </head>
@@ -85,12 +85,21 @@
             <a href="<g:createLink controller="BankRegion"/>"><g:message code="bankRegion"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="LoanType"/>"><g:message code="loanType"/></a>
-        </li>
-        <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'loanGroup.png')}" />
+            </span>
             <a href="<g:createLink controller="LoanGroup"/>"><g:message code="loanGroup"/></a>
         </li>
         <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'loanType.png')}" />
+            </span>
+            <a href="<g:createLink controller="LoanType"/>"><g:message code="loanType"/></a>
+        </li>
+        <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'earning.png')}" />
+            </span>
             <a href="<g:createLink controller="GLCode"/>"><g:message code="glCode"/></a>
         </li>
         <li>
@@ -101,26 +110,41 @@
 <div class="set GheireTabsareh">
     <ul>
         <li>
-            <a href="<g:createLink controller="LoanRequest_NT"/>"><g:message code="LoanRequest"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'loanType.png')}" />
+            </span>
+            <a href="<g:createLink controller="LoanRequest_NT"/>"><g:message code="LoanRequest.register.nt"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="ListForBranchHead" />"><g:message code="ListForBranchHead"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'branchHead.png')}" />
+            </span>
+            <a href="<g:createLink controller="ListForBranchHead" />"><g:message code="loanList.branchHead"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="ListForBankRegion" />"><g:message code="ListForBankRegion"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'bankRegion.png')}" />
+            </span>
+            <a href="<g:createLink controller="ListForBankRegion" />"><g:message code="loanList.BankRegion"/></a>
         </li>
-        <li>
-            <a href="<g:createLink controller="ListForHeadOffice" />"><g:message code="ListForHeadOffice"/></a>
-        </li>
+        %{--<li>--}%
+            %{--<a href="<g:createLink controller="ListForHeadOffice" />"><g:message code="ListForHeadOffice"/></a>--}%
+        %{--</li>--}%
     </ul>
 </div>
 <div class="set Tabsareh">
     <ul>
         <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'loanType.png')}" />
+            </span>
             <a href="<g:createLink controller="LoanRequest_T"/>"><g:message code="LoanRequest"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="AssignToBranch" />"><g:message code="AssignToBranch"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'sum.png')}" />
+            </span>
+            <a href="<g:createLink controller="AssignToBranch" />"><g:message code="Branch.PermitAssign.t"/></a>
         </li>
 
     </ul>
@@ -128,10 +152,22 @@
 <div class="set Gharzolhasane">
     <ul>
         <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'loanType.png')}" />
+            </span>
             <a href="<g:createLink controller="LoanRequest_GH"/>"><g:message code="LoanRequest"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="AssignToBranch" />"><g:message code="AssignToBranch"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'sum.png')}" />
+            </span>
+            <a href="<g:createLink controller="permissionAmount_GH" action="branchHeadList"/>"><g:message code="Branch.PermitAssign.gh.branchHead"/></a>
+        </li>
+        <li>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'sum.png')}" />
+            </span>
+            <a href="<g:createLink controller="permissionAmount_GH" />"><g:message code="Branch.PermitAssign.gh"/></a>
         </li>
 
     </ul>
@@ -139,17 +175,20 @@
 <div class="set Reports">
     <ul>
         <li>
-            <a href="<g:createLink controller="ListResources"/>"><g:message code="ListResources"/></a>
+            <a href="<g:createLink controller="ListResources"/>"><g:message code="Resources.List"/></a>
         </li>
         <li>
-            <a href="<g:createLink controller="Dashboard" />"><g:message code="Dashboard"/></a>
+            <a href="<g:createLink controller="Dashboard" />"><g:message code="Loan.Dashboard"/></a>
         </li>
     </ul>
 </div>
 <div class="set SystemManagement">
     <ul>
         <li>
-            <a href="<g:createLink controller="UserDefinition"/>"><g:message code="UserDefinition"/></a>
+            <span>
+                <img src="${resource(dir: 'images/reportMenuImages', file: 'user.png')}" />
+            </span>
+            <a href="<g:createLink controller="UserDefinition"/>"><g:message code="User.definition"/></a>
         </li>
 
     </ul>

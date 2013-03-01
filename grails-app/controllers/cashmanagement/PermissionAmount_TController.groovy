@@ -1,6 +1,7 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import fi.joensuu.joyds1.calendar.JalaliCalendar
 
 class PermissionAmount_TController {
     def loanService
@@ -12,14 +13,14 @@ class PermissionAmount_TController {
     }
 
     def list() {
-        def br=principalService.getBranchHead()
+        def br = principalService.getBranchHead()
         def result
         if (br)
-            result= loanService.getVosooli(br)?:0
+            result = loanService.getVosooli(br) ?: 0
         else
-            result=0
+            result = 0
 
-        [resultParm:result]
+        [resultParm: result, branchHead: br]
     }
 
     def create() {
@@ -27,14 +28,19 @@ class PermissionAmount_TController {
     }
 
     def save() {
-        def permissionAmount_TInstance = new PermissionAmount_T(params)
-        if (!permissionAmount_TInstance.save(flush: true)) {
-            render(view: "create", model: [permissionAmount_TInstance: permissionAmount_TInstance])
-            return
+        def region = principalService.branchHead
+        def year = new JalaliCalendar().year
+        def branchs = Branch.findAllByBranchHead(region)
+        branchs.each {
+            def permissionAmount = PermissionAmount_T.findByBranchAndYear(it, year)
+            if (!permissionAmount)
+                permissionAmount = new PermissionAmount_T(branch: it, year: year)
+            def permAmt = params["branch_${it.id}"] ?: "0"
+            permAmt = permAmt.replace(",", "")
+            permissionAmount.permAmount = Double.valueOf(permAmt)
+            permissionAmount.save()
         }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'permissionAmount_T.label', default: 'PermissionAmount_T'), permissionAmount_TInstance.id])
-        redirect(action: "show", id: permissionAmount_TInstance.id)
+        redirect(action: "list")
     }
 
     def show() {

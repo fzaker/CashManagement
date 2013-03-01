@@ -1,16 +1,26 @@
 package cashmanagement
 
 class SystemParameters {
+    LoanGroup tabserei
+    LoanGroup gheyreTabserei
+    LoanGroup gharzolhasane
+
     //** Gheire Tabsare
     Double maxGrowth
     Double minGrowth
     Double permitToward
     Integer numofDays
+
+
+
     //**  Tabsare
     Double permitReceivePercent
     Double permitReceiveDaysNum
 
-    //** Gharzol hasane
+
+    //gharzolhasane
+    Double ghMonthlyPercent
+    Double ghCentralBankPercent
 
     static mapping = {
         table 'cash_parameters'
@@ -23,5 +33,8 @@ class SystemParameters {
         numofDays(nullable: false)
         permitReceivePercent(nullable: false)
         permitReceiveDaysNum(nullable: false)
+        tabserei(nullable: true)
+        gheyreTabserei(nullable: true)
+        gharzolhasane(nullable: true)
     }
 }

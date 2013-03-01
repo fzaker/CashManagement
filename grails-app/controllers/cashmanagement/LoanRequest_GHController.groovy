@@ -1,6 +1,8 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
+import fi.joensuu.joyds1.calendar.JalaliCalendar
 
 class LoanRequest_GHController {
     def principalService
@@ -12,10 +14,33 @@ class LoanRequest_GHController {
     }
 
     def list() {
+        def res = getPermitAmts()
+        res
     }
 
     def create() {
         [loanRequest_GHInstance: new LoanRequest_GH(params)]
+    }
+
+    def reject() {
+        def loanRequest = LoanRequest_GH.get(params.id)
+        loanRequest.loanRequestStatus = LoanRequest_GH.Cancel
+        loanRequest.save(flush: true)
+        def res = getPermitAmts()
+        render res as JSON
+    }
+
+    private def getPermitAmts() {
+        def sysParam = SystemParameters.findAll().first()
+        def year = new JalaliCalendar().getYear()
+        def firstOfMonth = new JalaliCalendar(new JalaliCalendar().year, new JalaliCalendar().month, 1).toJavaUtilGregorianCalendar().time
+        def usedAmount = LoanRequest_GH.findAllByBranchAndLoanRequestStatus(principalService.branch, LoanRequest_GH.Confirm).sum {it.loanAmount} ?: 0
+        def usedAmountMonth = LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateGreaterThanEquals(principalService.branch, LoanRequest_GH.Confirm, firstOfMonth).sum {it.loanAmount} ?: 0
+        def permitAmt = PermissionAmount_GH.findByBranchAndYear(principalService.branch, year)?.permAmount ?: 0
+        def res = [usedAmount: usedAmount, remainAmount: permitAmt - usedAmount, permitAmount: permitAmt, permitAmountMonth: permitAmt * sysParam.ghMonthlyPercent,
+                usedAmountMonth: usedAmountMonth, remainAmountMonth: permitAmt * sysParam.ghMonthlyPercent - usedAmountMonth,
+                branch: principalService.branch,bankPercent:loanService.masarefBeManabeGharzolhasane()]
+        return res
     }
 
     def save() {
@@ -35,7 +60,8 @@ class LoanRequest_GHController {
 
 
         loanRequest_GHInstance.save(flush: true)
-        render 1
+        def res = getPermitAmts()
+        render res as JSON
     }
 
     def show() {

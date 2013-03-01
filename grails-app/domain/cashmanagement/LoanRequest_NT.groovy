@@ -8,6 +8,7 @@ class LoanRequest_NT {
 
     String loanNo
     String loanIDCode
+    String name
     String loanRequestStatus
     Double loanAmount
     Date requestDate
@@ -18,6 +19,7 @@ class LoanRequest_NT {
         loanNo(nullable: false, unique: true)
         loanIDCode(nullable: false, unique: true)
         loanType(nullable: false)
+        name()
         loanAmount(nullable: false)
         requestDate(nullable: false)
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])

@@ -1,8 +1,11 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import fi.joensuu.joyds1.calendar.JalaliCalendar
 
 class PermissionAmount_GHController {
+
+    def principalService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -11,6 +14,8 @@ class PermissionAmount_GHController {
     }
 
     def list() {
+        def branchHead = principalService.branchHead
+        [branchHead: branchHead]
     }
 
     def create() {
@@ -37,6 +42,43 @@ class PermissionAmount_GHController {
         }
 
         [permissionAmount_GHInstance: permissionAmount_GHInstance]
+    }
+
+    def branchHeadList() {
+        def region = principalService.bankRegion
+        [bankRegion: region]
+    }
+
+    def saveBranchHeadPermissionAmount() {
+        def region = principalService.bankRegion
+        def year = new JalaliCalendar().year
+        def branchHeads = BranchHead.findAllByBankRegion(region)
+        branchHeads.each {
+            def permissionAmount = PermissionAmount_BranchHead_GH.findByBranchHeadAndYear(it, year)
+            if (!permissionAmount)
+                permissionAmount = new PermissionAmount_BranchHead_GH(branchHead: it, year: year)
+            def val = params["branchHead_${it.id}"] ?: "0"
+            val = val.replace(",", "")
+            permissionAmount.permAmount = Double.valueOf(val)
+            permissionAmount.save()
+        }
+        redirect(action: "branchHeadList")
+    }
+
+    def saveBranchPermissionAmount() {
+        def region = principalService.branchHead
+        def year = new JalaliCalendar().year
+        def branchs = Branch.findAllByBranchHead(region)
+        branchs.each {
+            def permissionAmount = PermissionAmount_GH.findByBranchAndYear(it, year)
+            if (!permissionAmount)
+                permissionAmount = new PermissionAmount_GH(branch: it, year: year)
+            def val = params["branch_${it.id}"] ?: "0"
+            val = val.replace(",", "")
+            permissionAmount.permAmount = Double.valueOf(val)
+            permissionAmount.save()
+        }
+        redirect(action: "list")
     }
 
     def edit() {

@@ -16,7 +16,7 @@
     <rg:grid domainClass="${cashmanagement.User}"
              showCommand="false"
              commands="[[handler: 'addToGrid(#id#)', icon: 'application_edit']]"
-             toolbarCommands="[[icon: 'plus', caption: 'Add', function: 'addToGrid']]"></rg:grid>
+             toolbarCommands="[[icon: 'plus', caption: message(code:'create'), function: 'addToGrid']]"></rg:grid>
     <g:javascript>
                 function addToGrid(id){
                 var url='<g:createLink action="form"/>';

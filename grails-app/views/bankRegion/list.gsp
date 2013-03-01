@@ -12,12 +12,12 @@
 		<a href="#list-bankRegion" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
         <div id="list-bankRegion" ng-controller="bankRegionController" class="content scaffold-list" role="main">
-            <rg:grid domainClass="${cashmanagement.BankRegion}">
+            <rg:grid showCommand="false" domainClass="${cashmanagement.BankRegion}">
                 <rg:commands>
                     <rg:deleteCommand/>
                 </rg:commands>
             </rg:grid>
-            <rg:dialog id="bankRegion" title="BankRegion Dialog">
+            <rg:dialog id="bankRegion" title="${message(code:'bank.region')}">
                 <rg:fields bean="${new cashmanagement.BankRegion()}">
                     <rg:modify>
                         <rg:ignoreField field="branchHeads"/>
@@ -26,8 +26,8 @@
                 <rg:saveButton domainClass="${cashmanagement.BankRegion}"/>
                 <rg:cancelButton/>
             </rg:dialog>
-            <input type="button" ng-click="openBankRegionCreateDialog()" value="Create BankRegion"/>
-            <input type="button" ng-click="openBankRegionEditDialog()" value="Edit BankRegion"/>
+            <input type="button" ng-click="openBankRegionCreateDialog()" value="<g:message code="create" />"/>
+            <input type="button" ng-click="openBankRegionEditDialog()" value="<g:message code="edit" />"/>
         </div>
     </body>
 </html>

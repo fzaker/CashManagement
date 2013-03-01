@@ -1,6 +1,8 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import fi.joensuu.joyds1.calendar.JalaliCalendar
+import grails.converters.JSON
 
 class LoanRequest_TController {
     def principalService
@@ -13,6 +15,17 @@ class LoanRequest_TController {
     }
 
     def list() {
+        def res = viewParams()
+        res
+    }
+
+    def viewParams() {
+        def branch = principalService.branch
+        def year = new JalaliCalendar().year
+        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
+        def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, startDate, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0
+        def permitAmount = cashmanagement.PermissionAmount_T.findByBranchAndYear(branch, year)?.permAmount
+        return [branch: branch, usedAmount: usedAmountBranch, permitAmount: permitAmount]
     }
 
     def create() {
@@ -35,7 +48,7 @@ class LoanRequest_TController {
         }
         loanRequest_TInstance.save(flush: true)
 
-        render 1;
+        render viewParams() as JSON;
 //
 //        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_NT'), loanRequest_TInstance.id])
 //        redirect(action: "show", id: loanRequest_TInstance.id)
@@ -91,6 +104,13 @@ class LoanRequest_TController {
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_T'), loanRequest_TInstance.id])
         redirect(action: "show", id: loanRequest_TInstance.id)
+    }
+
+    def reject() {
+        def loanRequest = LoanRequest_T.get(params.id)
+        loanRequest.loanRequestStatus = LoanRequest_T.Cancel
+        loanRequest.save(flush: true)
+        render viewParams() as JSON
     }
 
     def delete() {

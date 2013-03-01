@@ -47,10 +47,10 @@
                     <a href="<g:createLink controller="LoanRequest_NT" action="bankRegion"/>"><g:message
                             code="loanList.BankRegion"/></a>
                 </li>
-                <li>
-                    <a href="<g:createLink controller="LoanRequestNT_HeadOffice"/>"><g:message
-                            code="loanList.HeadOffice"/></a>
-                </li>
+                %{--<li>--}%
+                    %{--<a href="<g:createLink controller="LoanRequestNT_HeadOffice"/>"><g:message--}%
+                            %{--code="loanList.HeadOffice"/></a>--}%
+                %{--</li>--}%
             </ul>
         </li>
 
@@ -73,6 +73,9 @@
                 <li>
                     <a href="<g:createLink controller="LoanRequest_GH"/>"><g:message
                             code="LoanRequest.register.gh"/></a>
+                </li>
+                <li>
+                    <a href="<g:createLink controller="permissionAmount_GH" action="branchHeadList"/>"><g:message code="Branch.PermitAssign.gh.branchHead"/></a>
                 </li>
                 <li>
                     <a href="<g:createLink controller="permissionAmount_GH"/>"><g:message code="Branch.PermitAssign.gh"/></a>

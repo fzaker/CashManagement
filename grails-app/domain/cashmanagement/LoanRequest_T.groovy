@@ -7,6 +7,7 @@ class LoanRequest_T {
     static final String Sent = "Sent"
 
     String loanNo
+    String name
     String loanIDCode
     String loanRequestStatus
     Double loanAmount
@@ -21,6 +22,7 @@ class LoanRequest_T {
         loanNo(nullable: false, unique: true)
         loanIDCode(nullable: false, unique: true)
         loanType(nullable: false)
+        name()
         loanAmount(nullable: false)
         requestDate(nullable: false)
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])

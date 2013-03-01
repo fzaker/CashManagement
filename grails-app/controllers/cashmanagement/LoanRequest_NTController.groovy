@@ -14,8 +14,9 @@ class LoanRequest_NTController {
     }
 
     def list() {
-
-         }
+        def branch = principalService.branch
+        [branch: branch, permitAmount: loanService.getAvailable(branch), usedPercent: loanService.checkAvailable_numofdays_curMonth(branch), usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branch)]
+    }
 
     def create() {
         [loanRequest_NTInstance: new LoanRequest_NT(params)]
