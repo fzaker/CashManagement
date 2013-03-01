@@ -43,25 +43,27 @@
         </rg:criteria>
     </rg:grid>
 
-    <button onclick="linkRequest()"><g:message code="link-request" /></button>
+    <button onclick="linkRequest()"><g:message code="link-request"/></button>
 
     <g:javascript>
         function linkRequest(){
             var reqId=$("#LoanRequestNT_BankRegionGrid").getGridParam('selrow')
             var branchId=$("#BranchGrid").getGridParam('selrow')
             if(!reqId){
-                alert("<g:message code="please-select-a-request" />")
+                alert("<g:message code="please-select-a-request"/>")
                 return false;
             }
             if(!branchId){
-                alert("<g:message code="please-select-a-branch" />")
+                alert("<g:message code="please-select-a-branch"/>")
                 return false;
             }
+            var amt=prompt("<g:message code="please-enter-amount"/>")
             $.ajax({
-                url:'<g:createLink action="linkBranchRequestRegion" />',
+                url:'<g:createLink action="linkBranchRequestRegion"/>',
                 data:{
                  branchId:branchId,
-                 reqId:reqId
+                 reqId:reqId,
+                 amt:amt
                 }
             }).done(function (response) {
                 alert(response)

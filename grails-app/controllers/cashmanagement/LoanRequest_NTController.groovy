@@ -15,7 +15,7 @@ class LoanRequest_NTController {
 
     def list() {
         def branch = principalService.branch
-        [branch: branch, permitAmount: loanService.getAvailable(branch), usedPercent: loanService.checkAvailable_numofdays_curMonth(branch), usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branch)]
+        [branch: branch, permitAmount: loanService.getAvailable(branch), usedPercent: loanService.checkAvailable_numofdays_curMonth(branch, 0) * 100, usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branch) * 100]
     }
 
     def create() {
@@ -125,16 +125,23 @@ class LoanRequest_NTController {
         try {
             def destBranch = Branch.get(params.branchId)
             def req = LoanRequestNT_BranchHead.get(params.reqId)
-            if (req.loanAmount >= destBranch.available) {
+            def amt = params.amt ?: "0"
+            def amount = amt as Double
+            if (amount <= 0) {
+                render message(code: 'please-enter-amount')
+            }
+            else if (amount >= destBranch.available) {
                 render message(code: 'branch-available-is-less-than-request')
             }
             else {
-                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: req.loanAmount, request: req.loanRequest_nt).save()
-                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: req.loanAmount, request: req.loanRequest_nt).save()
-                req.loanReqStatus = LoanRequest_NT.Confirm
-                req.save()
-                req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
-                req.loanRequest_nt.save()
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt).save()
+                if (loanService.getAvailable(req.branch) >= req.loanAmount) {
+                    req.loanReqStatus = LoanRequest_NT.Confirm
+                    req.save()
+                    req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+                    req.loanRequest_nt.save()
+                }
                 render message(code: 'request-assign-successfull')
             }
         } catch (e) {
@@ -145,17 +152,24 @@ class LoanRequest_NTController {
     def linkBranchRequestRegion() {
         try {
             def destBranch = Branch.get(params.branchId)
+            def amt = params.amt ?: "0"
+            def amount = amt as Double
             def req = LoanRequestNT_BankRegion.get(params.reqId)
-            if (req.loanAmount >= destBranch.available) {
+            if (amount <= 0) {
+                render message(code: 'please-enter-amount')
+            }
+            else if (amount >= destBranch.available) {
                 render message(code: 'branch-available-is-less-than-request')
             }
             else {
-                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: req.loanAmount, request: req.loanRequest_nt).save()
-                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: req.loanAmount, request: req.loanRequest_nt).save()
-                req.loanReqStatus = LoanRequest_NT.Confirm
-                req.save()
-                req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
-                req.loanRequest_nt.save()
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt).save()
+                if (loanService.getAvailable(req.branch) >= req.loanAmount) {
+                    req.loanReqStatus = LoanRequest_NT.Confirm
+                    req.save()
+                    req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+                    req.loanRequest_nt.save()
+                }
                 render message(code: 'request-assign-successfull')
             }
         } catch (e) {

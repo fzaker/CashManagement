@@ -10,6 +10,8 @@ class User {
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
+    boolean isAdmin
+    boolean basicInformation
 
 
     transient def getBranch(){
@@ -28,6 +30,8 @@ class User {
         branch()
         branchHead()
         bankRegion()
+        isAdmin()
+        basicInformation()
     }
 
     static mapping = {

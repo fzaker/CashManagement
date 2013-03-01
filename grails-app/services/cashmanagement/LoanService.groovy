@@ -59,24 +59,24 @@ class LoanService {
 
     def checkResourceAvailability(Branch branch, double amt) {
         SystemParameters sysParam = SystemParameters.findAll().first()
-        // def avail=getAvailable(branch)
-        // return amt <= avail
-        if (checkAvailable_numofdays_curMonth(branch) < sysParam.permitToward) {
-            if (checkAvailable_numofdays_curMonth(branch) - checkAvailable_numofdays_oldMonth(branch) <= sysParam.maxGrowth)
+
+        if (checkAvailable_numofdays_curMonth(branch, amt) < sysParam.permitToward) {
+            if (checkAvailable_numofdays_curMonth(branch, amt) - checkAvailable_numofdays_oldMonth(branch) <= sysParam.maxGrowth)
                 return true
             else
                 return false ///inja bayad kollan cancel shavad ... ,, na pending
         }
         else {
-            if (checkAvailable_numofdays_curMonth(branch) - checkAvailable_numofdays_oldMonth(branch) <= sysParam.minGrowth)
+            if (checkAvailable_numofdays_curMonth(branch, amt) - checkAvailable_numofdays_oldMonth(branch) <= sysParam.minGrowth)
                 return true
             else
                 return false
         }
-
+//        def avail = getAvailable(branch)
+//        return amt <= avail
     }
 
-    def checkAvailable_numofdays_curMonth(Branch branch) {
+    def checkAvailable_numofdays_curMonth(Branch branch, Double amt) {
         SystemParameters sysParam = SystemParameters.findAll().first()
 
         def cal = Calendar.getInstance()
@@ -89,11 +89,12 @@ class LoanService {
 
         def manabeGLGroup = sysParam.gheyreTabserei.manabe
         def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
-        def manabe = ((GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glManabe, branch, date).sum {it.glAmount }) ?: 0) / ((GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glManabe, branch, date).count {it.glAmount }) ?: 1)
+        def manabe = ((GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThanEquals(glManabe, branch, date).sum {it.glAmount }) ?: 0) /
+                ((GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThanEquals(glManabe, branch, date).count {it.glAmount }) ?: 1)
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
-        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glMasaref, branch, date).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}?.glAmount}.sum() ?: 0
+        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThanEquals(glMasaref, branch, date).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}?.glAmount}.sum() ?: 0
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
 
@@ -102,7 +103,7 @@ class LoanService {
         def sumCredit = (barrows.sum {it.credit ?: 0}) ?: 0
 
 
-        def cur_toward = (masaref + mojavezSadere - sumDebit + sumCredit) / ((manabe) ?: 1)
+        def cur_toward = (masaref + mojavezSadere - sumDebit + sumCredit + (amt ?: 0)) / ((manabe) ?: 1)
 
         return cur_toward
     }
@@ -127,11 +128,11 @@ class LoanService {
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
-        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glMasaref, branch, fromDate, toDate).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}?.glAmount}.sum() ?: 0
+        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateBetween(glMasaref, branch, fromDate, toDate).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}?.glAmount}.sum() ?: 0
 
-        def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
+        def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatusAndRequestDateLessThanEquals(branch, LoanRequest_NT.Confirm, toDate).sum {it.loanAmount}) ?: 0
 
-        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
+        def barrows = LoanRequestNTBarrow.findAllByBranchAndDateLessThanEquals(branch,toDate)
         def sumDebit = (barrows.sum {it.debit ?: 0}) ?: 0
         def sumCredit = (barrows.sum {it.credit ?: 0}) ?: 0
 
@@ -155,11 +156,11 @@ class LoanService {
 
         def manabeGLGroup = sysParam.gheyreTabserei.manabe
         def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
-        def manabe = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glManabe, branch, date).sum {it.glAmount * it.glCode.glFlag}) ?: 0
+        def manabe = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThanEquals(glManabe, branch, date).sum {it.glAmount /** it.glCode.glFlag*/}) ?: 0
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
-        def masaref = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThan(glMasaref, branch, date).sum {it.glAmount * it.glCode.glFlag}) ?: 0
+        def masaref = (GLTransaction.findAllByGlCodeInListAndBranchAndTranDateGreaterThanEquals(glMasaref, branch, date).sum {it.glAmount /** it.glCode.glFlag*/}) ?: 0
 
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
@@ -168,9 +169,9 @@ class LoanService {
         def sumDebit = (barrows.sum {it.debit ?: 0}) ?: 0
         def sumCredit = (barrows.sum {it.credit ?: 0}) ?: 0
 
+        def permitToward = Math.min(sysParam.permitToward, sysParam.maxGrowth + checkAvailable_numofdays_oldMonth(branch))
 
-
-        def avail = (sysParam.permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
+        def avail = (permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
         return avail
     }
 
@@ -193,7 +194,7 @@ class LoanService {
 
         def vosooliGlGroup = sysParam.tabserei.manabe
         def VosooliGlCode = GLCode.findAllByGlGroup(vosooliGlGroup)
-        def Vosooli = (GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateGreaterThan(VosooliGlCode, bch, date).sum {it.glAmount}) ?: 0
+        def Vosooli = (GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateGreaterThanEquals(VosooliGlCode, bch, date).sum {it.glAmount}) ?: 0
 
         def vosool = Vosooli * sysParam.permitReceivePercent
 

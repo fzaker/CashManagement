@@ -12,7 +12,9 @@
 		<a href="#list-branch" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
         <div id="list-branch" ng-controller="branchController" class="content scaffold-list" role="main">
-            <rg:grid showCommand="false" domainClass="${cashmanagement.Branch}">
+            <rg:grid
+                    columns="[[name:'branchHead'],[name:'branchCode'],[name:'branchName']]"
+                    showCommand="false" domainClass="${cashmanagement.Branch}">
                 <rg:commands>
                     <rg:deleteCommand/>
                 </rg:commands>

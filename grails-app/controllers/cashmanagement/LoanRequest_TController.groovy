@@ -24,7 +24,7 @@ class LoanRequest_TController {
         def year = new JalaliCalendar().year
         def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
         def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, startDate, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0
-        def permitAmount = cashmanagement.PermissionAmount_T.findByBranchAndYear(branch, year)?.permAmount
+        def permitAmount = cashmanagement.PermissionAmount_T.findByBranchAndYear(branch, year)?.permAmount?:0
         return [branch: branch, usedAmount: usedAmountBranch, permitAmount: permitAmount]
     }
 

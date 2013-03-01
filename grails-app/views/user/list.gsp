@@ -15,12 +15,23 @@
 <div id="list-user" class="content scaffold-list" role="main">
     <rg:grid domainClass="${cashmanagement.User}"
              showCommand="false"
-             commands="[[handler: 'addToGrid(#id#)', icon: 'application_edit']]"
-             toolbarCommands="[[icon: 'plus', caption: message(code:'create'), function: 'addToGrid']]"></rg:grid>
+             commands="[[handler: 'addToGrid(#id#)', icon: 'application_edit'], [handler: 'changepass(#id#)', icon: 'application_key']]"
+             toolbarCommands="[[icon: 'plus', caption: message(code: 'create'), function: 'addToGrid']]"></rg:grid>
     <g:javascript>
                 function addToGrid(id){
                 var url='<g:createLink action="form"/>';
                     var save='<g:createLink action="save"/>'
+                if(id){
+                    url+="/"+id
+                    save+="/"+id
+                    }
+                    loadOverlay(url,save,function(){
+                        $("#UserGrid").trigger("reloadGrid")
+                    })
+                }
+        function changepass(id){
+                var url='<g:createLink action="password"/>';
+                    var save='<g:createLink action="savepass"/>'
                 if(id){
                     url+="/"+id
                     save+="/"+id

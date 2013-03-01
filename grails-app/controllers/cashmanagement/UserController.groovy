@@ -35,6 +35,18 @@ class UserController {
         render(template: "form", model: [userInstance: user, branch: branch, branchHead: branchHead, bankRegion: bankRegion])
     }
 
+    def password() {
+        def user = User.get(params.id)
+        render(template: "password", model: [user: user])
+    }
+
+    def savepass() {
+        def user = User.get(params.id)
+        user.password = params.password
+        user.save()
+        render 0;
+    }
+
     def save() {
         def user
         if (params.id) {
@@ -53,21 +65,40 @@ class UserController {
         if (params.branchId) {
             def branch = Branch.get(params.branchId)
             def branchRole = BranchRole.findByBranch(branch) ?: new BranchRole(branch: branch, authority: "branch_${branch.id}").save()
-            if(branchRole)
+            user.authorities.findAll {it instanceof BranchRole}.each {UserRole.remove(user, it)}
+            if (branchRole)
                 UserRole.create(user, branchRole)
+
+        }
+        else {
+            def branchRole = user.authorities.find {it instanceof BranchRole}
+            if (branchRole)
+                UserRole.remove(user, branchRole)
         }
         if (params.branchHeadId) {
             def branchH = BranchHead.get(params.branchHeadId)
             def branchRole = BranchHeadRole.findByBranchHead(branchH) ?: new BranchHeadRole(branchHead: branchH, authority: "branchHead_${branchH.id}").save()
-            if(branchRole)
+            user.authorities.findAll {it instanceof BranchHeadRole}.each {UserRole.remove(user, it)}
+            if (branchRole)
                 UserRole.create(user, branchRole)
+        }
+        else {
+            def branchRole = user.authorities.find {it instanceof BranchHeadRole}
+            if (branchRole)
+                UserRole.remove(user, branchRole)
         }
 
         if (params.bankRegionId) {
             def bankRegion = BankRegion.get(params.bankRegionId)
             def branchRole = BankRegionRole.findByBankRegion(bankRegion) ?: new BankRegionRole(bankRegion: bankRegion, authority: "bankRegion_${bankRegion.id}").save()
+            user.authorities.findAll {it instanceof BankRegionRole}.each {UserRole.remove(user, it)}
             if (branchRole)
                 UserRole.create(user, branchRole)
+        }
+        else {
+            def branchRole = user.authorities.find {it instanceof BankRegionRole}
+            if (branchRole)
+                UserRole.remove(user, branchRole)
         }
         render user as JSON
     }
