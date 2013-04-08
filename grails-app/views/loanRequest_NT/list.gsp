@@ -13,6 +13,9 @@
                                                                      default="Skip to content&hellip;"/></a>
 
 <div id="list-loanRequest_NT" ng-controller="loanRequest_NTController" class="content scaffold-list" role="main">
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <div class="fieldcontain">
         <span><g:message code="permitpermissionamountbranch"/> ${branch}: <g:formatNumber
                 number="${permitAmount}" type="number"/></span>

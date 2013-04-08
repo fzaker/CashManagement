@@ -18,14 +18,20 @@ class LoanService {
 
         def jc = new JalaliCalendar()
         def year = jc.year
+        def month=jc.month
         jc.set(jc.year, jc.month, 1)
         def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Confirm).sum {it.loanAmount}) ?: 0
         def sumBranchThisMonth = (LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateGreaterThanEquals(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount}) ?: 0
 
         def permAmount = (PermissionAmount_GH.findByBranchAndYear(branch, year)?.permAmount) ?: 0
+
+        def usedAmountPrevMonths = LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateLessThan(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount} ?: 0
+        def permitAmountPrevMonths = permAmount * (month - 1) * sysParam.ghMonthlyPercent - usedAmountPrevMonths
+
+
         if (permAmount < sumBranch + amt)
             return false
-        if (sysParam.ghMonthlyPercent * permAmount < sumBranchThisMonth + amt)
+        if (sysParam.ghMonthlyPercent * permAmount+permitAmountPrevMonths < sumBranchThisMonth + amt)
             return false
         if (masarefBeManabeGharzolhasane() > sysParam.ghCentralBankPercent)
             return false

@@ -140,6 +140,19 @@
                     </ul>
                 </li>
             </c:isAdmin>
+            <li class="MenuItem">
+
+                <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>
+                <ul>
+                    <li>
+                        <a href="<g:createLink controller="logout" />"><g:message code="logout"/></a>
+                    </li>
+                    <li>
+                        <a href="<g:createLink controller="user" action="changePasswordUser"/>"><g:message code="changepass"/></a>
+                    </li>
+
+                </ul>
+            </li>
 
         </ul>
     </div>

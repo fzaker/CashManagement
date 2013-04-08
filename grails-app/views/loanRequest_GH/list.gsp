@@ -21,6 +21,9 @@
 <g:set var="usedAmountBranchMonth"
        value="${usedAmountMonth}"/>
 
+<g:set var="permissionAmountPrevMonths"
+       value="${permitAmountPrevMonths}"/>
+
 
 <div id="list-loanRequest_GH" ng-controller="loanRequest_GHController" class="content scaffold-list" role="main">
     <div class="fieldcontain">
@@ -50,10 +53,14 @@
         <span><g:message code="usedpermissionamountbranchmonth"/> ${branch}: <span id="usedAmountMonth"><g:formatNumber
                 number="${usedAmountBranchMonth}" type="number"/></span></span>
     </div>
+    <div class="fieldcontain">
+        <span><g:message code="permissionAmountPrevMonths"/> ${branch}: <span id="permitAmountPrevMonths"><g:formatNumber
+                number="${permissionAmountPrevMonths}" type="number"/></span></span>
+    </div>
 
     <div class="fieldcontain">
         <span><g:message code="permitpermissionamountbranchmonth"/> ${branch}: <span id="permitAmountMonth"><g:formatNumber
-                number="${permissionAmountBranchMonth - usedAmountBranchMonth}" type="number"/></span></span>
+                number="${permissionAmountBranchMonth + permissionAmountPrevMonths - usedAmountBranchMonth}" type="number"/></span></span>
     </div>
 
 
@@ -113,6 +120,7 @@
                     $("#usedAmount").html(addCommas(resp.usedAmount))
                     $("#permitAmount").html(addCommas(resp.remainAmount))
                     $("#usedAmountMonth").html(addCommas(resp.usedAmountMonth) )
+                    $("#permitAmountPrevMonths").html(addCommas(resp.permitAmountPrevMonths))
                     $("#permitAmountMonth").html(addCommas(resp.remainAmountMonth))
                 }
                 function reject(id){
@@ -127,6 +135,7 @@
                             $("#usedAmount").html(addCommas(resp.usedAmount))
                             $("#permitAmount").html(addCommas(resp.remainAmount))
                             $("#usedAmountMonth").html(addCommas(resp.usedAmountMonth))
+                            $("#permitAmountPrevMonths").html(addCommas(resp.permitAmountPrevMonths))
                             $("#permitAmountMonth").html(addCommas(resp.remainAmountMonth))
                         })
                     }

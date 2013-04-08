@@ -88,7 +88,6 @@ class LoanRequest_NTController {
 
     def save() {
         def branch = principalService.getBranch()
-
         def loanRequest_NTInstance = new LoanRequest_NT(params)
         loanRequest_NTInstance.branch = branch
         loanRequest_NTInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
@@ -100,14 +99,15 @@ class LoanRequest_NTController {
             loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Pending
 
         }
+        if (LoanRequest_NT.countByLoanNo(loanRequest_NTInstance.loanNo) > 0) {
+            flash.message = message(code: 'loan-no-not-unique')
 
-
-        if (!loanRequest_NTInstance.save(flush: true)) {
-            render(view: "create", model: [loanRequest_NTInstance: loanRequest_NTInstance])
-            return
         }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
+        else {
+            if (loanRequest_NTInstance.save(flush: true)) {
+//                flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
+            }
+        }
         redirect(action: "list")
     }
 

@@ -13,14 +13,16 @@
     <link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'apple-touch-icon.png')}">
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
-    <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'rapidgrails.css')}" type="text/css">
+    <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'rapidgrails.css')}"
+          type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'css3.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'reset.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'theme.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'msgGrowl.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'rg-rtl.css')}" type="text/css">
-    <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'jquery-ui-rtl.css')}" type="text/css">
+    <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'jquery-ui-rtl.css')}"
+          type="text/css">
 
     <ckeditor:resources/>
     <g:javascript plugin="rapid-grails" src="angular.min.js"></g:javascript>
@@ -54,13 +56,14 @@
     <g:javascript src="superfish/supersubs.js"/>
 
     <g:javascript>
-        jQuery(function() {
-            jQuery('ul.sf-menu').supersubs({maxWidth: 27, extraWidth: 1}).superfish();
+        jQuery(function () {
+            jQuery('ul.sf-menu').supersubs({maxWidth:27, extraWidth:1}).superfish();
         });
     </g:javascript>
 
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'common.css')}"/>
-    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css/themes', file: (setting?setting.siteColor:'blue') + '.css')}"/>
+    <link rel="stylesheet" type="text/css"
+          href="${resource(dir: 'css/themes', file: (setting ? setting.siteColor : 'blue') + '.css')}"/>
 
     <g:layoutHead/>
 </head>
@@ -69,9 +72,12 @@
 <div id="bokeh"><div id="container">
     <div id="header" role="banner">
         <h1 id="logo">Application Title</h1>
-    </div><!-- end #header -->
 
+    </div><!-- end #header -->
     <g:render template="/menu"/>
+    <span class="logintitle">
+        <c:loginmessage/>
+    </span>
 
     <div id="content">
         <g:layoutBody/>
@@ -82,7 +88,7 @@
 
 <div id="footer" role="contentinfo">
     <g:message code="application.name" default="Cash Management System"/> | <g:message code="application.copyRight"
-                                                                                    default="© AGAH-IT 2012"/>
+                                                                                       default="© AGAH-IT 2012"/>
 </div><!-- end #footer -->
 
 <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt"

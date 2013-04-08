@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<h2><g:message code="default.list.label" args="[entityName]"/></h2>
+<h3><g:message code="default.list.label" args="[entityName]"/></h3>
 <a href="#list-loanRequest_T" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
                                                                     default="Skip to content&hellip;"/></a>
 <g:set var="year" value="${new JalaliCalendar().getYear()}"/>

@@ -43,5 +43,22 @@ class CashmanagementTagLib {
             out << body()
         }
     }
-
+    def loginmessage = {attrs, body ->
+        if (principalService.user) {
+            out << message(code: 'user.name.label')
+            out << ': <b>' + principalService.user.name+"</b>  "
+            if (principalService.branch) {
+                out << message(code: 'branch')
+                out << ': <b>' + principalService.branch+"</b>  "
+            }
+            if (principalService.branchHead) {
+                out << message(code: 'branchHead')
+                out << ': <b>' + principalService.branchHead+"</b>  "
+            }
+            if (principalService.bankRegion) {
+                out << message(code: 'bankRegion')
+                out << ': <b>' + principalService.bankRegion+"</b>  "
+            }
+        }
+    }
 }

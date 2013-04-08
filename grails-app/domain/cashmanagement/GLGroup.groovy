@@ -6,7 +6,7 @@ class GLGroup {
 
 
     static constraints = {
-        glGroupCode()
+        glGroupCode(unique: true)
         glGroupName(nullable: false)
     }
     String toString(){

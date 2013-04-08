@@ -44,7 +44,82 @@
     </rg:grid>
 
     <button onclick="linkRequest()"><g:message code="link-request"/></button>
+    <br>
+    <br>
+    <div id="manoto">
+        <ul>
+            <li>
+                <a href="#Confirm"><g:message code="Confirm"/></a>
+            </li>
+            <li>
+                <a href="#Test"><g:message code="Sent"/></a>
+            </li>
+            <li>
+                <a href="#Rejected"><g:message code="Rejected"/></a>
+            </li>
+        </ul>
 
+
+        <div id="Confirm">
+            <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
+                     idPostfix="ConfirmList"
+                     showCommand="false"
+                     caption="${message(code: "Confirm")}">
+                <rg:criteria>
+                    <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                    <rg:nest name="loanRequest_nt">
+                        <rg:nest name="branch">
+                            <rg:nest name="branchHead">
+                                <rg:nest name="bankRegion">
+                                    <rg:eq name="id" value="${bankRegion?.id}"/>
+                                </rg:nest>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:criteria>
+            </rg:grid>
+        </div>
+
+        <div id="Test">
+            <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
+                     idPostfix="SentList"
+                     showCommand="false"
+                     caption="${message(code: "Sent")}">
+                <rg:criteria>
+                    <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
+                    <rg:nest name="loanRequest_nt">
+                        <rg:nest name="branch">
+                            <rg:nest name="branchHead">
+                                <rg:nest name="bankRegion">
+                                    <rg:eq name="id" value="${bankRegion?.id}"/>
+                                </rg:nest>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:criteria>
+            </rg:grid>
+        </div>
+
+        <div id="Rejected">
+            <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
+                     idPostfix="RejectedList"
+                     showCommand="false"
+                     caption="${message(code: "Rejected")}">
+                <rg:criteria>
+                    <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+                    <rg:nest name="loanRequest_nt">
+                        <rg:nest name="branch">
+                            <rg:nest name="branchHead">
+                                <rg:nest name="bankRegion">
+                                    <rg:eq name="id" value="${bankRegion?.id}"/>
+                                </rg:nest>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:criteria>
+            </rg:grid>
+        </div>
+    </div>
     <g:javascript>
         function linkRequest(){
             var reqId=$("#LoanRequestNT_BankRegionGrid").getGridParam('selrow')
@@ -69,6 +144,7 @@
                 alert(response)
                 $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
                 $("#BranchGrid").trigger("reloadGrid")
+                $("#LoanRequestNT_BankRegionConfirmListGrid").trigger("reloadGrid")
             })
         }
         function reject(id){
@@ -79,6 +155,7 @@
                     data:{id:id}
                 }).success(function(){
                     $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
+                    $("#LoanRequestNT_BankRegionRejectedListGrid").trigger("reloadGrid")
                 })
             }
         }
@@ -90,9 +167,13 @@
                     data:{id:id}
                 }).success(function(){
                     $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
+                    $("#LoanRequestNT_BankRegionSentListGrid").trigger("reloadGrid")
                 })
             }
         }
+        $(function() {
+            $( "#manoto" ).tabs();
+        });
     </g:javascript>
 </div>
 </body>

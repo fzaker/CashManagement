@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<h2><g:message code="default.list.label" args="[entityName]"/></h2>
+<h3><g:message code="default.list.label" args="[entityName]"/></h3>
 <a href="#list-permissionAmount_GH" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
                                                                           default="Skip to content&hellip;"/></a>
 

@@ -6,6 +6,7 @@ import grails.converters.JSON
 class UserController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    def principalService
 
     def index() {
         redirect(action: "list", params: params)
@@ -40,6 +41,20 @@ class UserController {
         render(template: "password", model: [user: user])
     }
 
+    def changePasswordUser() {
+        def user = principalService.user
+        [user: user]
+    }
+
+    def savepassuser() {
+        if (params.password == params.repassword) {
+            def user = principalService.user
+            user.password = params.password
+            user.save()
+        }
+        redirect(action: "changePasswordUser")
+    }
+
     def savepass() {
         def user = User.get(params.id)
         user.password = params.password
@@ -59,7 +74,7 @@ class UserController {
             user.accountLocked = false
             user.enabled = true
         }
-
+        user.password = "123456"
         user.save()
 
         if (params.branchId) {

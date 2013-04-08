@@ -7,7 +7,7 @@ class GLCode {
 
     static constraints = {
         glGroup()
-        glCode()
+        glCode(unique: true)
         glFlag(inList:[1L,-1L] )
     }
     String toString(){

@@ -790,3 +790,11 @@ a.skip {
 .jstree-checked > a > .jstree-radio:hover { background-position:-38px -37px; }
 .jstree-unchecked > a > .jstree-radio:hover { background-position:-2px -37px; }
 .jstree-undetermined > a > .jstree-radio:hover { background-position:-20px -37px; }
+
+.inline input[type=button],.inline .fieldcontain{
+    display: inline-block;
+}
+.logintitle{
+    float: left;
+
+}
