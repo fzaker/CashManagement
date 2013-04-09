@@ -164,6 +164,8 @@ class LoanRequest_NTController {
                 def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user).save()
                 if (loanService.getAvailable(req.branch) >= req.loanAmount) {
                     req.loanReqStatus = LoanRequest_NT.Confirm
+                    req.changeDate=new Date()
+                    req.user=principalService.user
                     req.save()
                     req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
                     req.loanRequest_nt.save()
@@ -193,6 +195,8 @@ class LoanRequest_NTController {
                 def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user).save()
                 if (loanService.getAvailable(req.branch) >= req.loanAmount) {
                     req.loanReqStatus = LoanRequest_NT.Confirm
+                    req.changeDate=new Date()
+                    req.user=principalService.user
                     req.save()
                     req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
                     req.loanRequest_nt.save()

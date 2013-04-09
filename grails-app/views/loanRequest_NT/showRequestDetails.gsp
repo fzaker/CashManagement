@@ -114,7 +114,7 @@
             <g:if test="${requestBranchHead?.changeDate}">
                 <li class="fieldcontain">
                     <span class="property-label"><g:message code="date-branchHead" /></span>
-                    <span class="property-value"><rg:formatJalaliDate date="${requestBranchHead?.changeDate?.encodeAsHTML()}"/></span>
+                    <span class="property-value"><rg:formatJalaliDate date="${requestBranchHead?.changeDate}"/></span>
                 </li>
             </g:if>
             <g:if test="${requestBranchHead?.loanReqStatus}">
