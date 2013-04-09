@@ -25,6 +25,7 @@ class LoanRequest_GHController {
     def reject() {
         def loanRequest = LoanRequest_GH.get(params.id)
         loanRequest.loanRequestStatus = LoanRequest_GH.Cancel
+        loanRequest.rejectReason = RejectReason.get(params.rejectReasonId)
         loanRequest.save(flush: true)
         def res = getPermitAmts()
         render res as JSON
@@ -62,10 +63,12 @@ class LoanRequest_GHController {
 
         }
 
-
-        loanRequest_GHInstance.save(flush: true)
-        def res = getPermitAmts()
-        render res as JSON
+        if(loanRequest_GHInstance.save(flush: true)){
+            def res = getPermitAmts()
+            render res as JSON
+        }else{
+            render loanRequest_GHInstance.errors.allErrors.collect{g.message(error: it)} as JSON
+        }
     }
 
     def show() {

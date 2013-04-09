@@ -5,6 +5,9 @@ class LoanRequestNT_HeadOffice {
     LoanRequest_NT loanRequest_nt
     String loanReqStatus     // ** Confirm - Cancel - Send to BankRegion
     String request_Desc
+    RejectReason rejectReason
+    Date changeDate
+    User user
 
 //    Date timeStamp
 //    String loginUser
@@ -43,7 +46,9 @@ class LoanRequestNT_HeadOffice {
         branch()
         loanReqStatus(inList: ["Confirm", "Cancel", "Sent", "Pending"])
         request_Desc(nullable: true)
-
+        rejectReason(nullable: true)
+        changeDate(nullable: true)
+        user(nullable: true)
     }
 
 }

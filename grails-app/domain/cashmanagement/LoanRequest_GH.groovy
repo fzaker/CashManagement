@@ -14,6 +14,7 @@ class LoanRequest_GH {
     Date requestDate
     LoanType loanType
     Branch branch
+    RejectReason rejectReason
 //    Date registerTimeStamp
 //    String loginUser
 
@@ -26,5 +27,6 @@ class LoanRequest_GH {
         requestDate(nullable: false)
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
         branch(nullable: false)
+        rejectReason(nullable: true)
     }
 }

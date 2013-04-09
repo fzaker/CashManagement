@@ -33,6 +33,9 @@
                             <li>
                                 <a href="<g:createLink controller="GLCode"/>"><g:message code="glCode.definition"/></a>
                             </li>
+                            <li>
+                                <a href="<g:createLink controller="RejectReason"/>"><g:message code="rejectReason.definition"/></a>
+                            </li>
                         </c:isBasicInformation>
                         <c:isAdmin>
                             <li>

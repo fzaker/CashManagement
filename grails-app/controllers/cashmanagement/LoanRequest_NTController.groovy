@@ -2,6 +2,7 @@ package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
 import org.codehaus.groovy.grails.commons.ApplicationHolder
+import grails.converters.JSON
 
 class LoanRequest_NTController {
     def principalService
@@ -37,6 +38,7 @@ class LoanRequest_NTController {
         def req = LoanRequest_NT.get(params.id)
         if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
             req.loanRequestStatus = LoanRequest_NT.Cancel
+            req.rejectReason = RejectReason.get(params.rejectReasonId)
             req.save()
         }
         render 0
@@ -48,6 +50,8 @@ class LoanRequest_NTController {
             def loanReqRegion = new LoanRequestNT_BankRegion(loanReqStatus: LoanRequest_NT.Pending, loanRequest_nt: req.loanRequest_nt)
             loanReqRegion.save(true)
             req.loanReqStatus = LoanRequest_NT.Sent
+            req.user = principalService.user
+            req.changeDate = new Date()
             req.save()
         }
         render 0
@@ -57,8 +61,12 @@ class LoanRequest_NTController {
         def req = LoanRequestNT_BranchHead.get(params.id)
         if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
             req.loanReqStatus = LoanRequest_NT.Cancel
+            req.rejectReason = RejectReason.get(params.rejectReasonId)
+            req.user = principalService.user
+            req.changeDate = new Date()
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Cancel
+            req.loanRequest_nt.rejectReason = RejectReason.get(params.rejectReasonId)
             req.save()
         }
         render 0
@@ -70,6 +78,8 @@ class LoanRequest_NTController {
             def loanReqHead = new LoanRequestNT_HeadOffice(loanReqStatus: LoanRequest_NT.Pending, loanRequest_nt: req.loanRequest_nt)
             loanReqHead.save(true)
             req.loanReqStatus = LoanRequest_NT.Sent
+            req.user = principalService.user
+            req.changeDate = new Date()
             req.save()
         }
         render 0
@@ -79,8 +89,12 @@ class LoanRequest_NTController {
         def req = LoanRequestNT_BankRegion.get(params.id)
         if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
             req.loanReqStatus = LoanRequest_NT.Cancel
+            req.rejectReason = RejectReason.get(params.rejectReasonId)
+            req.user = principalService.user
+            req.changeDate = new Date()
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Cancel
+            req.loanRequest_nt.rejectReason = RejectReason.get(params.rejectReasonId)
             req.save()
         }
         render 0
@@ -92,6 +106,7 @@ class LoanRequest_NTController {
         loanRequest_NTInstance.branch = branch
         loanRequest_NTInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_NTInstance.requestDate = new Date()
+        loanRequest_NTInstance.user = principalService.user
         if (loanService.checkResourceAvailability(branch, loanRequest_NTInstance.loanAmount)) {
             loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Confirm
         }
@@ -121,6 +136,16 @@ class LoanRequest_NTController {
         [bankRegion: bankRegion]
     }
 
+    def getRequestBranch() {
+        def req = LoanRequestNT_BranchHead.get(params.id)
+        render req.branch as JSON
+    }
+
+    def getRequestBranchHead() {
+        def req = LoanRequestNT_BankRegion.get(params.id)
+        render req.branch as JSON
+    }
+
     def linkBranchRequest() {
         try {
             def destBranch = Branch.get(params.branchId)
@@ -134,8 +159,9 @@ class LoanRequest_NTController {
                 render message(code: 'branch-available-is-less-than-request')
             }
             else {
-                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt).save()
-                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt).save()
+                def user = principalService.user
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt, user: user).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user).save()
                 if (loanService.getAvailable(req.branch) >= req.loanAmount) {
                     req.loanReqStatus = LoanRequest_NT.Confirm
                     req.save()
@@ -162,8 +188,9 @@ class LoanRequest_NTController {
                 render message(code: 'branch-available-is-less-than-request')
             }
             else {
-                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt).save()
-                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt).save()
+                def user = principalService.user
+                def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt, user: user).save()
+                def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user).save()
                 if (loanService.getAvailable(req.branch) >= req.loanAmount) {
                     req.loanReqStatus = LoanRequest_NT.Confirm
                     req.save()
@@ -175,6 +202,23 @@ class LoanRequest_NTController {
         } catch (e) {
             render(message(code: 'error') + e.message)
         }
+    }
+
+    def showBranchDetails() {
+        def branch = Branch.get(params.id)
+        [branchInstance: branch]
+    }
+
+    def showRequestDetails() {
+        def loanRequest
+        if (params.bankRegion)
+            loanRequest = LoanRequestNT_BankRegion.get(params.bankRegion).loanRequest_nt
+        if (params.branchHead)
+            loanRequest = LoanRequestNT_BranchHead.get(params.branchHead).loanRequest_nt
+        if (params.id)
+            loanRequest = LoanRequest_NT.get(params.id)
+        [loanRequest_NTInstance: loanRequest]
+
     }
 
     def show() {

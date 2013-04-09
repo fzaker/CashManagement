@@ -4,6 +4,9 @@ class LoanRequestNT_BankRegion {
     LoanRequest_NT loanRequest_nt
     String loanReqStatus     // ** Confirm - Cancel - Send to BankRegion
     String request_Desc
+    RejectReason rejectReason
+    Date changeDate
+    User user
 
     transient def getLoanNo(){
         loanRequest_nt.loanNo
@@ -14,8 +17,11 @@ class LoanRequestNT_BankRegion {
     transient def getLoanType(){
         loanRequest_nt.loanType
     }
-    transient def getLoanAmount(){
+    transient Double getLoanAmount(){
         loanRequest_nt.loanAmount
+    }
+    transient Double getRemainingAmount(){
+        loanAmount - LoanRequestNTBarrow.findAllByRequestAndBranch(loanRequest_nt,loanRequest_nt.branch).sum{it.debit}
     }
     transient def getRequestDate(){
         loanRequest_nt.requestDate
@@ -27,12 +33,16 @@ class LoanRequestNT_BankRegion {
         loanNo()
         loanIDCode()
         loanType()
-        loanAmount()
         requestDate()
-
         branch()
+        loanAmount()
+        remainingAmount()
+
         loanReqStatus(inList: ["Confirm", "Cancel", "Sent","Pending"])
         request_Desc(nullable: true)
+        rejectReason(nullable: true)
+        changeDate(nullable: true)
+        user(nullable: true)
 
     }
 }

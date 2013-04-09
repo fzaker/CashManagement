@@ -12,7 +12,7 @@
 <a href="#list-loanRequest_NT" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
                                                                      default="Skip to content&hellip;"/></a>
 
-<div id="list-loanRequest_NT" ng-controller="loanRequest_NTController" class="content scaffold-list" role="main">
+<div id="list-loanRequest_NT"  class="content scaffold-list" role="main">
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
@@ -49,6 +49,7 @@
                 <div class="fieldcontain">
                     <label for="loanAmount"> <g:message code="loanAmount"/> </label>
                     <g:textField name="loanAmount" required="true" />
+                    <span id="loanAmountValue"></span>
                 </div>
                 %{--<div class="fieldcontain">--}%
                     %{--<label for="loanIDCode"> <g:message code="loanIDCode"/> </label>--}%
@@ -86,6 +87,7 @@
                      commands="${[[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
+                    <rg:eq name="branch.id" value="${branch?.id}"/>
                 </rg:criteria>
             </rg:grid>
         </div>
@@ -97,6 +99,7 @@
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                    <rg:eq name="branch.id" value="${branch?.id}"/>
                 </rg:criteria>
             </rg:grid>
         </div>
@@ -108,33 +111,64 @@
                      caption="${message(code: "Sent")}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
+                    <rg:eq name="branch.id" value="${branch?.id}"/>
                 </rg:criteria>
             </rg:grid>
         </div>
 
         <div id="Rejected">
             <rg:grid domainClass="${cashmanagement.LoanRequest_NT}"
+                     columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'name'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"
                      showCommand="false"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+                    <rg:eq name="branch.id" value="${branch?.id}"/>
                 </rg:criteria>
             </rg:grid>
         </div>
     </div>
 </div>
+<div id="reject-reason">
+    <div class="fieldcontain">
+        <g:hiddenField name="loanId"/>
+        <label for="rejectReason">
+            <g:message code="rejectReason.label" default="Loan No" />
+        </label>
+        <g:select name="rejectReason" from="${cashmanagement.RejectReason.list()}" optionKey="id"/>
+    </div>
+    <g:submitButton name="save" value="${message(code: "save.label")}" onclick="rejectSubmit()"/>
+</div>
 <g:javascript>
-        function reject(id){
-            if(confirm('<g:message code="are.you.sure.to.reject.reuqest"/>')){
-                $.ajax({
-                    type:'post',
-                    url:'<g:createLink action="reject"/>',
-                    data:{id:id}
-                }).success(function(){
-                    $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
-                })
+        function addCommas(nStr)
+        {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }
+            return x1 + x2;
+        }
+        function reject(id){
+            $("#loanId").val(id)
+            $("#reject-reason").dialog('open')
+        }
+        function rejectSubmit(){
+            $.ajax({
+                type:'post',
+                url:'<g:createLink action="reject"/>',
+                data:{
+                    id:$("#loanId").val(),
+                    rejectReasonId:$("#rejectReason").val()
+                }
+            }).success(function(){
+                $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
+                $("#reject-reason").dialog('close')
+            })
         }
         function accept(id){
             if(confirm('<g:message code="are.you.sure.to.accept.reuqest"/>')){
@@ -149,8 +183,17 @@
             }
         }
         $(function() {
-        $( "#manoto" ).tabs();
-    });
+            $( "#manoto" ).tabs();
+            $("#reject-reason").dialog({
+                resizable:false,
+                modal:true,
+                title:'<g:message code="are.you.sure.to.reject.reuqest"/>',
+                autoOpen:false
+            })
+            $("#loanAmount").keyup(function(){
+                $("#loanAmountValue").html(addCommas($("#loanAmount").val()))
+            })
+        });
 </g:javascript>
 </body>
 </html>

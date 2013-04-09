@@ -7,10 +7,11 @@ class LoanRequestNTBarrow {
     Double credit
     LoanRequest_NT request
     String description
-
+    User user
     static constraints = {
         credit(nullable: true)
         debit(nullable: true)
         description(nullable: true)
+        user(nullable: true)
     }
 }

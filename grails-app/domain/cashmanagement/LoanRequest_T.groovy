@@ -14,6 +14,7 @@ class LoanRequest_T {
     Date requestDate
     LoanType loanType
     Branch branch
+    RejectReason rejectReason
 
 //    Date registerTimeStamp
 //    String loginUser
@@ -27,5 +28,6 @@ class LoanRequest_T {
         requestDate(nullable: false)
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
         branch(nullable: false)
+        rejectReason(nullable: true)
     }
 }

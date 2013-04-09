@@ -23,11 +23,11 @@
     <rg:dialog id="GLCode" title="${entityName}">
         <rg:fields bean="${new cashmanagement.GLCode()}">
             <rg:modify>
-                <rg:ignoreField field="glFlag"/>
+                %{--<rg:ignoreField field="glFlag"/>--}%
             </rg:modify>
-            <g:select name="glFlag" optionKey="key" optionValue="value" noSelection="['': '']"
-                      ng-model="GLCodeInstance.glFlag"
-                      from="[[key: 1, value: message(code: 'GLCode.glFlag.manabe')], [key: -1, value: message(code: 'GLCode.glFlag.masaref')]]"/>
+            %{--<g:select name="glFlag" optionKey="key" optionValue="value" noSelection="['': '']"--}%
+                      %{--ng-model="GLCodeInstance.glFlag"--}%
+                      %{--from="[[key: 1, value: message(code: 'GLCode.glFlag.manabe')], [key: -1, value: message(code: 'GLCode.glFlag.masaref')]]"/>--}%
         </rg:fields>
         <rg:saveButton domainClass="${cashmanagement.GLCode}"/>
         <rg:cancelButton/>

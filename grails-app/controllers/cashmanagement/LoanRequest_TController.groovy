@@ -46,9 +46,10 @@ class LoanRequest_TController {
             loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Cancel
 
         }
-        loanRequest_TInstance.save(flush: true)
-
-        render viewParams() as JSON;
+        if(loanRequest_TInstance.save(flush: true))
+            render viewParams() as JSON;
+        else
+            render loanRequest_TInstance.errors.allErrors.collect{g.message(error: it)} as JSON
 //
 //        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_NT'), loanRequest_TInstance.id])
 //        redirect(action: "show", id: loanRequest_TInstance.id)
@@ -109,6 +110,7 @@ class LoanRequest_TController {
     def reject() {
         def loanRequest = LoanRequest_T.get(params.id)
         loanRequest.loanRequestStatus = LoanRequest_T.Cancel
+        loanRequest.rejectReason = RejectReason.get(params.rejectReasonId)
         loanRequest.save(flush: true)
         render viewParams() as JSON
     }

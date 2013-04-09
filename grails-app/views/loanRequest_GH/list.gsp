@@ -77,6 +77,7 @@
     </rg:grid>
     <br>
     <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
+             columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'name'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
              caption="${message(code: "Rejected")}"
              showCommand="false"
              idPostfix="RejectedList">
@@ -92,15 +93,27 @@
                 <rg:hiddenReference field="loanRequestStatus"/>
                 <rg:hiddenReference field="branch"/>
                 <rg:hiddenReference field="requestDate"/>
+                <rg:ignoreField field="rejectReason"/>
                 <rg:ignoreField field="loanType"/>
             </rg:modify>
             <g:select name="loanType.id" from="${cashmanagement.LoanType.findAllByLoanGroup(SystemParameters.findAll().first().gharzolhasane)}"
                         ng-model="loanRequest_GHInstance.loanType.id" optionKey="id"/>
         </rg:fields>
+        <div id="loanAmountValue"></div>
         <rg:saveButton domainClass="${cashmanagement.LoanRequest_GH}" conroller="loanRequest_GH"
                        params="[saveCallback: 'saveGridCallback']"/>
         <rg:cancelButton/>
     </rg:dialog>
+    <div id="reject-reason">
+        <div class="fieldcontain">
+            <g:hiddenField name="loanId"/>
+            <label for="rejectReason">
+                <g:message code="rejectReason.label" default="Loan No" />
+            </label>
+            <g:select name="rejectReason" from="${cashmanagement.RejectReason.list()}" optionKey="id"/>
+        </div>
+        <g:submitButton name="save" value="${message(code: "save.label")}" onclick="rejectSubmit()"/>
+    </div>
     <g:javascript>
                 function addCommas(nStr)
                 {
@@ -124,22 +137,44 @@
                     $("#permitAmountMonth").html(addCommas(resp.remainAmountMonth))
                 }
                 function reject(id){
-                    if(confirm('<g:message code="are.you.sure.to.reject.reuqest"/>')){
-                        $.ajax({
-                            type:'post',
-                            url:'<g:createLink action="reject"/>',
-                            data:{id:id}
-                        }).success(function(resp){
-                            $("#LoanRequest_GHApprovedListGrid").trigger("reloadGrid")
-                            $("#LoanRequest_GHRejectedListGrid").trigger("reloadGrid")
-                            $("#usedAmount").html(addCommas(resp.usedAmount))
-                            $("#permitAmount").html(addCommas(resp.remainAmount))
-                            $("#usedAmountMonth").html(addCommas(resp.usedAmountMonth))
-                            $("#permitAmountPrevMonths").html(addCommas(resp.permitAmountPrevMonths))
-                            $("#permitAmountMonth").html(addCommas(resp.remainAmountMonth))
-                        })
-                    }
+                    $("#loanId").val(id)
+                    $("#reject-reason").dialog('open')
                 }
+                function rejectSubmit(){
+                    $.ajax({
+                        type:'post',
+                        url:'<g:createLink action="reject"/>',
+                        data:{
+                            id:$("#loanId").val(),
+                            rejectReasonId:$("#rejectReason").val()
+                        }
+                    }).success(function(resp){
+                        $("#LoanRequest_GHApprovedListGrid").trigger("reloadGrid")
+                        $("#LoanRequest_GHRejectedListGrid").trigger("reloadGrid")
+                        $("#usedAmount").html(addCommas(resp.usedAmount))
+                        $("#permitAmount").html(addCommas(resp.remainAmount))
+                        $("#usedAmountMonth").html(addCommas(resp.usedAmountMonth))
+                        $("#permitAmountPrevMonths").html(addCommas(resp.permitAmountPrevMonths))
+                        $("#permitAmountMonth").html(addCommas(resp.remainAmountMonth))
+                        $("#reject-reason").dialog('close')
+                    })
+                }
+        $(function(){
+            $("#reject-reason").dialog({
+                resizable:false,
+                modal:true,
+                title:'<g:message code="are.you.sure.to.reject.reuqest"/>',
+                autoOpen:false
+            })
+
+            $( "#loanRequest_GH" ).on( "dialogclose", function( ) {
+                $("#loanAmountValue").html('')
+            } );
+            $("#loanAmount").keyup(function(){
+                $("#loanAmountValue").html(addCommas($("#loanAmount").val()))
+            })
+
+        })
     </g:javascript>
 
     %{--<input type="button" ng-click="openLoanRequest_GHEditDialog()" value="Edit LoanRequest_GH"/>--}%

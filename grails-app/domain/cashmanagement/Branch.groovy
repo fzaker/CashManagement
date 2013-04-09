@@ -7,7 +7,7 @@ class Branch {
     String branchCode
     String branchName
 
-    transient def getAvailable() {
+    transient Double getAvailable() {
         if (this?.id) {
             def service = ApplicationHolder.application.getMainContext().getBean("loanService")
             service.getAvailable(this)

@@ -41,6 +41,7 @@
             </rg:grid>
             <br>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
+                     columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'name'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      showCommand="false"
                      caption="${message(code: "Rejected")}"
                      idPostfix="RejectedList">
@@ -57,13 +58,25 @@
                         <rg:hiddenReference field="branch"/>
                         <rg:hiddenReference field="requestDate"/>
                         <rg:ignoreField field="loanType"/>
+                        <rg:ignoreField field="rejectReason"/>
                     </rg:modify>
                     <g:select name="loanType.id" from="${cashmanagement.LoanType.findAllByLoanGroup(SystemParameters.findAll().first().tabserei)}"
                               ng-model="loanRequest_TInstance.loanType.id" optionKey="id"/>
                 </rg:fields>
+                <div id="loanAmountValue"></div >
                 <rg:saveButton domainClass="${cashmanagement.LoanRequest_T}" conroller="loanRequest_T"  params="[saveCallback:'saveGridCallback']"/>
                 <rg:cancelButton/>
             </rg:dialog>
+            <div id="reject-reason">
+                <div class="fieldcontain">
+                    <g:hiddenField name="loanId"/>
+                    <label for="rejectReason">
+                        <g:message code="rejectReason.label" default="Loan No" />
+                    </label>
+                    <g:select name="rejectReason" from="${cashmanagement.RejectReason.list()}" optionKey="id"/>
+                </div>
+                <g:submitButton name="save" value="${message(code: "save.label")}" onclick="rejectSubmit()"/>
+            </div>
             <g:javascript>
                 function saveGridCallback(resp){
                     $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
@@ -84,19 +97,39 @@
                     return x1 + x2;
                 }
                 function reject(id){
-                    if(confirm('<g:message code="are.you.sure.to.reject.reuqest"/>')){
-                        $.ajax({
-                            type:'post',
-                            url:'<g:createLink action="reject"/>',
-                            data:{id:id}
-                        }).success(function(resp){
-                            $("#LoanRequest_TApprovedListGrid").trigger("reloadGrid")
-                            $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
-                            $("#usedAmount").html(addCommas(resp.usedAmount))
-                            $("#permitAmount").html(addCommas(resp.permitAmount-resp.usedAmount))
-                        })
-                    }
+                    $("#loanId").val(id)
+                    $("#reject-reason").dialog('open')
                 }
+                function rejectSubmit(){
+                    $.ajax({
+                        type:'post',
+                        url:'<g:createLink action="reject"/>',
+                        data:{
+                            id:$("#loanId").val(),
+                            rejectReasonId:$("#rejectReason").val()
+                        }
+                    }).success(function(resp){
+                        $("#LoanRequest_TApprovedListGrid").trigger("reloadGrid")
+                        $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
+                        $("#usedAmount").html(addCommas(resp.usedAmount))
+                        $("#permitAmount").html(addCommas(resp.permitAmount-resp.usedAmount))
+                        $("#reject-reason").dialog('close')
+                    })
+                }
+                $(function(){
+                    $("#reject-reason").dialog({
+                        resizable:false,
+                        modal:true,
+                        title:'<g:message code="are.you.sure.to.reject.reuqest"/>',
+                        autoOpen:false
+                    })
+                    $( "#loanRequest_T" ).on( "dialogclose", function( ) {
+                        $("#loanAmountValue").html('')
+                    } );
+                    $("#loanAmount").keyup(function(){
+                        $("#loanAmountValue").html(addCommas($("#loanAmount").val()))
+                    })
+                })
             </g:javascript>
             %{--<input type="button" ng-click="openLoanRequest_TEditDialog()" value="Edit LoanRequest_T"/>--}%
         </div>

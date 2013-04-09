@@ -66,3 +66,11 @@
     </label>
     <g:checkBox name="basicInformation" required="" value="${userInstance?.basicInformation}"/>
 </div>
+
+<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'basicInformation', 'error')} required">
+    <label for="enabled">
+        <g:message code="user.enabled.label" default="Password"/>
+        <span class="required-indicator">*</span>
+    </label>
+    <g:checkBox name="enabled" required="" value="${userInstance?.enabled}"/>
+</div>

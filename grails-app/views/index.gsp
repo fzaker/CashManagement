@@ -234,7 +234,7 @@
                         <span>
                             <img src="${resource(dir: 'images/reportMenuImages', file: 'user.png')}"/>
                         </span>
-                        <a href="<g:createLink controller="UserDefinition"/>"><g:message code="User.definition"/></a>
+                        <a href="<g:createLink controller="user"/>"><g:message code="User.definition"/></a>
                     </li>
 
                 </ul>
