@@ -66,6 +66,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="ConfirmList"
                      showCommand="false"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
@@ -86,6 +87,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="SentList"
                      showCommand="false"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
                      caption="${message(code: "Sent")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
@@ -106,6 +108,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
                      showCommand="false"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>

@@ -21,7 +21,7 @@ class LoanRequestNT_BranchHead {
         loanRequest_nt.loanAmount
     }
     transient Double getRemainingAmount(){
-        loanAmount - LoanRequestNTBarrow.findAllByRequestAndBranch(loanRequest_nt,loanRequest_nt.branch).sum{it.debit}
+        loanAmount - (LoanRequestNTBarrow.findAllByRequestAndBranch(loanRequest_nt,loanRequest_nt.branch).sum{it.debit}?:0)
     }
     transient def getRequestDate(){
         loanRequest_nt.requestDate

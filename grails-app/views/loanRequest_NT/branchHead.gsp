@@ -17,8 +17,8 @@
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
              maxColumns="7"
              showCommand="false"
-             firstColumnWidth="30"
-             commands="${[[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
+             firstColumnWidth="45"
+             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier'],[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
         <rg:criteria>
             <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
             <rg:nest name="loanRequest_nt">
@@ -32,6 +32,7 @@
     </rg:grid>
 
     <rg:grid domainClass="${cashmanagement.Branch}"
+             commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier']]}"
              showCommand="false">
         <rg:criteria>
             <rg:eq name="branchHead.id" value="${branchHead?.id}"/>
@@ -59,6 +60,7 @@
         <div id="Confirm">
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="ConfirmList"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
                      showCommand="false"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
@@ -78,6 +80,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="SentList"
                      showCommand="false"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
                      caption="${message(code: "Sent")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
@@ -97,6 +100,7 @@
                      columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"
                      showCommand="false"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>

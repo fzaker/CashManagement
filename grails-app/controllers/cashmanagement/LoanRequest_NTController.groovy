@@ -217,7 +217,10 @@ class LoanRequest_NTController {
             loanRequest = LoanRequestNT_BranchHead.get(params.branchHead).loanRequest_nt
         if (params.id)
             loanRequest = LoanRequest_NT.get(params.id)
-        [loanRequest_NTInstance: loanRequest]
+        def branchHead = LoanRequestNT_BranchHead.findByLoanRequest_nt(loanRequest)
+        def bankRegion = LoanRequestNT_BankRegion.findByLoanRequest_nt(loanRequest)
+        def hasBarrow = LoanRequestNTBarrow.countByRequest(loanRequest) > 0
+        [loanRequest_NTInstance: loanRequest, requestBranchHead: branchHead, requestBankRegion: bankRegion, hasBarrow: hasBarrow]
 
     }
 

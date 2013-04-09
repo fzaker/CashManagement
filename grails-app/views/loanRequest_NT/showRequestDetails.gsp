@@ -35,6 +35,15 @@
             </li>
         </g:if>
 
+        <g:if test="${loanRequest_NTInstance?.name}">
+            <li class="fieldcontain">
+                <span  class="property-label"><g:message code="loanRequest_NT.name" default="Loan IDC ode" /></span>
+
+                <span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="name"/></span>
+
+            </li>
+        </g:if>
+
         <g:if test="${loanRequest_NTInstance?.loanType}">
             <li class="fieldcontain">
                 <span id="loanType-label" class="property-label"><g:message code="loanRequest_NT.loanType" default="Loan Type" /></span>
@@ -70,6 +79,12 @@
 
             </li>
         </g:if>
+        <g:if test="${loanRequest_NTInstance?.rejectReason}">
+            <li class="fieldcontain">
+                <span class="property-label"><g:message code="rejectReason" /></span>
+                <span class="property-value">${loanRequest_NTInstance?.rejectReason?.encodeAsHTML()}</span>
+            </li>
+        </g:if>
 
         <g:if test="${loanRequest_NTInstance?.branch}">
             <li class="fieldcontain">
@@ -77,6 +92,85 @@
 
                 <span class="property-value" aria-labelledby="branch-label">${loanRequest_NTInstance?.branch?.encodeAsHTML()}</span>
 
+            </li>
+        </g:if>
+
+        <g:if test="${loanRequest_NTInstance?.user}">
+            <li class="fieldcontain">
+                <span id="user-label" class="property-label"><g:message code="user" default="User" /></span>
+
+                <span class="property-value" aria-labelledby="user-label">${loanRequest_NTInstance?.user?.encodeAsHTML()}</span>
+
+            </li>
+        </g:if>
+
+        <g:if test="${requestBranchHead}">
+            <g:if test="${requestBranchHead?.user}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="user-branchHead" default="User" /></span>
+                    <span class="property-value" aria-labelledby="user-label">${requestBranchHead?.user?.encodeAsHTML()}</span>
+                </li>
+            </g:if>
+            <g:if test="${requestBranchHead?.changeDate}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="date-branchHead" /></span>
+                    <span class="property-value"><rg:formatJalaliDate date="${requestBranchHead?.changeDate?.encodeAsHTML()}"/></span>
+                </li>
+            </g:if>
+            <g:if test="${requestBranchHead?.loanReqStatus}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="status-branchHead" /></span>
+                    <span class="property-value"><g:message code="${requestBranchHead?.loanReqStatus?.encodeAsHTML()}"/></span>
+                </li>
+            </g:if>
+            %{--<g:if test="${requestBranchHead?.rejectReason}">--}%
+                %{--<li class="fieldcontain">--}%
+                    %{--<span class="property-label"><g:message code="rejectReason" /></span>--}%
+                    %{--<span class="property-value">${requestBranchHead?.rejectReason?.encodeAsHTML()}</span>--}%
+                %{--</li>--}%
+            %{--</g:if>--}%
+
+        </g:if>
+
+        <g:if test="${requestBankRegion}">
+            <g:if test="${requestBankRegion?.user}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="user-bankRegion" default="User" /></span>
+                    <span class="property-value" aria-labelledby="user-label">${requestBankRegion?.user?.encodeAsHTML()}</span>
+                </li>
+            </g:if>
+            <g:if test="${requestBankRegion?.changeDate}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="date-bankRegion" /></span>
+                    <span class="property-value"><rg:formatJalaliDate date="${requestBankRegion?.changeDate}"/></span>
+                </li>
+            </g:if>
+            <g:if test="${requestBankRegion?.loanReqStatus}">
+                <li class="fieldcontain">
+                    <span class="property-label"><g:message code="status-bankRegion" /></span>
+                    <span class="property-value"><g:message code="${requestBankRegion?.loanReqStatus?.encodeAsHTML()}"/></span>
+                </li>
+            </g:if>
+            %{--<g:if test="${requestBankRegion?.rejectReason}">--}%
+                %{--<li class="fieldcontain">--}%
+                    %{--<span class="property-label"><g:message code="rejectReason" /></span>--}%
+                    %{--<span class="property-value">${requestBankRegion?.rejectReason?.encodeAsHTML()}</span>--}%
+                %{--</li>--}%
+            %{--</g:if>--}%
+
+        </g:if>
+        <g:if test="${hasBarrow}">
+            <li class="fieldcontain">
+                <rg:grid domainClass="${cashmanagement.LoanRequestNTBarrow}"
+                         columns="[[name:'credit'],[name:'user'],[name:'branch'],[name:'date']]"
+                         showCommand="false"
+                         caption="${message(code:"request_barrows")}">
+                    <rg:criteria>
+                        <rg:eq name="request.id" value="${loanRequest_NTInstance?.id}"/>
+                        <rg:ne name="branch.id" value="${loanRequest_NTInstance?.branch?.id}"/>
+                    </rg:criteria>
+
+                </rg:grid>
             </li>
         </g:if>
 
