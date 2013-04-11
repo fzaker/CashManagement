@@ -15,7 +15,7 @@
 <div id="list-GLCode" ng-controller="GLCodeController" class="content scaffold-list" role="main">
     <rg:grid showCommand="false"
              domainClass="${cashmanagement.GLCode}"
-             columns="[[name:'glGroup'],[name:'glCode'],[name:'glFlag',expression:'obj.glFlag==1?g.message(code:\\\'GLCode.glFlag.manabe\\\'):g.message(code:\\\'GLCode.glFlag.masaref\\\')',formatter:'string']]">
+             columns="[[name:'glGroup'],[name:'glCode'],[name:'glFlag',formatter:'string']]">
         <rg:commands>
             <rg:deleteCommand/>
         </rg:commands>

@@ -16,7 +16,24 @@ class LoanRequest_NTController {
 
     def list() {
         def branch = principalService.branch
-        [branch: branch, permitAmount: loanService.getAvailable(branch), usedPercent: loanService.checkAvailable_numofdays_curMonth(branch, 0) * 100, usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branch) * 100]
+        def manabe = Math.max(loanService.getManabeGT(branch),0)
+        def masaref = loanService.getMasarefGT(branch)
+        def mojavezSadere = loanService.getMojavezSadereGT(branch)
+        def sumDebit = loanService.getEtebarDaryaftiGT(branch)
+        def sumCredit = loanService.getEtebarEtayeeGT(branch)
+        def permitToward = loanService.getPermitTowardGT(branch)
+
+        [   branch: branch,
+            permitAmount: loanService.getAvailable(branch),
+            usedPercent: loanService.checkAvailable_numofdays_curMonth(branch, 0) * 100,
+            usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branch) * 100,
+            manabe:manabe,
+            masaref:masaref,
+            tashilatEtayee:mojavezSadere,
+            sumCredit:sumCredit,
+            sumDebit:sumDebit,
+            permitToward:permitToward
+            ]
     }
 
     def create() {

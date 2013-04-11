@@ -30,6 +30,28 @@
         <span><g:message code="usedPercentPrevMonthBranch"/> ${branch}: <span id="permitAmount"><g:formatNumber
                 number="${usedPercentPrevMonth}" type="number"/></span></span>
     </div>
+    <div class="fieldcontain">
+        <br>
+        <br>
+        <br>
+        <span><g:message code="manabe"/> ${branch}: <span id="manabe"><g:formatNumber
+                number="${manabe}" type="number"/></span></span>
+        <br>
+        <span><g:message code="masaref"/> ${branch}: <span id="masaref"><g:formatNumber
+                number="${masaref}" type="number"/></span></span>
+        <br>
+        <span><g:message code="tashilatEtayee"/> ${branch}: <span id="tashilatEtayee"><g:formatNumber
+                number="${tashilatEtayee}" type="number"/></span></span>
+        <br>
+        <span><g:message code="sumCredit"/> ${branch}: <span id="sumCredit"><g:formatNumber
+                number="${sumCredit}" type="number"/></span></span>
+        <br>
+        <span><g:message code="sumDebit"/> ${branch}: <span id="sumDebit"><g:formatNumber
+                number="${sumDebit}" type="number"/></span></span>
+        <br>
+        <span><g:message code="permitToward"/> ${branch}: <span id="permitToward"><g:formatNumber
+                number="${permitToward}" type="number"/></span></span>
+    </div>
     <g:form action="save">
         <div class="form-field">
             <div class="form-fields-part" >

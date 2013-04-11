@@ -8,4 +8,8 @@ class GLTransaction {
 
     static constraints = {
     }
+
+    String toString() {
+        "${glCode} ${tranDate} ${glAmount}"
+    }
 }
