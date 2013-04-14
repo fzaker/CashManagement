@@ -50,7 +50,8 @@
                 number="${sumDebit}" type="number"/></span></span>
         <br>
         <span><g:message code="permitToward"/> ${branch}: <span id="permitToward"><g:formatNumber
-                number="${permitToward}" type="number"/></span></span>
+                number="${permitToward}" type="number"/>(<g:formatNumber
+                number="${permitToward*100}" type="number"/>%)</span></span>
     </div>
     <g:form action="save">
         <div class="form-field">
