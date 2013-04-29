@@ -16,9 +16,9 @@
 
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
              showCommand="false"
-             firstColumnWidth="45"
-             maxColumns="7"
-             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier'],[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
+             firstColumnWidth="50"
+             maxColumns="8"
+             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')],[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")], [handler: 'accept(#id#)', icon: 'tick',title:message(code:"confirm")]]}">
         <rg:criteria>
             <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
             <rg:nest name="loanRequest_nt">
@@ -35,7 +35,7 @@
 
     <rg:grid domainClass="${cashmanagement.Branch}"
              showCommand="false"
-             commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier']]}">
+             commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]}">
         <rg:criteria>
             <rg:nest name="branchHead">
                 <rg:nest name="bankRegion">
@@ -66,7 +66,8 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="ConfirmList"
                      showCommand="false"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
+                     columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'branch']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
@@ -87,7 +88,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="SentList"
                      showCommand="false"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Sent")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
@@ -108,7 +109,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      showCommand="false"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>
@@ -226,16 +227,33 @@
             })
         }
         function accept(id){
-            if(confirm('<g:message code="are.you.sure.to.accept.reuqest"/>')){
-                $.ajax({
+        $.ajax({
                     type:'post',
-                    url:'<g:createLink action="acceptBankRegion"/>',
+                    url:'<g:createLink action="preAcceptBankRegion"/>',
                     data:{id:id}
-                }).success(function(){
-                    $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
-                    $("#LoanRequestNT_BankRegionSentListGrid").trigger("reloadGrid")
+                }).success(function(data){
+                    if(data.result=="OK" && confirm(data.message)){
+                        $.ajax({
+                            type:'post',
+                            url:'<g:createLink action="acceptConfirmBankRegion"/>',
+                            data:{id:id}
+                        }).success(function(){
+                            $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
+                            $("#LoanRequestNT_BankRegionConfirmListGrid").trigger("reloadGrid")
+                        })
+                    }
+                    if(data.result=="CANCEL" && confirm(data.message)){
+                        $.ajax({
+                            type:'post',
+                            url:'<g:createLink action="acceptSendBankRegion"/>',
+                            data:{id:id}
+                        }).success(function(){
+                            $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
+                            $("#LoanRequestNT_BankRegionSentListGrid").trigger("reloadGrid")
+                        })
+                    }
                 })
-            }
+
         }
         $(function() {
             $( "#manoto" ).tabs();

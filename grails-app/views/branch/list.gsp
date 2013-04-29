@@ -25,7 +25,7 @@
                     <rg:deleteCommand/>
                 </rg:commands>
             </rg:grid>
-            <rg:dialog id="branch" title="${entityName}">
+            <rg:dialog id="branch" title="${message(code:'branch.dialog')}">
                 <rg:fields bean="${new cashmanagement.Branch()}">
                     <rg:modify>
                         <rg:ignoreField field="available"/>

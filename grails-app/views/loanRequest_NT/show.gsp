@@ -80,7 +80,7 @@
 				<g:if test="${loanRequest_NTInstance?.branch}">
 				<li class="fieldcontain">
 					<span id="branch-label" class="property-label"><g:message code="loanRequest_NT.branch.label" default="Branch" /></span>
-					
+
 						<span class="property-value" aria-labelledby="branch-label"><g:link controller="branch" action="show" id="${loanRequest_NTInstance?.branch?.id}">${loanRequest_NTInstance?.branch?.encodeAsHTML()}</g:link></span>
 					
 				</li>

@@ -88,5 +88,13 @@
 	<g:field type="number" name="ghMonthlyPercent" step="any" required="" value="${systemParametersInstance.ghMonthlyPercent}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'today', 'error')} required">
+    <label for="ghMonthlyPercent">
+        <g:message code="systemParameters.today.label" default="today" />
+        <span class="required-indicator">*</span>
+    </label>
+    <g:field type="number" name="today" step="any" required="" value="${systemParametersInstance.today?:today}"/>
+</div>
+
 
 

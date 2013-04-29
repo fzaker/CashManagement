@@ -15,10 +15,10 @@
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
 
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
-             maxColumns="7"
+             maxColumns="8"
              showCommand="false"
-             firstColumnWidth="45"
-             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier'],[handler: 'reject(#id#)', icon: 'cancel'], [handler: 'accept(#id#)', icon: 'arrow_turn_left']]}">
+             firstColumnWidth="50"
+             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier',title:message(code:'show-details')],[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")], [handler: 'accept(#id#)', icon: 'tick',title:message(code:"confirm")]]}">
         <rg:criteria>
             <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
             <rg:nest name="loanRequest_nt">
@@ -32,7 +32,7 @@
     </rg:grid>
 
     <rg:grid domainClass="${cashmanagement.Branch}"
-             commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier']]}"
+             commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]}"
              showCommand="false">
         <rg:criteria>
             <rg:eq name="branchHead.id" value="${branchHead?.id}"/>
@@ -60,7 +60,8 @@
         <div id="Confirm">
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="ConfirmList"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
+                     columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'melliCode'], [name: 'loanAmount'],[name: 'branch']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      showCommand="false"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
@@ -80,7 +81,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="SentList"
                      showCommand="false"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Sent")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Sent}"/>
@@ -97,10 +98,10 @@
 
         <div id="Rejected">
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
-                     columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
+                     columns="[[name:'loanNo'],[name:'name'],[name:'melliCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"
                      showCommand="false"
-                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier']]"
+                     commands="[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>
                     <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
@@ -214,16 +215,32 @@
             })
         }
         function accept(id){
-            if(confirm('<g:message code="are.you.sure.to.accept.reuqest"/>')){
-                $.ajax({
+            $.ajax({
                     type:'post',
-                    url:'<g:createLink action="acceptBranchHead"/>',
+                    url:'<g:createLink action="preAcceptBranchHead"/>',
                     data:{id:id}
-                }).success(function(){
-                    $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
-                    $("#LoanRequestNT_BranchHeadSentListGrid").trigger("reloadGrid")
+                }).success(function(data){
+                    if(data.result=="OK" && confirm(data.message)){
+                        $.ajax({
+                            type:'post',
+                            url:'<g:createLink action="acceptConfirmBranchHead"/>',
+                            data:{id:id}
+                        }).success(function(){
+                            $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                            $("#LoanRequestNT_BranchHeadConfirmListGrid").trigger("reloadGrid")
+                        })
+                    }
+                    if(data.result=="CANCEL" && confirm(data.message)){
+                        $.ajax({
+                            type:'post',
+                            url:'<g:createLink action="acceptSendBranchHead"/>',
+                            data:{id:id}
+                        }).success(function(){
+                            $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                            $("#LoanRequestNT_BranchHeadSentListGrid").trigger("reloadGrid")
+                        })
+                    }
                 })
-            }
         }
         $(function() {
             $( "#manoto" ).tabs();

@@ -8,6 +8,8 @@ class LoanRequest_T {
 
     String loanNo
     String name
+    String family
+    String melliCode
     String loanIDCode
     String loanRequestStatus
     Double loanAmount
@@ -21,9 +23,11 @@ class LoanRequest_T {
 
     static constraints = {
         loanNo(nullable: false, unique: true)
-        loanIDCode(nullable: false, unique: true)
+        loanIDCode(nullable: true, unique: true)
         loanType(nullable: false)
         name()
+        family()
+        melliCode()
         loanAmount(nullable: false)
         requestDate(nullable: false)
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])

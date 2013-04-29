@@ -1,6 +1,7 @@
 package cashmanagement
 
 import org.springframework.dao.DataIntegrityViolationException
+import fi.joensuu.joyds1.calendar.JalaliCalendar
 
 class SystemParametersController {
 
@@ -23,8 +24,9 @@ class SystemParametersController {
             redirect(action: "list")
             return
         }
-
-        [systemParametersInstance: systemParametersInstance]
+        def cal = new JalaliCalendar()
+        def today = cal.day + cal.month * 100 + cal.year * 10000
+        [systemParametersInstance: systemParametersInstance, today: today]
     }
 
     def update() {

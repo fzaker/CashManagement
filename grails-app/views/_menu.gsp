@@ -1,10 +1,13 @@
 <sec:ifLoggedIn>
-    <div id="menu" style="float: left;margin-top: -45px;">
+    <div id="menu" style="float: left;margin-top: -45px;margin-left:-40px ">
 
         <ul class="sf-menu Menu">
             <c:isAdminOrBasicInformation>
+                <li class="MenuItem">
+                    <a href="<g:createLink uri="/"/>" class="sf-top-level-anchor toplevel"><g:message code="home"/></a>
+                </li>
                 <li class="MenuItem current">
-                    <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="basic.information"/></a>
+                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="basic.information"/></a>
                     <ul>
                         <c:isBasicInformation>
                             <li>
@@ -48,7 +51,7 @@
             </c:isAdminOrBasicInformation>
             <c:isBranchOrBranchHeadOrBankRegion>
                 <li class="MenuItem">
-                    <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh.loans"/></a>
+                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh.loans"/></a>
                     <ul>
                         <c:isBranchUser>
                             <li>
@@ -74,7 +77,7 @@
 
 
                 <li class="MenuItem">
-                    <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>
+                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>
                     <ul>
                         <c:isBranchUser>
                             <li>
@@ -92,7 +95,7 @@
                 </li>
 
                 <li class="MenuItem">
-                    <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane.loans"/></a>
+                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane.loans"/></a>
                     <ul>
                         <c:isBranchUser>
                             <li>
@@ -119,22 +122,18 @@
             </c:isBranchOrBranchHeadOrBankRegion>
 
             <li class="MenuItem">
-                <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>
+                <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>
                 <ul>
                     <li>
-                        <a href="<g:createLink controller="ListResources"/>"><g:message code="Resources.List"/></a>
+                        <a href="<g:createLink controller="loanRequest_NT" action="report"/>"><g:message code="loanRequest_NT.label"/></a>
                     </li>
-                    <li>
-                        <a href="<g:createLink controller="Dashboard"/>"><g:message code="Loan.Dashboard"/></a>
-                    </li>
-
                 </ul>
             </li>
 
             <c:isAdmin>
                 <li class="MenuItem">
 
-                    <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
+                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
                     <ul>
                         <li>
                             <a href="<g:createLink controller="User"/>"><g:message code="User.definition"/></a>
@@ -145,7 +144,7 @@
             </c:isAdmin>
             <li class="MenuItem">
 
-                <a href="#a" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>
+                <a href="#" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>
                 <ul>
                     <li>
                         <a href="<g:createLink controller="logout" />"><g:message code="logout"/></a>

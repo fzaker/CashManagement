@@ -10,6 +10,7 @@
           <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/jquery-ui-1.8.24/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/database-migration-1.2/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/web-app" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -33,6 +34,11 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/grails-app/i18n" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/grails-app/controllers" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/famfamfam-1.0.1/grails-app/taglib" isTestSource="false" />
@@ -94,10 +100,12 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails/grails-datastore-mongo/jars/grails-datastore-mongo-1.0.0.RELEASE.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails/grails-datastore-gorm-test/jars/grails-datastore-gorm-test-1.0.7.RELEASE.jar!/" />
+          <root url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/dynamic-jasper-0.6/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.grails/2.0.4/projects/CashManagement/plugins/export-1.5/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>

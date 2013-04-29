@@ -38,6 +38,7 @@ input:-moz-placeholder {
     display: block;
     margin-bottom: 0;
     padding: 3px;
+    background-color: #fafafa;
 }
 
 .fieldcontain span.property-label{
@@ -49,8 +50,8 @@ input:-moz-placeholder {
     box-shadow: White 0 0 3px;
     text-shadow: White 0 1px 1px;
     margin-bottom: 0;
-    width: 40%;
-    max-width: 100px;
+    width: 55%;
+    max-width: 280px;
     text-align: left;
     display: inline-block;
     padding-left:5px;
@@ -797,4 +798,13 @@ a.skip {
 .logintitle{
     float: left;
 
+}
+.content{
+    direction: rtl;
+}
+.sep{
+    border-bottom: 1px solid #D3D3D3;
+    clear: both;
+    margin: 15px;
+    padding: 5px;
 }

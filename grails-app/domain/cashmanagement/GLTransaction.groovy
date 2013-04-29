@@ -2,7 +2,7 @@ package cashmanagement
 
 class GLTransaction {
     GLCode glCode
-    Date tranDate
+    Integer tranDate
     Double glAmount
     Branch branch
 

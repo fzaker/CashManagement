@@ -6,6 +6,7 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT')}" />
     <title><g:message code="default.show.label" args="[entityName]" /></title>
+    <g:javascript src="jquery.printelement.js"/>
 </head>
 <body>
 <a href="#show-loanRequest_NT" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -88,7 +89,7 @@
 
         <g:if test="${loanRequest_NTInstance?.branch}">
             <li class="fieldcontain">
-                <span id="branch-label" class="property-label"><g:message code="branch" default="Branch" /></span>
+                <span id="branch-label" class="property-label"><g:message code="request-branch" default="Branch" /></span>
 
                 <span class="property-value" aria-labelledby="branch-label">${loanRequest_NTInstance?.branch?.encodeAsHTML()}</span>
 
@@ -97,9 +98,17 @@
 
         <g:if test="${loanRequest_NTInstance?.user}">
             <li class="fieldcontain">
-                <span id="user-label" class="property-label"><g:message code="user" default="User" /></span>
+                <span id="user-label" class="property-label"><g:message code="create-user" default="User" /></span>
 
                 <span class="property-value" aria-labelledby="user-label">${loanRequest_NTInstance?.user?.encodeAsHTML()}</span>
+
+            </li>
+        </g:if>
+        <g:if test="${loanRequest_NTInstance?.confirmUser}">
+            <li class="fieldcontain">
+                <span class="property-label"><g:message code="confirm-user" default="User" /></span>
+
+                <span class="property-value" aria-labelledby="user-label">${loanRequest_NTInstance?.confirmUser?.encodeAsHTML()}</span>
 
             </li>
         </g:if>
@@ -159,10 +168,15 @@
             %{--</g:if>--}%
 
         </g:if>
+        <g:set var="commands" value="${[]}"/>
+        <g:if test="${[cashmanagement.LoanRequest_NT.Pending,LoanRequest_NT.Sent].contains(loanRequest_NTInstance?.loanRequestStatus)}">
+            <g:set var="commands" value="${[[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")]]}"/>
+        </g:if>
         <g:if test="${hasBarrow}">
             <li class="fieldcontain">
                 <rg:grid domainClass="${cashmanagement.LoanRequestNTBarrow}"
                          columns="[[name:'credit'],[name:'user'],[name:'branch'],[name:'date']]"
+                         commands="${commands}"
                          showCommand="false"
                          caption="${message(code:"request_barrows")}">
                     <rg:criteria>
@@ -177,5 +191,26 @@
     </ol>
 
 </div>
+<input type="button" value="<g:message code="print" />" onclick="printEL()">
+<script type="text/javascript">
+    function printEL(){
+        var f=$('#show-loanRequest_NT').clone()
+        f.find('#LoanRequestNTBarrowGridContainer').remove()
+        f.printElement({ printMode:'popup',overrideElementCSS:['${resource(dir: 'css',file: 'main.css')}']})
+    }
+    function reject(id){
+       if(confirm('<g:message code="are.you.sure.to.reject.reuqest"/>')){
+           $.ajax({
+               type:'post',
+               url:'<g:createLink action="rejectBarrow"/>',
+               data:{
+                   id:id
+               }
+           }).success(function(){
+               $("#LoanRequestNTBarrowGrid").trigger("reloadGrid")
+           })
+       }
+    }
+</script>
 </body>
 </html>

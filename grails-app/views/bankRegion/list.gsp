@@ -17,7 +17,7 @@
                     <rg:deleteCommand/>
                 </rg:commands>
             </rg:grid>
-            <rg:dialog id="bankRegion" title="${message(code:'bank.region')}">
+            <rg:dialog id="bankRegion" title="${message(code:'bank.region.dialog')}">
                 <rg:fields bean="${new cashmanagement.BankRegion()}">
                     <rg:modify>
                         <rg:ignoreField field="branchHeads"/>

@@ -23,7 +23,7 @@
                     <rg:deleteCommand/>
                 </rg:commands>
             </rg:grid>
-            <rg:dialog id="branchHead" title="${entityName}">
+            <rg:dialog id="branchHead" title="${message(code:'branchHead.dialog')}">
                 <rg:fields bean="${new cashmanagement.BranchHead()}">
                     <rg:modify>
                         <rg:ignoreField field="branches"/>

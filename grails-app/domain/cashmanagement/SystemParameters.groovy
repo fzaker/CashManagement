@@ -21,6 +21,7 @@ class SystemParameters {
     //gharzolhasane
     Double ghMonthlyPercent
     Double ghCentralBankPercent
+    Integer today
 
     static mapping = {
         table 'cash_parameters'
@@ -36,5 +37,6 @@ class SystemParameters {
         tabserei(nullable: true)
         gheyreTabserei(nullable: true)
         gharzolhasane(nullable: true)
+        today(nullable: true)
     }
 }
