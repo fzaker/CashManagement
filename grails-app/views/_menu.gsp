@@ -2,10 +2,11 @@
     <div id="menu" style="float: left;margin-top: -45px;margin-left:-40px ">
 
         <ul class="sf-menu Menu">
+            <li class="MenuItem">
+                <a href="<g:createLink uri="/"/>" class="sf-top-level-anchor toplevel"><g:message code="home"/></a>
+            </li>
             <c:isAdminOrBasicInformation>
-                <li class="MenuItem">
-                    <a href="<g:createLink uri="/"/>" class="sf-top-level-anchor toplevel"><g:message code="home"/></a>
-                </li>
+
                 <li class="MenuItem current">
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="basic.information"/></a>
                     <ul>

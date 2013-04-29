@@ -238,6 +238,7 @@
                 }
             }).success(function(){
                 $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
+                $("#LoanRequest_NTRejectedListGrid").trigger("reloadGrid")
                 $("#reject-reason").dialog('close')
             })
         }

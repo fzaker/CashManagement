@@ -57,7 +57,7 @@ class LoanRequest_NT {
         chart(title: "sumLoanBranch", yTitle: "", subtitle: "", variable: "requestDate") {
             column("loanAmount")
         }
-        chart(title: "masarefbemanabe", yTitle: "", subtitle: "", chartType: 'pie', variable: "title") {
+        chart(title: "masarefbemanabe", yTitle: "", subtitle: "", variable: "title") {
             column("amount")
         }
 

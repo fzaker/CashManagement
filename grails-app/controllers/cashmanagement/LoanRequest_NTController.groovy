@@ -320,7 +320,7 @@ class LoanRequest_NTController {
             def req = LoanRequestNT_BranchHead.get(params.reqId)
             def amt = params.amt ?: "0"
             def amount = amt as Double
-            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum {it.debit}
+            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum {it.debit}?:0
             if (amount <= 0) {
                 render message(code: 'please-enter-amount')
             }
@@ -360,13 +360,14 @@ class LoanRequest_NTController {
             def amt = params.amt ?: "0"
             def amount = amt as Double
             def req = LoanRequestNT_BankRegion.get(params.reqId)
+            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum {it.debit}?:0
             if (amount <= 0) {
                 render message(code: 'please-enter-amount')
             }
             else if (amount > destBranch.available) {
                 render message(code: 'branch-available-is-less-than-request')
             }
-            else if (amount > req.remainingAmount + req.branch.available) {
+            else if (amount > req.loanAmount - sumDebit) {
                 render message(code: 'cannot-link-more-than-loanAmount')
             }
             else {
