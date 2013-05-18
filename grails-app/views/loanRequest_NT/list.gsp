@@ -1,4 +1,4 @@
-<%@ page import="cashmanagement.SystemParameters; cashmanagement.LoanRequest_NT" %>
+<%@ page import="java.math.RoundingMode; cashmanagement.SystemParameters; cashmanagement.LoanRequest_NT" %>
 <!doctype html>
 <html>
 <head>
@@ -20,7 +20,7 @@
         <div class="fieldcontain">
             <span class="property-label"><g:message code="permitpermissionamountbranch"/>:</span>
             <span class="property-value"><g:formatNumber
-                    number="${permitAmount}" maxFractionDigits="0" type="number"/></span>
+                    number="${permitAmount}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/></span>
         </div>
 
         <div class="fieldcontain">
@@ -40,7 +40,7 @@
         <div class="fieldcontain">
             <span class="property-label"><g:message code="avg.manabe" args="[manabeDays,tendaysago,today]"/>:</span>
             <span class="property-value"><span id="manabe"><g:formatNumber
-                    number="${manabe}" maxFractionDigits="0" type="number"/></span></span>
+                    number="${manabe}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/></span></span>
         </div>
 
         <div class="fieldcontain">
@@ -109,7 +109,7 @@
 
                 <div class="fieldcontain">
                     <label for="loanAmount"><g:message code="loanAmount"/></label>
-                    <g:textField name="loanAmount" required="true" value="${loanRequest_nt?.loanAmount}"/>
+                    <g:textField name="loanAmount" required="true" value="${g.formatNumber(number:loanRequest_nt?.loanAmount)}"/>
                     <span id="loanAmountValue"></span>
                 </div>
                 %{--<div class="fieldcontain">--}%
@@ -281,7 +281,7 @@
             })
             $("#loanAmount").keyup(function(){
                 $("#loanAmountValue").html(addCommas($("#loanAmount").val()))
-            })
+            }).keyup()
         });
 </g:javascript>
 </body>

@@ -77,7 +77,7 @@ class LoanService {
 //                return false
 //        }
         def avail = getAvailable(branch)
-        return amt <= avail
+        return amt <= Math.ceil(avail)
     }
 
     def checkAvailable_numofdays_curMonth(Branch branch, Double amt) {

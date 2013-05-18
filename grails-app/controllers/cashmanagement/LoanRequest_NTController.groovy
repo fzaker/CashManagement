@@ -111,6 +111,7 @@ class LoanRequest_NTController {
         def req = LoanRequest_NT.get(params.id)
         if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
             req.loanRequestStatus = LoanRequest_NT.Confirm
+            req.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
             req.confirmUser = principalService.user
             req.save()
         }
@@ -157,6 +158,7 @@ class LoanRequest_NTController {
             req.user = principalService.user
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
             req.loanRequest_nt.confirmUser = principalService.user
             req.loanRequest_nt.save()
         }
@@ -222,6 +224,7 @@ class LoanRequest_NTController {
             req.user = principalService.user
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
+            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
             req.loanRequest_nt.confirmUser = principalService.user
             req.loanRequest_nt.save()
         }
@@ -272,7 +275,7 @@ class LoanRequest_NTController {
         else
             loanRequest_NTInstance = new LoanRequest_NT(params)
         loanRequest_NTInstance.branch = branch
-        loanRequest_NTInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
+//        loanRequest_NTInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
         loanRequest_NTInstance.requestDate = new Date()
         loanRequest_NTInstance.user = principalService.user
 //        if (loanService.checkResourceAvailability(branch, loanRequest_NTInstance.loanAmount)) {
