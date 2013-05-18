@@ -134,6 +134,9 @@
                 <a href="#Confirm"><g:message code="Confirm"/></a>
             </li>
             <li>
+                <a href="#Paid"><g:message code="Paid"/></a>
+            </li>
+            <li>
                 <a href="#Test"><g:message code="Sent"/></a>
             </li>
             <li>
@@ -162,10 +165,24 @@
                      columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      idPostfix="ConfirmList"
                      showCommand="false"
-                     commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
+                     firstColumnWidth="50"
+                     commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: 'reject')]]"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                    <rg:eq name="branch.id" value="${branch?.id}"/>
+                </rg:criteria>
+            </rg:grid>
+        </div>
+        <div id="Paid">
+            <rg:grid domainClass="${cashmanagement.LoanRequest_NT}"
+                     columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                     idPostfix="PaidList"
+                     showCommand="false"
+                     commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
+                     caption="${message(code: "Confirm")}">
+                <rg:criteria>
+                    <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Paid}"/>
                     <rg:eq name="branch.id" value="${branch?.id}"/>
                 </rg:criteria>
             </rg:grid>
@@ -239,6 +256,7 @@
             }).success(function(){
                 $("#LoanRequest_NTPendingListGrid").trigger("reloadGrid")
                 $("#LoanRequest_NTRejectedListGrid").trigger("reloadGrid")
+                $("#LoanRequest_NTConfirmListGrid").trigger("reloadGrid")
                 $("#reject-reason").dialog('close')
             })
         }

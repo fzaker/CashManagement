@@ -111,7 +111,7 @@ class LoanRequest_NTController {
         def req = LoanRequest_NT.get(params.id)
         if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
             req.loanRequestStatus = LoanRequest_NT.Confirm
-            req.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
+            req.loanIDCode = loanService.generateLoanId(req.branch, LoanType.get(req.loanType.id), new Date(), req.loanNo)
             req.confirmUser = principalService.user
             req.save()
         }
@@ -120,7 +120,7 @@ class LoanRequest_NTController {
 
     def reject() {
         def req = LoanRequest_NT.get(params.id)
-        if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
+        if (req && (req.loanRequestStatus == LoanRequest_NT.Pending || req.loanRequestStatus == LoanRequest_NT.Confirm )) {
             req.loanRequestStatus = LoanRequest_NT.Cancel
             req.rejectReason = RejectReason.get(params.rejectReasonId)
             req.rejectUser = principalService.user
@@ -158,7 +158,7 @@ class LoanRequest_NTController {
             req.user = principalService.user
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
-            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
+            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(req.branch, LoanType.get(req.loanType.id), new Date(), req.loanNo)
             req.loanRequest_nt.confirmUser = principalService.user
             req.loanRequest_nt.save()
         }
@@ -224,7 +224,7 @@ class LoanRequest_NTController {
             req.user = principalService.user
             req.save()
             req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Confirm
-            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
+            req.loanRequest_nt.loanIDCode = loanService.generateLoanId(req.branch, LoanType.get(req.loanType.id), new Date(), req.loanNo)
             req.loanRequest_nt.confirmUser = principalService.user
             req.loanRequest_nt.save()
         }
@@ -299,7 +299,35 @@ class LoanRequest_NTController {
 
     def branchHead() {
         def branchHead = principalService.getBranchHead()
-        [branchHead: branchHead]
+        def manabe = Math.max(loanService.getManabeGT(branchHead) as Long, 0)
+        def masaref = loanService.getMasarefGT(branchHead)
+        def mojavezSadere = loanService.getMojavezSadereGT(branchHead)
+        def sumDebit = loanService.getEtebarDaryaftiGT(branchHead)
+        def sumCredit = loanService.getEtebarEtayeeGT(branchHead)
+        def permitToward = loanService.getPermitTowardGT(branchHead)
+        def sysParam = SystemParameters.findAll().first()
+        def manabeDays = sysParam.numofDays
+        def cal = loanService.getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
+        def pmjcalt = new JalaliCalendar(cal)
+        def today = "${pmjcalt.year}/${pmjcalt.month}/${pmjcalt.day}"
+        cal.add(Calendar.DATE, -1 * sysParam.numofDays + 1)
+        def pmjcal = new JalaliCalendar(cal)
+
+        def tendaysagno = "${pmjcal.year}/${pmjcal.month}/${pmjcal.day}"
+
+        [branchHead: branchHead,
+                permitAmount: loanService.getAvailable(branchHead),
+                usedPercent: loanService.checkAvailable_numofdays_curMonth(branchHead, 0) * 100,
+                usedPercentPrevMonth: loanService.checkAvailable_numofdays_oldMonth(branchHead) * 100,
+                manabe: manabe,
+                masaref: masaref,
+                tashilatEtayee: mojavezSadere,
+                sumCredit: sumCredit,
+                sumDebit: sumDebit,
+                permitToward: permitToward,
+                manabeDays: manabeDays,
+                today: today,
+                tendaysago: tendaysagno]
     }
 
     def bankRegion() {

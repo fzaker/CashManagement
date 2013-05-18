@@ -45,6 +45,24 @@
             </li>
         </g:if>
 
+        <g:if test="${loanRequest_NTInstance?.family}">
+            <li class="fieldcontain">
+                <span id="family-label" class="property-label"><g:message code="loanRequest_NT.family.label" default="Family" /></span>
+
+                <span class="property-value" aria-labelledby="family-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="family"/></span>
+
+            </li>
+        </g:if>
+
+        <g:if test="${loanRequest_NTInstance?.melliCode}">
+            <li class="fieldcontain">
+                <span id="melliCode-label" class="property-label"><g:message code="loanRequest_NT.melliCode.label" default="Melli Code" /></span>
+
+                <span class="property-value" aria-labelledby="melliCode-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="melliCode"/></span>
+
+            </li>
+        </g:if>
+
         <g:if test="${loanRequest_NTInstance?.loanType}">
             <li class="fieldcontain">
                 <span id="loanType-label" class="property-label"><g:message code="loanRequest_NT.loanType" default="Loan Type" /></span>

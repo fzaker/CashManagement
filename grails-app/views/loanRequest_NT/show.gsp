@@ -32,20 +32,38 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${loanRequest_NTInstance?.loanIDCode}">
-				<li class="fieldcontain">
-					<span id="loanIDCode-label" class="property-label"><g:message code="loanRequest_NT.loanIDCode.label" default="Loan IDC ode" /></span>
-					
-						<span class="property-value" aria-labelledby="loanIDCode-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="loanIDCode"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${loanRequest_NTInstance?.loanType}">
 				<li class="fieldcontain">
 					<span id="loanType-label" class="property-label"><g:message code="loanRequest_NT.loanType.label" default="Loan Type" /></span>
 					
 						<span class="property-value" aria-labelledby="loanType-label"><g:link controller="loanType" action="show" id="${loanRequest_NTInstance?.loanType?.id}">${loanRequest_NTInstance?.loanType?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.name}">
+				<li class="fieldcontain">
+					<span id="name-label" class="property-label"><g:message code="loanRequest_NT.name.label" default="Name" /></span>
+					
+						<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="name"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.family}">
+				<li class="fieldcontain">
+					<span id="family-label" class="property-label"><g:message code="loanRequest_NT.family.label" default="Family" /></span>
+					
+						<span class="property-value" aria-labelledby="family-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="family"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.melliCode}">
+				<li class="fieldcontain">
+					<span id="melliCode-label" class="property-label"><g:message code="loanRequest_NT.melliCode.label" default="Melli Code" /></span>
+					
+						<span class="property-value" aria-labelledby="melliCode-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="melliCode"/></span>
 					
 				</li>
 				</g:if>
@@ -80,8 +98,71 @@
 				<g:if test="${loanRequest_NTInstance?.branch}">
 				<li class="fieldcontain">
 					<span id="branch-label" class="property-label"><g:message code="loanRequest_NT.branch.label" default="Branch" /></span>
-
+					
 						<span class="property-value" aria-labelledby="branch-label"><g:link controller="branch" action="show" id="${loanRequest_NTInstance?.branch?.id}">${loanRequest_NTInstance?.branch?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.rejectReason}">
+				<li class="fieldcontain">
+					<span id="rejectReason-label" class="property-label"><g:message code="loanRequest_NT.rejectReason.label" default="Reject Reason" /></span>
+					
+						<span class="property-value" aria-labelledby="rejectReason-label"><g:link controller="rejectReason" action="show" id="${loanRequest_NTInstance?.rejectReason?.id}">${loanRequest_NTInstance?.rejectReason?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.loanIDCode}">
+				<li class="fieldcontain">
+					<span id="loanIDCode-label" class="property-label"><g:message code="loanRequest_NT.loanIDCode.label" default="Loan IDC ode" /></span>
+					
+						<span class="property-value" aria-labelledby="loanIDCode-label"><g:fieldValue bean="${loanRequest_NTInstance}" field="loanIDCode"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.user}">
+				<li class="fieldcontain">
+					<span id="user-label" class="property-label"><g:message code="loanRequest_NT.user.label" default="User" /></span>
+					
+						<span class="property-value" aria-labelledby="user-label"><g:link controller="user" action="show" id="${loanRequest_NTInstance?.user?.id}">${loanRequest_NTInstance?.user?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.sendUser}">
+				<li class="fieldcontain">
+					<span id="sendUser-label" class="property-label"><g:message code="loanRequest_NT.sendUser.label" default="Send User" /></span>
+					
+						<span class="property-value" aria-labelledby="sendUser-label"><g:link controller="user" action="show" id="${loanRequest_NTInstance?.sendUser?.id}">${loanRequest_NTInstance?.sendUser?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.sendUserBranchHead}">
+				<li class="fieldcontain">
+					<span id="sendUserBranchHead-label" class="property-label"><g:message code="loanRequest_NT.sendUserBranchHead.label" default="Send User Branch Head" /></span>
+					
+						<span class="property-value" aria-labelledby="sendUserBranchHead-label"><g:link controller="user" action="show" id="${loanRequest_NTInstance?.sendUserBranchHead?.id}">${loanRequest_NTInstance?.sendUserBranchHead?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.confirmUser}">
+				<li class="fieldcontain">
+					<span id="confirmUser-label" class="property-label"><g:message code="loanRequest_NT.confirmUser.label" default="Confirm User" /></span>
+					
+						<span class="property-value" aria-labelledby="confirmUser-label"><g:link controller="user" action="show" id="${loanRequest_NTInstance?.confirmUser?.id}">${loanRequest_NTInstance?.confirmUser?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${loanRequest_NTInstance?.rejectUser}">
+				<li class="fieldcontain">
+					<span id="rejectUser-label" class="property-label"><g:message code="loanRequest_NT.rejectUser.label" default="Reject User" /></span>
+					
+						<span class="property-value" aria-labelledby="rejectUser-label"><g:link controller="user" action="show" id="${loanRequest_NTInstance?.rejectUser?.id}">${loanRequest_NTInstance?.rejectUser?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

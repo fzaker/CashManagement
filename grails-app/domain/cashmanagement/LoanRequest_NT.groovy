@@ -5,6 +5,7 @@ class LoanRequest_NT {
     static final String Cancel = "Cancel"
     static final String Confirm = "Confirm"
     static final String Sent = "Sent"
+    static final String Paid = "Paid"
 
     String loanNo
     String loanIDCode
@@ -31,7 +32,7 @@ class LoanRequest_NT {
         melliCode()
         loanAmount(nullable: false)
         requestDate(nullable: false)
-        loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
+        loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent,Paid])
         branch(nullable: false)
         rejectReason(nullable: true)
         loanIDCode(nullable: true, unique: true)

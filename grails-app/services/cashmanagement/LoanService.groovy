@@ -8,7 +8,7 @@ class LoanService {
         def cal = Calendar.getInstance()
         cal.setTime(date)
         def jc = new JalaliCalendar(cal)
-        def d = String.format("%04d%02d%02d", jc.getYear(), jc.getMonth(), jc.getDay())
+        def d = String.format("%02d%02d%02d", jc.getYear() % 100, jc.getMonth(), jc.getDay())
 
         return "${branch.branchCode}-${loanType.loanGroup.loanGroupCode}-${d}-${loanNo}"
     }
@@ -90,6 +90,16 @@ class LoanService {
 
         return cur_toward
     }
+    def checkAvailable_numofdays_curMonth(BranchHead branchHead, Double amt) {
+        def manabe = getManabeGT(branchHead)
+        def masaref = getMasarefGT(branchHead)
+        def mojavezSadere = getMojavezSadereGT(branchHead)
+        def sumDebit = getEtebarDaryaftiGT(branchHead)
+        def sumCredit = getEtebarEtayeeGT(branchHead)
+        def cur_toward = (masaref + mojavezSadere - sumDebit + sumCredit + (amt ?: 0)) / ((manabe) ?: 1)
+
+        return cur_toward
+    }
 
     def checkAvailable_numofdays_oldMonth(Branch branch) {
         SystemParameters sysParam = SystemParameters.findAll().first()
@@ -118,6 +128,48 @@ class LoanService {
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatusAndRequestDateLessThanEquals(branch, LoanRequest_NT.Confirm, toDateD).sum {it.loanAmount}) ?: 0
 
         def barrows = LoanRequestNTBarrow.findAllByBranchAndDateLessThanEquals(branch, toDateD)
+        def sumDebit = (barrows.sum {it.debit ?: 0}) ?: 0
+        def sumCredit = (barrows.sum {it.credit ?: 0}) ?: 0
+
+
+        def old_toward = (masaref + mojavezSadere - sumDebit + sumCredit) / (manabe)
+
+        return old_toward
+    }
+    def checkAvailable_numofdays_oldMonth(BranchHead branchHead) {
+        def branches=Branch.findAllByBranchHead(branchHead)
+        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def cal = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
+        cal.add(Calendar.MONTH, -1)
+        def pmjcal = new JalaliCalendar(cal)
+        def toDate = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
+        def toDateD = cal.getTime()
+        cal.add(Calendar.DATE, -1 * sysParam.numofDays)
+        def tpmjcal = new JalaliCalendar(cal)
+        def fromDate = tpmjcal.year * 10000 + tpmjcal.month * 100 + tpmjcal.day
+        def fromDateD = cal.getTime()
+
+        def manabeGLGroup = sysParam.gheyreTabserei.manabe
+        def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
+        def manabeTrans = GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateBetween(glManabe, branches, fromDate, toDate)
+        def manabeDays = manabeTrans.collect {it.tranDate}.unique()
+        def manabe = (((manabeTrans.sum {it.glAmount * it.glCode.glFlag }) ?: 0) /
+                ((manabeDays.size()) ?: 1)) ?: 1
+
+        def masarefGLGroup = sysParam.gheyreTabserei.masaref
+        def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
+        def masaref = GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateBetween(glMasaref, branches, fromDate, toDate)
+                .groupBy {it.branch}
+                .collect{
+                    it.value.groupBy {it.glCode}
+                    .collect {it.value.sort {it.tranDate}.reverse().find {true}}
+                    .sum {it?.glAmount * it?.glCode?.glFlag} ?: 0
+                }.sum()
+
+        def mojavezSadere = (LoanRequest_NT.findAllByBranchInListAndLoanRequestStatusAndRequestDateLessThanEquals(branches, LoanRequest_NT.Confirm, toDateD).sum {it.loanAmount}) ?: 0
+
+        def barrows = LoanRequestNTBarrow.findAllByBranchInListAndDateLessThanEquals(branches, toDateD)
         def sumDebit = (barrows.sum {it.debit ?: 0}) ?: 0
         def sumCredit = (barrows.sum {it.credit ?: 0}) ?: 0
 
@@ -155,6 +207,26 @@ class LoanService {
         //miangin e 10 rooz e gozashte
         return manabe
     }
+    def getManabeGT(BranchHead branchHead) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def cal = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
+        def pmjcalt = new JalaliCalendar(cal)
+        def today = pmjcalt.year * 10000 + pmjcalt.month * 100 + pmjcalt.day
+        cal.add(Calendar.DATE,-1*sysParam.numofDays+1)
+        def pmjcal = new JalaliCalendar(cal)
+
+        def tendaysagno = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
+
+        def manabeGLGroup = sysParam.gheyreTabserei.manabe
+        def glManabe = GLCode.findAllByGlGroup(manabeGLGroup)
+        def glTrans = GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateBetween(glManabe, Branch.findAllByBranchHead(branchHead), tendaysagno,today)
+        def manabeDays = glTrans.collect {it.tranDate}.unique()
+        def manabe = ((glTrans.sum {it.glAmount * it.glCode.glFlag }) ?: 0) /
+                ((manabeDays.size()) ?: 1)
+        //miangin e 10 rooz e gozashte
+        return manabe
+    }
 
     def getMasarefGT(Branch branch) {
         SystemParameters sysParam = SystemParameters.findAll().first()
@@ -173,13 +245,42 @@ class LoanService {
         //mande akharin rooz
         return masaref
     }
+    def getMasarefGT(BranchHead branchHead) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def cal = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
+        def pmjcalt = new JalaliCalendar(cal)
+        def today = pmjcalt.year * 10000 + pmjcalt.month * 100 + pmjcalt.day
+        cal.add(Calendar.DATE,-1*sysParam.numofDays+1)
+        def pmjcal = new JalaliCalendar(cal)
+
+        def tendaysagno = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
+
+        def masarefGLGroup = sysParam.gheyreTabserei.masaref
+        def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
+        def masaref = GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateBetween(glMasaref, Branch.findAllByBranchHead(branchHead),tendaysagno, today)
+                .groupBy {it.branch}
+                .collect{
+                    it.value.groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}}
+                    .sum {it?.glAmount * it?.glCode?.glFlag} ?: 0
+                }.sum()
+        //mande akharin rooz
+        return masaref
+    }
 
     def getMojavezSadereGT(Branch branch) {
         return (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
     }
+    def getMojavezSadereGT(BranchHead branchHead) {
+        return (LoanRequest_NT.findAllByBranchInListAndLoanRequestStatus(Branch.findAllByBranchHead(branchHead), LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
+    }
 
     def getEtebarEtayeeGT(Branch branch) {
         def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
+        return (barrows.sum {it.credit ?: 0}) ?: 0
+    }
+    def getEtebarEtayeeGT(BranchHead branchHead) {
+        def barrows = LoanRequestNTBarrow.findAllByBranchInList(Branch.findAllByBranchHead(branchHead))
         return (barrows.sum {it.credit ?: 0}) ?: 0
     }
 
@@ -187,10 +288,23 @@ class LoanService {
         def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
         return (barrows.sum {it.debit ?: 0}) ?: 0
     }
+    def getEtebarDaryaftiGT(BranchHead branchHead) {
+        def barrows = LoanRequestNTBarrow.findAllByBranchInList(Branch.findAllByBranchHead(branchHead))
+        return (barrows.sum {it.debit ?: 0}) ?: 0
+    }
 
     def getPermitTowardGT(Branch branch) {
         SystemParameters sysParam = SystemParameters.findAll().first()
         def oldMonth = checkAvailable_numofdays_oldMonth(branch)
+        if (oldMonth >= sysParam.permitToward + sysParam.minGrowth)
+            return oldMonth - sysParam.minGrowth
+        else
+            return Math.max(0, Math.min(sysParam.permitToward, sysParam.maxGrowth + oldMonth))
+    }
+
+    def getPermitTowardGT(BranchHead branchHead) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+        def oldMonth = checkAvailable_numofdays_oldMonth(branchHead)
         if (oldMonth >= sysParam.permitToward + sysParam.minGrowth)
             return oldMonth - sysParam.minGrowth
         else
@@ -204,6 +318,17 @@ class LoanService {
         def sumDebit = getEtebarDaryaftiGT(branch)
         def sumCredit = getEtebarEtayeeGT(branch)
         def permitToward = getPermitTowardGT(branch)
+
+        def avail = (permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
+        return Math.max(avail, 0)
+    }
+    def getAvailable(BranchHead branchHead) {
+        def manabe = getManabeGT(branchHead)
+        def masaref = getMasarefGT(branchHead)
+        def mojavezSadere = getMojavezSadereGT(branchHead)
+        def sumDebit = getEtebarDaryaftiGT(branchHead)
+        def sumCredit = getEtebarEtayeeGT(branchHead)
+        def permitToward = getPermitTowardGT(branchHead)
 
         def avail = (permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
         return Math.max(avail, 0)

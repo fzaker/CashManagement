@@ -35,6 +35,7 @@
 
     <rg:grid domainClass="${cashmanagement.Branch}"
              showCommand="false"
+             groupby="branchHead"
              commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]}">
         <rg:criteria>
             <rg:nest name="branchHead">

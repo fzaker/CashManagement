@@ -1,4 +1,4 @@
-<%@ page import="cashmanagement.LoanRequest_NT" %>
+<%@ page import="java.math.RoundingMode; cashmanagement.LoanRequest_NT" %>
 <!doctype html>
 <html>
 <head>
@@ -13,7 +13,66 @@
                                                                      default="Skip to content&hellip;"/></a>
 
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
+<div class="left" style="width: 50%">
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="permitpermissionamountbranch"/>:</span>
+        <span class="property-value"><g:formatNumber
+                number="${permitAmount}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/></span>
+    </div>
 
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="usedPercentbranch" args="[manabeDays]"/>:</span>
+        <span class="property-value"><span id="usedAmount"><g:formatNumber
+                number="${usedPercent}" maxFractionDigits="2" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="usedPercentPrevMonthBranch" args="[manabeDays]"/>:</span>
+        <span class="property-value"><span id="permitAmount"><g:formatNumber
+                number="${usedPercentPrevMonth}" maxFractionDigits="2" type="number"/></span></span>
+    </div>
+</div>
+
+<div class="right" style="width: 50%">
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="avg.manabe" args="[manabeDays,tendaysago,today]"/>:</span>
+        <span class="property-value"><span id="manabe"><g:formatNumber
+                number="${manabe}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="last.masaref"/>:</span>
+        <span class="property-value"><span id="masaref"><g:formatNumber
+                number="${masaref}" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="tashilatEtayee"/>:</span>
+        <span class="property-value"><span id="tashilatEtayee"><g:formatNumber
+                number="${tashilatEtayee}" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="sumCredit"/>:</span>
+        <span class="property-value"><span id="sumCredit"><g:formatNumber
+                number="${sumCredit}" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="sumDebit"/>:</span>
+        <span class="property-value"><span id="sumDebit"><g:formatNumber
+                number="${sumDebit}" type="number"/></span></span>
+    </div>
+
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="permitToward"/>:</span>
+        <span class="property-value"><span id="permitToward"><g:formatNumber
+                number="${permitToward}" maxFractionDigits="2" type="number"/>(<g:formatNumber
+                number="${permitToward * 100}" maxFractionDigits="2" type="number"/>%)</span></span>
+    </div>
+</div>
+
+<div class="sep"></div>
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
              maxColumns="8"
              showCommand="false"
