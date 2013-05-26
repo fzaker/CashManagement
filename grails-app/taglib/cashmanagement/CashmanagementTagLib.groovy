@@ -34,7 +34,7 @@ class CashmanagementTagLib {
         }
     }
     def isAdminOrBasicInformation = { attrs, body ->
-        if (principalService.user?.isAdmin || principalService.user?.isBasicInformation()) {
+        if (principalService.user?.isAdmin || principalService.user?.basicInformation) {
             out << body()
         }
     }

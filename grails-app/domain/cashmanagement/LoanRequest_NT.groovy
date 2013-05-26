@@ -35,7 +35,7 @@ class LoanRequest_NT {
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent,Paid])
         branch(nullable: false)
         rejectReason(nullable: true)
-        loanIDCode(nullable: true, unique: true)
+        loanIDCode(nullable: true)
         user(nullable: true)
         sendUser(nullable: true)
         sendUserBranchHead(nullable: true)

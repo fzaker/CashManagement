@@ -16,7 +16,7 @@
     <rg:grid domainClass="${cashmanagement.User}"
              showCommand="false"
              commands="[[handler: 'addToGrid(#id#)', icon: 'application_edit',title:message(code: 'edit')], [handler: 'changepass(#id#)', icon: 'application_key',title:message(code: 'changepass')]]"></rg:grid>
-    <input type="button" ng-click="addToGrid()" value="${message(code: "create")}"/>
+    <input type="button" onclick="addToGrid()" value="${message(code: "create")}"/>
     <g:javascript>
                 function addToGrid(id){
                 var url='<g:createLink action="form"/>';

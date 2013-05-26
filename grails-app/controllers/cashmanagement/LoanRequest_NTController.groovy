@@ -290,7 +290,7 @@ class LoanRequest_NTController {
 
         }
         else {
-            if (loanRequest_NTInstance.save(flush: true)) {
+            if (loanRequest_NTInstance.save()) {
 //                flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
             }
         }
