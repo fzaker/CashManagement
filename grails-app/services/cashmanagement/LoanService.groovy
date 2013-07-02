@@ -47,11 +47,11 @@ class LoanService {
         def masaref = gharzolhasane.masaref
         def manabeGLCodes = GLCode.findAllByGlGroup(manabe)
         def masarefGLCodes = GLCode.findAllByGlGroup(masaref)
-        def date = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
-        date.add(Calendar.DATE, -1)
+//        def date = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
+//        date.add(Calendar.DATE, -1)
 
-        double manabeAmt = GLTransaction.findAllByGlCodeInListAndTranDate(manabeGLCodes, date.time).sum {it.glAmount * it.glCode.glFlag} ?: 1
-        double masarefAmt = GLTransaction.findAllByGlCodeInListAndTranDate(masarefGLCodes, date.time).sum {it.glAmount * it.glCode.glFlag} ?: 0
+        double manabeAmt = GLTransaction.findAllByGlCodeInListAndTranDate(manabeGLCodes, sysParam.today).sum {it.glAmount * it.glCode.glFlag} ?: 1
+        double masarefAmt = GLTransaction.findAllByGlCodeInListAndTranDate(masarefGLCodes, sysParam.today).sum {it.glAmount * it.glCode.glFlag} ?: 0
         return masarefAmt / manabeAmt
     }
 
