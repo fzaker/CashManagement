@@ -410,7 +410,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     }
 
     def getPermitTowardGT(Branch branch) {
-        def sysParam = getSystemParam(branch.branchHead)
+        def sysParam = getSystemParam(branch)
         def oldMonth = checkAvailable_numofdays_oldMonth(branch)
         if (oldMonth >= sysParam.permitToward + sysParam.minGrowth)
             return oldMonth - sysParam.minGrowth
@@ -477,9 +477,16 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         return vosool
     }
 
-    private def getSystemParam(BranchHead branchHead) {
+    def getSystemParam(BranchHead branchHead) {
         SystemParameters sysParam = SystemParameters.findAll().first()
         BranchHeadNTParams.findByBranchHead(branchHead) ?: new BranchHeadNTParams(branchHead: branchHead,
+                permitToward: sysParam.permitToward,
+                maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
+    }
+
+    def getSystemParam(Branch branch) {
+        def sysParam = getSystemParam(branch.branchHead)
+        BranchNTParams.findByBranch(branch) ?: new BranchNTParams(branch: branch,
                 permitToward: sysParam.permitToward,
                 maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
     }

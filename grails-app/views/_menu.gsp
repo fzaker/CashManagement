@@ -65,6 +65,10 @@
                                 <a href="<g:createLink controller="LoanRequest_NT" action="branchHead"/>"><g:message
                                         code="loanList.branchHead"/></a>
                             </li>
+                            <li>
+                                <a href="<g:createLink controller="LoanRequest_NT" action="branchHeadPercents"/>"><g:message
+                                        code="loanList.branchHeadPercents"/></a>
+                            </li>
                         </c:isBranchHeadUser>
                         <c:isBankRegionUser>
                             <li>

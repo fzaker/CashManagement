@@ -194,7 +194,8 @@ class LoanRequest_NTController {
         }
         render 0
     }
-    def rejectHeadOffice(){
+
+    def rejectHeadOffice() {
         def req = LoanRequestNT_HeadOffice.get(params.id)
         if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
             req.loanReqStatus = LoanRequest_NT.Cancel
@@ -209,6 +210,7 @@ class LoanRequest_NTController {
         }
         render 0
     }
+
     def preAcceptBankRegion() {
         def req = LoanRequestNT_BankRegion.get(params.id)
         if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
@@ -250,6 +252,7 @@ class LoanRequest_NTController {
         }
         render 0
     }
+
     def acceptHeadOffice() {
         def req = LoanRequestNT_HeadOffice.get(params.id)
 
@@ -364,9 +367,11 @@ class LoanRequest_NTController {
                 today: today,
                 tendaysago: tendaysagno]
     }
+
     def headOffice() {
 
     }
+
     def bankRegionPercents() {
         def sysParam = SystemParameters.findAll().first()
         def branchHeads
@@ -400,6 +405,50 @@ class LoanRequest_NTController {
         [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchHeadsParams: branchHeadsParams]
     }
 
+    def branchHeadPercents() {
+        def sysParam
+        def branchs
+        if (principalService.user?.branchHead) {
+
+            def branchHead = principalService.getBranchHead()
+            sysParam = loanService.getSystemParam(branchHead)
+            branchs = Branch.findAllByBranchHead(branchHead)
+        }
+        else {
+            render "Permission Denied"
+            return
+        }
+        def branchsParams = []
+        branchs.each {
+            def ntParam = BranchNTParams.findByBranch(it) ?:
+                new BranchNTParams(branch: it, permitToward: sysParam.permitToward,
+                        maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
+            branchsParams << [branch: it, ntParam: ntParam, manabe: loanService.getManabeGT(it) ?: 0]
+        }
+        def sumManabe = branchsParams.sum {it.manabe ?: 0}
+        branchsParams.each {
+            it.manabePercent = it.manabe / sumManabe
+        }
+        def curManabeBeMasaref = branchsParams.sum {
+            it.manabePercent * it.ntParam.permitToward
+        }
+        branchsParams.each {
+            it.maxPermitToward = it.manabePercent ? ((sysParam.permitToward - curManabeBeMasaref) / it.manabePercent + it.ntParam.permitToward) : it.ntParam.permitToward
+        }
+        [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchsParams: branchsParams]
+    }
+    def savePermitPercentsBranchHead() {
+        params.findAll {it.key.contains("_")}.groupBy {
+            it.key.split("_")[1]
+        }.each { key, val ->
+            def param = BranchNTParams.get(key as Long)
+            param.permitToward = val["permitToward_${key}"] as Double
+            param.maxGrowth = val["maxGrowth_${key}"] as Double
+            param.minGrowth = val["minGrowth_${key}"] as Double
+            param.save()
+        }
+        redirect(action: "branchHeadPercents")
+    }
     def savePermitPercents() {
         params.findAll {it.key.contains("_")}.groupBy {
             it.key.split("_")[1]
