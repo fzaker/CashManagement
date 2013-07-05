@@ -12,6 +12,14 @@ class LoanRequestNT_HeadOffice {
 //    Date timeStamp
 //    String loginUser
 
+    transient def getName() {
+        "${loanRequest_nt.name} ${loanRequest_nt.family}"
+    }
+
+    transient def getMelliCode() {
+        loanRequest_nt.melliCode
+    }
+
     transient def getLoanNo() {
         loanRequest_nt.loanNo
     }
@@ -24,8 +32,16 @@ class LoanRequestNT_HeadOffice {
         loanRequest_nt.loanType
     }
 
-    transient def getLoanAmount() {
+    transient Double getLoanAmount() {
         loanRequest_nt.loanAmount
+    }
+
+    transient Double getRemainingAmount() {
+        if (id) {
+            return Math.max(loanAmount  - branch.available,0)
+        }
+        return 0
+
     }
 
     transient def getRequestDate() {
@@ -38,13 +54,16 @@ class LoanRequestNT_HeadOffice {
 
     static constraints = {
         loanNo()
-        loanIDCode()
+        name()
+        melliCode()
         loanType()
-        loanAmount()
         requestDate()
-
         branch()
+        loanAmount()
+        remainingAmount()
+
         loanReqStatus(inList: ["Confirm", "Cancel", "Sent", "Pending"])
+        loanIDCode()
         request_Desc(nullable: true)
         rejectReason(nullable: true)
         changeDate(nullable: true)

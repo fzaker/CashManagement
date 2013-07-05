@@ -32,11 +32,11 @@
 </c:isBranchUser>
 <c:isBranchHeadUser>
     <div>
-        <div style="display: inline-block; width: 48%;">
+        <div style="">
             <rg:chart id="availableBranches" chart="availableBranches" domainClass="${cashmanagement.LoanRequest_NT}" yTitle="--"/>
         </div>
 
-        <div style="display: inline-block; width: 48%;">
+        <div style="">
             <rg:chart id="masarefbemanabeBranches" chart="masarefbemanabeBranches" domainClass="${cashmanagement.LoanRequest_NT}"
                       yTitle="--"/>
         </div>

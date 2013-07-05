@@ -27,9 +27,9 @@ class LoanRequest_NTService {
             def sumDebit = loanService.getEtebarDaryaftiGT(branch)
             def sumCredit = loanService.getEtebarEtayeeGT(branch)
             def masarefBeManabe = (masaref + mojavezSadere - sumDebit + sumCredit) / manabe
-            def list= [
-                    [title: messageSource.getMessage("masarefBeManabe", null, local), amount: Math.round(masarefBeManabe*100)],
-                ]
+            def list = [
+                    [title: messageSource.getMessage("masarefBeManabe", null, local), amount: Math.round(masarefBeManabe * 100)],
+            ]
             return [list: list, userdata: [:]]
         }
         else if (params.chart?.title == 'availableBranches') {
@@ -49,7 +49,7 @@ class LoanRequest_NTService {
         else if (params.chart?.title == 'availableBrancheHeads') {
             def bankRegion = principalService.bankRegion
             def list = BranchHead.findAllByBankRegion(bankRegion).collect {
-                def available = Branch.findAllByBranchHead(it).collect {it.available}.sum()
+                def available = loanService.getAvailable(it)
                 [branchHead: it.toString(), value: Math.round(available)]
             }
             return [list: list, userdata: [:]]
@@ -57,8 +57,8 @@ class LoanRequest_NTService {
         else if (params.chart?.title == 'masarefbemanabeBrancheHeads') {
             def bankRegion = principalService.bankRegion
             def list = BranchHead.findAllByBankRegion(bankRegion).collect {
-                def masarefbemanabeBranches = Branch.findAllByBranchHead(it).collect {loanService.checkAvailable_numofdays_curMonth(it, 0) * 100}
-                def masarefBemanabe = masarefbemanabeBranches.sum() / masarefbemanabeBranches.size()
+
+                def masarefBemanabe = loanService.checkAvailable_numofdays_curMonth(it, 0) * 100
                 [branchHead: it.toString(), value: Math.round(masarefBemanabe)]
             }
             return [list: list, userdata: [:]]

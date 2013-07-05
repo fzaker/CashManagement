@@ -33,7 +33,7 @@ environments {
 //            }
             username = "sa"
             password = "Salam123"
-            url = "jdbc:sqlserver://192.168.47.128:1433;databaseName=CashDB"
+            url = "jdbc:sqlserver://192.168.47.132:1433;databaseName=CashDB"
 
             driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
             dialect = "org.hibernate.dialect.SQLServerDialect"

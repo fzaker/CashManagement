@@ -13,6 +13,9 @@
                                                                      default="Skip to content&hellip;"/></a>
 
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
+<g:if test="${permitAmount==0}">
+    <h3><div class="error"><g:message code="permit-amt-is-zero" /></div></h3>
+</g:if>
 <div class="left" style="width: 50%">
     <div class="fieldcontain">
         <span class="property-label"><g:message code="permitpermissionamountbranch"/>:</span>
@@ -97,8 +100,9 @@
             <rg:eq name="branchHead.id" value="${branchHead?.id}"/>
         </rg:criteria>
     </rg:grid>
-
-    <button onclick="linkRequest()"><g:message code="link-request"/></button>
+    <g:if test="${permitAmount>0}">
+        <button onclick="linkRequest()"><g:message code="link-request"/></button>
+    </g:if>
 
     <br>
     <br>
@@ -210,6 +214,7 @@
             }
             return x1 + x2;
         }
+        <g:if test="${permitAmount>0}">
         function linkRequestSubmit(){
             var reqId=$("#LoanRequestNT_BranchHeadGrid").getGridParam('selrow')
             var branchId=$("#BranchGrid").getGridParam('selrow')
@@ -255,6 +260,7 @@
             })
 
         }
+        </g:if>
         function reject(id){
             $("#loanId").val(id)
             $("#reject-reason").dialog('open')

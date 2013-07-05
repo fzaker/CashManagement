@@ -66,9 +66,23 @@
           href="${resource(dir: 'css/themes', file: (setting ? setting.siteColor : 'blue') + '.css')}"/>
 
     <g:layoutHead/>
+    <g:javascript>
+        function alert(msg){
+            $("#alert-dialog").html(msg).dialog('open');
+        }
+        $(function(){
+            $("#alert-dialog").dialog({
+                resizable:false,
+                modal:true,
+                title:'',
+                autoOpen:false
+            })
+        })
+    </g:javascript>
 </head>
 
 <body dir="rtl">
+<div id="alert-dialog"></div>
 <div id="bokeh"><div id="container">
     <div id="header" role="banner">
         <h1 id="logo">Application Title</h1>

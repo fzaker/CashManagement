@@ -6,6 +6,7 @@ import groovy.sql.Sql
 class LoanService {
     def dataSource
     def sessionFactory
+
     def generateLoanId(Branch branch, LoanType loanType, Date date, String loanNo) {
         def cal = Calendar.getInstance()
         cal.setTime(date)
@@ -128,7 +129,7 @@ class LoanService {
 //        def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
 //        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateBetween(glMasaref, branch, fromDate, toDate).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}}.sum {it?.glAmount * it?.glCode?.glFlag} ?: 0
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
+        def x = sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
 FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS sumAmt
                        FROM          dbo.gltransaction JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
@@ -136,11 +137,11 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 				and (branch_id=:branch)
 				and (tran_date <= :todate) AND (tran_date >= :fromdate)
                        GROUP BY dbo.gltransaction.tran_date) AS derivedtbl_1""", [fromdate: fromDate, todate: toDate, branch: branch.id, glgroup: manabeGLGroup.id]);
-        def manabe=x.avgAmt
+        def manabe = x.avgAmt
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         sql = new Sql(sessionFactory.currentSession.connection())
-        x=sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
+        x = sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
   where branch_id=:branch
@@ -148,7 +149,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
   and gl_group_id=:glgroup""", [today: toDate, branch: branch.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
-        def masaref =  x.amt
+        def masaref = x.amt
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatusAndRequestDateLessThanEquals(branch, LoanRequest_NT.Confirm, toDateD).sum {it.loanAmount}) ?: 0
 
@@ -183,7 +184,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //        def manabe = (((manabeTrans.sum {it.glAmount * it.glCode.glFlag }) ?: 0) /
 //                ((manabeDays.size()) ?: 1)) ?: 1
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
+        def x = sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
 FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS sumAmt
                        FROM          dbo.gltransaction JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
@@ -192,7 +193,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 				and (branch_head_id=:branchhead)
 				and (tran_date <= :todate) AND (tran_date >= :fromdate)
                        GROUP BY dbo.gltransaction.tran_date) AS derivedtbl_1""", [fromdate: fromDate, todate: toDate, branchhead: branchHead.id, glgroup: manabeGLGroup.id]);
-        def manabe=x.avgAmt
+        def manabe = x.avgAmt
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
 //        def glMasaref = GLCode.findAllByGlGroup(masarefGLGroup)
@@ -203,8 +204,8 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //                    .collect {it.value.sort {it.tranDate}.reverse().find {true}}
 //                    .sum {it?.glAmount * it?.glCode?.glFlag} ?: 0
 //        }.sum()
-         sql = new Sql(sessionFactory.currentSession.connection())
-         x=sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
+        sql = new Sql(sessionFactory.currentSession.connection())
+        x = sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
                                               INNER JOIN branch on branch.id=branch_id
@@ -213,7 +214,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
   and gl_group_id=:glgroup""", [today: toDate, branchhead: branchHead.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
-        def masaref =  x.amt
+        def masaref = x.amt
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchInListAndLoanRequestStatusAndRequestDateLessThanEquals(branches, LoanRequest_NT.Confirm, toDateD).sum {it.loanAmount}) ?: 0
 
@@ -253,7 +254,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //        def manabe = ((glTrans.sum {it.glAmount * it.glCode.glFlag }) ?: 0) /
 //                ((manabeDays.size()) ?: 1)
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
+        def x = sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
 FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS sumAmt
                        FROM          dbo.gltransaction JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
@@ -279,7 +280,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 
         def manabeGLGroup = sysParam.gheyreTabserei.manabe
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
+        def x = sql.firstRow("""SELECT     ROUND(AVG(sumAmt), 0) AS avgAmt
 FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS sumAmt
                        FROM          dbo.gltransaction JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
@@ -315,7 +316,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //        def masaref = GLTransaction.findAllByGlCodeInListAndBranchAndTranDateBetween(glMasaref, branch, tendaysagno, today).groupBy {it.glCode}.collect {it.value.sort {it.tranDate}.reverse().find {true}}.sum {it?.glAmount * it?.glCode?.glFlag} ?: 0
 
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
+        def x = sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
   where branch_id=:branch
@@ -349,7 +350,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //        return masaref
 
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def x=sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
+        def x = sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
                                               INNER JOIN branch on branch.id=branch_id
@@ -362,22 +363,22 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     }
 
     def getMojavezSadereGT(Branch branch) {
-        def res=LoanRequest_NT.executeQuery("""select sum(loanAmount) from LoanRequest_NT where branch=:branch and loanRequestStatus=:status""",
-                [branch:branch,status:LoanRequest_NT.Confirm]).first()?:0
+        def res = LoanRequest_NT.executeQuery("""select sum(loanAmount) from LoanRequest_NT where branch=:branch and loanRequestStatus=:status""",
+                [branch: branch, status: LoanRequest_NT.Confirm]).first() ?: 0
         //return (LoanRequest_NT.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
         return res
     }
 
     def getMojavezSadereGT(BranchHead branchHead) {
-        def res=LoanRequest_NT.executeQuery("""select sum(loanAmount) from LoanRequest_NT where branch.branchHead=:branchhead and loanRequestStatus=:status""",
-                [branchhead: branchHead,status:LoanRequest_NT.Confirm]).first()?:0
+        def res = LoanRequest_NT.executeQuery("""select sum(loanAmount) from LoanRequest_NT where branch.branchHead=:branchhead and loanRequestStatus=:status""",
+                [branchhead: branchHead, status: LoanRequest_NT.Confirm]).first() ?: 0
         return res;
 //        return (LoanRequest_NT.findAllByBranchInListAndLoanRequestStatus(Branch.findAllByBranchHead(branchHead), LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
     }
 
     def getEtebarEtayeeGT(Branch branch) {
-        def res=LoanRequestNTBarrow.executeQuery("""select sum(credit) from LoanRequestNTBarrow where credit is not null and branch=:branch""",
-        [branch:branch]).first()?:0
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(credit) from LoanRequestNTBarrow where credit is not null and branch=:branch""",
+                [branch: branch]).first() ?: 0
 //        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
 //        return (barrows.sum {it.credit ?: 0}) ?: 0
         return res
@@ -386,15 +387,15 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     def getEtebarEtayeeGT(BranchHead branchHead) {
 //        def barrows = LoanRequestNTBarrow.findAllByBranchInList(Branch.findAllByBranchHead(branchHead))
 //        return (barrows.sum {it.credit ?: 0}) ?: 0
-        def res=LoanRequestNTBarrow.executeQuery("""select sum(credit) from LoanRequestNTBarrow where credit is not null and branch.branchHead=:branchhead""",
-                [branchhead:branchHead]).first()?:0
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(credit) from LoanRequestNTBarrow where credit is not null and branch.branchHead=:branchhead""",
+                [branchhead: branchHead]).first() ?: 0
         return res
     }
 
     def getEtebarDaryaftiGT(Branch branch) {
 
-        def res=LoanRequestNTBarrow.executeQuery("""select sum(debit) from LoanRequestNTBarrow where debit is not null and branch=:branch""",
-                [branch:branch]).first()?:0
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(debit) from LoanRequestNTBarrow where debit is not null and branch=:branch""",
+                [branch: branch]).first() ?: 0
         return res
 //        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
 //        return (barrows.sum {it.debit ?: 0}) ?: 0
@@ -403,13 +404,13 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     def getEtebarDaryaftiGT(BranchHead branchHead) {
 //        def barrows = LoanRequestNTBarrow.findAllByBranchInList(Branch.findAllByBranchHead(branchHead))
 //        return (barrows.sum {it.debit ?: 0}) ?: 0
-        def res=LoanRequestNTBarrow.executeQuery("""select sum(debit) from LoanRequestNTBarrow where debit is not null and branch.branchHead=:branchhead""",
-                [branchhead:branchHead]).first()?:0
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(debit) from LoanRequestNTBarrow where debit is not null and branch.branchHead=:branchhead""",
+                [branchhead: branchHead]).first() ?: 0
         return res
     }
 
     def getPermitTowardGT(Branch branch) {
-        SystemParameters sysParam = SystemParameters.findAll().first()
+        def sysParam = getSystemParam(branch.branchHead)
         def oldMonth = checkAvailable_numofdays_oldMonth(branch)
         if (oldMonth >= sysParam.permitToward + sysParam.minGrowth)
             return oldMonth - sysParam.minGrowth
@@ -418,12 +419,13 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     }
 
     def getPermitTowardGT(BranchHead branchHead) {
-        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def bhparam = getSystemParam(branchHead)
         def oldMonth = checkAvailable_numofdays_oldMonth(branchHead)
-        if (oldMonth >= sysParam.permitToward + sysParam.minGrowth)
-            return oldMonth - sysParam.minGrowth
+        if (oldMonth >= bhparam.permitToward + bhparam.minGrowth)
+            return oldMonth - bhparam.minGrowth
         else
-            return Math.max(0, Math.min(sysParam.permitToward, sysParam.maxGrowth + oldMonth))
+            return Math.max(0, Math.min(bhparam.permitToward, bhparam.maxGrowth + oldMonth))
     }
 
     def getAvailable(Branch branch) {
@@ -434,7 +436,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         def sumCredit = getEtebarEtayeeGT(branch)
         def permitToward = getPermitTowardGT(branch)
 
-        def avail = (permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
+        def avail = Math.max((permitToward * manabe) - (masaref), 0) - (mojavezSadere - sumDebit + sumCredit)
         return Math.max(avail, 0)
     }
 
@@ -446,7 +448,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         def sumCredit = getEtebarEtayeeGT(branchHead)
         def permitToward = getPermitTowardGT(branchHead)
 
-        def avail = (permitToward * manabe) - (masaref + mojavezSadere - sumDebit + sumCredit)
+        def avail = Math.max((permitToward * manabe) - (masaref), 0) - (mojavezSadere - sumDebit + sumCredit)
         return Math.max(avail, 0)
     }
 
@@ -474,4 +476,12 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 
         return vosool
     }
+
+    private def getSystemParam(BranchHead branchHead) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+        BranchHeadNTParams.findByBranchHead(branchHead) ?: new BranchHeadNTParams(branchHead: branchHead,
+                permitToward: sysParam.permitToward,
+                maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
+    }
+
 }

@@ -50,7 +50,7 @@
                     </ul>
                 </li>
             </c:isAdminOrBasicInformation>
-            <c:isBranchOrBranchHeadOrBankRegion>
+            <c:isBranchOrBranchHeadOrBankRegionOrAdmin>
                 <li class="MenuItem">
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh.loans"/></a>
                     <ul>
@@ -72,10 +72,20 @@
                                         code="loanList.BankRegion"/></a>
                             </li>
                         </c:isBankRegionUser>
-
+                        <c:isAdmin>
+                            <li>
+                                <a href="<g:createLink controller="LoanRequest_NT" action="headOffice"/>"><g:message
+                                        code="loanList.HeadOffice"/></a>
+                            </li>
+                            <li>
+                                <a href="<g:createLink controller="LoanRequest_NT" action="bankRegionPercents"/>"><g:message
+                                        code="loanList.bankRegionPercents"/></a>
+                            </li>
+                        </c:isAdmin>
                     </ul>
                 </li>
-
+            </c:isBranchOrBranchHeadOrBankRegionOrAdmin>
+            <c:isBranchOrBranchHeadOrBankRegion>
 
                 <li class="MenuItem">
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>

@@ -34,7 +34,7 @@ class LoanRequestNT_BankRegion {
 
     transient Double getRemainingAmount() {
         if (id) {
-            return Math.max(loanAmount  - branch.available,0)
+            return Math.max(loanAmount - branch.available, 0)
         }
         return 0
     }
@@ -47,6 +47,10 @@ class LoanRequestNT_BankRegion {
         loanRequest_nt.branch
     }
 
+    transient def getBranchHead() {
+        loanRequest_nt.branch.branchHead
+    }
+
     static constraints = {
         loanNo()
         name()
@@ -54,6 +58,7 @@ class LoanRequestNT_BankRegion {
         loanType()
         requestDate()
         branch()
+        branchHead()
         loanAmount()
         remainingAmount()
 

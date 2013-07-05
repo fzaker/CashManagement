@@ -808,3 +808,58 @@ a.skip {
     margin: 15px;
     padding: 5px;
 }
+.bank-region-percent .branch-head-name{
+    min-width: 200px;
+    display: inline-block;
+    text-align: center;
+}
+.bank-region-percent .manabe{
+    min-width: 160px;
+    display: inline-block;
+    text-align: center;
+}
+.bank-region-percent .manabe-percent{
+    min-width: 70px;
+    display: inline-block;
+    text-align: center;
+}
+.bank-region-percent .max-permit-toward{
+    min-width: 190px;
+    display: inline-block;
+    text-align: center;
+}
+.bank-region-percent .max-growth{
+    width: 150px;
+    display: inline-block;
+    padding: 4px;
+    text-align: center;
+}
+.bank-region-percent .min-growth{
+    width: 150px;
+    display: inline-block;
+    padding: 4px;
+    text-align: center;
+}
+.bank-region-percent .permit-toward{
+    width: 155px;
+    padding: 4px;
+    display: inline-block;
+    text-align: center;
+}
+.property-label-my{
+    background: none repeat scroll 0 0 #EFEFEF;
+    border-bottom: 1px solid #DDDDDD;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 3px White;
+    display: inline-block;
+    text-shadow: 0 1px 1px White;
+    vertical-align: top;
+    line-height: 14px;
+    padding: 4px;
+}
+.property-value-my{
+    background-color: #FAFAFA;
+    display: block;
+    font-weight: bold;
+    padding: 4px;
+}
