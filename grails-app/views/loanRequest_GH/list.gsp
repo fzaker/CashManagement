@@ -49,11 +49,11 @@
     <div class="form-field">
         <div class="form-fields-part inline">
             <div class="fieldcontain">
-                <g:hiddenField name="id" value="${loanRequest_t?.id}"/>
+                <g:hiddenField name="id" value="${loanRequest_gh?.id}"/>
                 <label for="loanType.id"><g:message code="loanType"/></label>
                 <g:select
                         from="${cashmanagement.LoanType.findAllByLoanGroup(SystemParameters.findAll().first().gharzolhasane)}"
-                        optionKey="id" name="loanType.id" value="${loanRequest_t?.loanType?.id}"/>
+                        optionKey="id" name="loanType.id" value="${loanRequest_gh?.loanType?.id}"/>
             </div>
 
             <div class="fieldcontain">

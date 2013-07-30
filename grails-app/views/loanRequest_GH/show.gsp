@@ -6,10 +6,11 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'loanRequest_GH.label', default: 'LoanRequest_GH')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
+        <g:javascript src="jquery.printelement.js"/>
 	</head>
 	<body>
 
-		<div id="show-loanRequest_GH" class="content scaffold-show" role="main">
+		<div id="show-loanRequest" class="content scaffold-show" role="main">
 			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
@@ -38,7 +39,7 @@
 				<li class="fieldcontain">
 					<span id="loanType-label" class="property-label"><g:message code="loanRequest_GH.loanType.label" default="Loan Type" /></span>
 					
-						<span class="property-value" aria-labelledby="loanType-label"><g:link controller="loanType" action="show" id="${loanRequest_GHInstance?.loanType?.id}">${loanRequest_GHInstance?.loanType?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="loanType-label">${loanRequest_GHInstance?.loanType?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -83,7 +84,7 @@
 				<li class="fieldcontain">
 					<span id="requestDate-label" class="property-label"><g:message code="loanRequest_T.requestDate.label" default="Request Date" /></span>
 					
-						<span class="property-value" aria-labelledby="requestDate-label"><g:formatDate date="${loanRequest_GHInstance?.requestDate}" /></span>
+						<span class="property-value" aria-labelledby="requestDate-label"><rg:formatJalaliDate date="${loanRequest_GHInstance?.requestDate}" /></span>
 					
 				</li>
 				</g:if>
@@ -92,7 +93,7 @@
 				<li class="fieldcontain">
 					<span id="loanRequestStatus-label" class="property-label"><g:message code="loanRequest_T.loanRequestStatus.label" default="Loan Request Status" /></span>
 					
-						<span class="property-value" aria-labelledby="loanRequestStatus-label"><g:fieldValue bean="${loanRequest_GHInstance}" field="loanRequestStatus"/></span>
+						<span class="property-value" aria-labelledby="loanRequestStatus-label"><g:message code="loanRequest_NT.loanRequestStatus.${loanRequest_GHInstance?.loanRequestStatus}" /></span>
 					
 				</li>
 				</g:if>
@@ -101,7 +102,7 @@
 				<li class="fieldcontain">
 					<span id="branch-label" class="property-label"><g:message code="loanRequest_T.branch.label" default="Branch" /></span>
 					
-						<span class="property-value" aria-labelledby="branch-label"><g:link controller="branch" action="show" id="${loanRequest_GHInstance?.branch?.id}">${loanRequest_GHInstance?.branch?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="branch-label">${loanRequest_GHInstance?.branch?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -110,7 +111,7 @@
 				<li class="fieldcontain">
 					<span id="rejectReason-label" class="property-label"><g:message code="loanRequest_T.rejectReason.label" default="Reject Reason" /></span>
 					
-						<span class="property-value" aria-labelledby="rejectReason-label"><g:link controller="rejectReason" action="show" id="${loanRequest_GHInstance?.rejectReason?.id}">${loanRequest_GHInstance?.rejectReason?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="rejectReason-label">${loanRequest_GHInstance?.rejectReason?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -119,7 +120,7 @@
 				<li class="fieldcontain">
 					<span id="requestUser-label" class="property-label"><g:message code="loanRequest_T.requestUser.label" default="Request User" /></span>
 					
-						<span class="property-value" aria-labelledby="requestUser-label"><g:link controller="user" action="show" id="${loanRequest_GHInstance?.requestUser?.id}">${loanRequest_GHInstance?.requestUser?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="requestUser-label">${loanRequest_GHInstance?.requestUser?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -128,7 +129,7 @@
 				<li class="fieldcontain">
 					<span id="confirmUser-label" class="property-label"><g:message code="loanRequest_T.confirmUser.label" default="Confirm User" /></span>
 					
-						<span class="property-value" aria-labelledby="confirmUser-label"><g:link controller="user" action="show" id="${loanRequest_GHInstance?.confirmUser?.id}">${loanRequest_GHInstance?.confirmUser?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="confirmUser-label">${loanRequest_GHInstance?.confirmUser?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -137,7 +138,7 @@
 				<li class="fieldcontain">
 					<span id="confirmedDate-label" class="property-label"><g:message code="loanRequest_T.confirmedDate.label" default="Confirmed Date" /></span>
 					
-						<span class="property-value" aria-labelledby="confirmedDate-label"><g:formatDate date="${loanRequest_GHInstance?.confirmedDate}" /></span>
+						<span class="property-value" aria-labelledby="confirmedDate-label"><rg:formatJalaliDate date="${loanRequest_GHInstance?.confirmedDate}" /></span>
 					
 				</li>
 				</g:if>
@@ -146,7 +147,7 @@
 				<li class="fieldcontain">
 					<span id="rejectUser-label" class="property-label"><g:message code="loanRequest_T.rejectUser.label" default="Reject User" /></span>
 					
-						<span class="property-value" aria-labelledby="rejectUser-label"><g:link controller="user" action="show" id="${loanRequest_GHInstance?.rejectUser?.id}">${loanRequest_GHInstance?.rejectUser?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="rejectUser-label">${loanRequest_GHInstance?.rejectUser?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -155,7 +156,7 @@
 				<li class="fieldcontain">
 					<span id="rejectDate-label" class="property-label"><g:message code="loanRequest_T.rejectDate.label" default="Reject Date" /></span>
 					
-						<span class="property-value" aria-labelledby="rejectDate-label"><g:formatDate date="${loanRequest_GHInstance?.rejectDate}" /></span>
+						<span class="property-value" aria-labelledby="rejectDate-label"><rg:formatJalaliDate date="${loanRequest_GHInstance?.rejectDate}" /></span>
 					
 				</li>
 				</g:if>

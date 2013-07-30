@@ -92,7 +92,7 @@
 				<li class="fieldcontain">
 					<span id="loanRequestStatus-label" class="property-label"><g:message code="loanRequest_T.loanRequestStatus.label" default="Loan Request Status" /></span>
 					
-						<span class="property-value" aria-labelledby="loanRequestStatus-label"><g:fieldValue bean="${loanRequest_TInstance}" field="loanRequestStatus"/></span>
+						<span class="property-value" aria-labelledby="loanRequestStatus-label"><g:message code="loanRequest_NT.loanRequestStatus.${loanRequest_TInstance?.loanRequestStatus}" /></span>
 					
 				</li>
 				</g:if>

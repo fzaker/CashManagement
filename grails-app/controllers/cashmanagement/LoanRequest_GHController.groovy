@@ -25,9 +25,9 @@ class LoanRequest_GHController {
         def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Confirm).sum {it.loanAmount} ?: 0
         def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
         def paidAmountPeriod = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
-        def loanRequest_t = LoanRequest_GH.get(params.id)
+        def loanRequest_gh = LoanRequest_GH.get(params.id)
         return [branch: branch, usedAmount: usedAmountBranch,
-                permitAmount: permitAmount?.permAmount, loanRequest_t: loanRequest_t,
+                permitAmount: permitAmount?.permAmount, loanRequest_gh: loanRequest_gh,
                 paidLoanAmount:paidAmount,
                 paidLoanAmountThisPeriod:paidAmountPeriod]
     }
