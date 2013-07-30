@@ -42,7 +42,7 @@ class LoanService {
 
 
         def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Confirm).sum {it.loanAmount}) ?: 0
-        def permAmount = PermissionAmount_GH.findAllByBranch(branch).sum{it.permAmount}?: 0
+        def permAmount = PermissionAmount_GH.findAllByBranch(branch).sum {it.permAmount} ?: 0
         return permAmount >= (sumBranch + amt)
     }
 
@@ -65,7 +65,7 @@ class LoanService {
         def sysParam = SystemParameters.findAll().first()
 
         def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Confirm).sum {it.loanAmount}) ?: 0
-        def permAmount = PermissionAmount_T.findAllByBranch(branch).sum{it.permAmount}?: 0
+        def permAmount = PermissionAmount_T.findAllByBranch(branch).sum {it.permAmount} ?: 0
         return permAmount >= (sumBranch + amt)
     }
 
@@ -86,6 +86,29 @@ class LoanService {
 //        }
         def avail = getAvailable(branch)
         return amt <= Math.ceil(avail)
+    }
+
+    def getNTReport(Date date) {
+        def manabe = getManabeGT(date)
+        def masaref = getMasarefGT(date)
+        def mojavezSadere = getMojavezSadereGT(date)
+        def sumD = getEtebarDaryaftiGT(date)
+        def sumC = getEtebarEtayeeGT(date)
+        def res = Branch.list().collect {br ->
+            def m= manabe.get("${br.id}") ?: 0
+            def ms= masaref.get("${br.id}") ?: 0
+            def mj=mojavezSadere.get("${br.id}") ?: 0
+            def d=sumD.get("${br.id}") ?: 0
+            def c=sumC.get("${br.id}") ?: 0
+            [id: br.id, name: br.toString(),
+                    manabe: m,
+                    masaref:ms,
+                    mojavezSadere: mj,
+                    sumD: d,
+                    sumC: c,
+                    percent:(ms + mj - d + c ) / ((m) ?: 1)*100]
+        }
+        return res.sort{it.name}
     }
 
     def checkAvailable_numofdays_curMonth(Branch branch, Double amt) {
@@ -241,6 +264,31 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         jalaliCalendar
     }
 
+    def getManabeGT(Date date) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+        def cal = Calendar.getInstance()
+        cal.setTime(date)
+        def pmjcalt = new JalaliCalendar(cal)
+        def today = pmjcalt.year * 10000 + pmjcalt.month * 100 + pmjcalt.day
+        cal.add(Calendar.DATE, -1 * sysParam.numofDays + 1)
+        def pmjcal = new JalaliCalendar(cal)
+
+        def tendaysagno = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
+
+        def manabeGLGroup = sysParam.gheyreTabserei.manabe
+
+        def sql = new Sql(sessionFactory.currentSession.connection())
+        def x = sql.rows("""SELECT ROUND(AVG(sumAmt), 0) AS avgAmt,branch_id
+FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS sumAmt ,branch_id
+                       FROM          dbo.gltransaction JOIN
+                                              dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
+			where  (gl_group_id =:glgroup)
+				and (tran_date <= :todate) AND (tran_date >= :fromdate)
+                       GROUP BY dbo.gltransaction.tran_date,branch_id) AS derivedtbl_1 group by branch_id""", [fromdate: tendaysagno, todate: today, glgroup: manabeGLGroup.id]);
+
+        return x.collectEntries {["${it.branch_id}": it.avgAmt]}
+    }
+
     def getManabeGT(Branch branch) {
         SystemParameters sysParam = SystemParameters.findAll().first()
 
@@ -332,6 +380,30 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         return x.amt
     }
 
+    def getMasarefGT(Date date) {
+        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def cal = Calendar.getInstance()
+        cal.setTime(date)
+        def pmjcalt = new JalaliCalendar(cal)
+        def today = pmjcalt.year * 10000 + pmjcalt.month * 100 + pmjcalt.day
+        cal.add(Calendar.DATE, -1 * sysParam.numofDays + 1)
+        def pmjcal = new JalaliCalendar(cal)
+
+        def tendaysagno = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
+
+        def masarefGLGroup = sysParam.gheyreTabserei.masaref
+
+        def sql = new Sql(sessionFactory.currentSession.connection())
+        def x = sql.rows("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt,branch_id
+                       FROM          dbo.gltransaction INNER JOIN
+                                              dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
+                          where  tran_date=:today
+                          and gl_group_id=:glgroup group by branch_id""", [today: today, glgroup: masarefGLGroup.id]);
+
+        return x.collectEntries {["${it.branch_id}": it.amt]}
+    }
+
     def getMasarefGT(BranchHead branchHead) {
         SystemParameters sysParam = SystemParameters.findAll().first()
 
@@ -374,6 +446,12 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         return res
     }
 
+    def getMojavezSadereGT(Date date) {
+        def res = LoanRequest_NT.executeQuery("""select sum(loanAmount)as amt ,branch.id from LoanRequest_NT where (loanRequestStatus=:statusConfirm or (loanRequestStatus=:statusPaid and payDate>=:date)) and requestDate<=:date group by branch""",
+                [statusConfirm: LoanRequest_NT.Confirm, statusPaid: LoanRequest_NT.Paid, date: date])
+        return res.collectEntries {["${it[1]}": it[0]]}
+    }
+
     def getMojavezSadereGT(BranchHead branchHead) {
         def res = LoanRequest_NT.executeQuery("""select sum(loanAmount) from LoanRequest_NT where branch.branchHead=:branchhead and loanRequestStatus=:status""",
                 [branchhead: branchHead, status: LoanRequest_NT.Confirm]).first() ?: 0
@@ -381,11 +459,15 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //        return (LoanRequest_NT.findAllByBranchInListAndLoanRequestStatus(Branch.findAllByBranchHead(branchHead), LoanRequest_NT.Confirm).sum {it.loanAmount}) ?: 0
     }
 
+    def getEtebarEtayeeGT(Date date) {
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(credit) as amt,branch.id from LoanRequestNTBarrow where credit is not null and date<=:date group by branch""",
+                [date: date])
+        return res.collectEntries {["${it[1]}": it[0]]}
+    }
+
     def getEtebarEtayeeGT(Branch branch) {
         def res = LoanRequestNTBarrow.executeQuery("""select sum(credit) from LoanRequestNTBarrow where credit is not null and branch=:branch""",
                 [branch: branch]).first() ?: 0
-//        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
-//        return (barrows.sum {it.credit ?: 0}) ?: 0
         return res
     }
 
@@ -404,6 +486,13 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         return res
 //        def barrows = LoanRequestNTBarrow.findAllByBranch(branch)
 //        return (barrows.sum {it.debit ?: 0}) ?: 0
+    }
+
+    def getEtebarDaryaftiGT(Date date) {
+
+        def res = LoanRequestNTBarrow.executeQuery("""select sum(debit),branch.id from LoanRequestNTBarrow where debit is not null and date<=:date group by branch""",
+                [date: date])
+        return res.collectEntries {["${it[1]}": it[0]]}
     }
 
     def getEtebarDaryaftiGT(BranchHead branchHead) {

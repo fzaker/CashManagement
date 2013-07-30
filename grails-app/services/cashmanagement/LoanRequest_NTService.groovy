@@ -65,4 +65,9 @@ class LoanRequest_NTService {
         }
 
     }
+    def repDate(params){
+        def date=new Date()
+        date.setMonth(date.getMonth()-2)
+        loanService.getNTReport(date)
+    }
 }

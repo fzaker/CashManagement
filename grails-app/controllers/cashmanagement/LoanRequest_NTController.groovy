@@ -14,7 +14,12 @@ class LoanRequest_NTController {
     def index() {
         redirect(action: "list", params: params)
     }
+    def report_date(){
+        def date=params.date?:new Date()
+        def res=loanService.getNTReport(date)
+        [branches:res,date: date]
 
+    }
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],

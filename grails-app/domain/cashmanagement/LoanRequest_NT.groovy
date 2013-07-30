@@ -15,6 +15,7 @@ class LoanRequest_NT {
     String loanRequestStatus
     Double loanAmount
     Date requestDate
+    Date payDate
     LoanType loanType
     Branch branch
     RejectReason rejectReason
@@ -41,6 +42,7 @@ class LoanRequest_NT {
         sendUserBranchHead(nullable: true)
         confirmUser(nullable: true)
         rejectUser(nullable: true)
+        payDate(nullable: true)
     }
     static charts = {
         chart(title: "masarefbemanabeBranches", yTitle: "", subtitle: "", variable: "branch") {
