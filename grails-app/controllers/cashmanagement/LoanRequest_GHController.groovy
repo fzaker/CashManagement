@@ -14,8 +14,22 @@ class LoanRequest_GHController {
     }
 
     def list() {
-        def res = getPermitAmts()
+        def res = viewParams(params)
         res
+    }
+    def viewParams(params) {
+        def branch = principalService.branch
+//        def year = new JalaliCalendar().year
+//        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
+        def permitAmount = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find()
+        def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Confirm).sum {it.loanAmount} ?: 0
+        def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
+        def paidAmountPeriod = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
+        def loanRequest_t = LoanRequest_GH.get(params.id)
+        return [branch: branch, usedAmount: usedAmountBranch,
+                permitAmount: permitAmount?.permAmount, loanRequest_t: loanRequest_t,
+                paidLoanAmount:paidAmount,
+                paidLoanAmountThisPeriod:paidAmountPeriod]
     }
 
     def create() {
@@ -26,9 +40,10 @@ class LoanRequest_GHController {
         def loanRequest = LoanRequest_GH.get(params.id)
         loanRequest.loanRequestStatus = LoanRequest_GH.Cancel
         loanRequest.rejectReason = RejectReason.get(params.rejectReasonId)
+        loanRequest.rejectUser = principalService.user
+        loanRequest.rejectDate = new Date()
         loanRequest.save(flush: true)
-        def res = getPermitAmts()
-        render res as JSON
+        render viewParams() as JSON
     }
 
     private def getPermitAmts() {
@@ -51,24 +66,27 @@ class LoanRequest_GHController {
     def save() {
         def branch = principalService.getBranch()
 
-        def loanRequest_GHInstance = new LoanRequest_GH(params)
-        loanRequest_GHInstance.branch = branch
-        loanRequest_GHInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
-        loanRequest_GHInstance.requestDate = new Date()
-        if (loanService.checkResourceAvailabilityGH(branch, loanRequest_GHInstance.loanAmount)) {
-            loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Confirm
+        def loanRequest_GHInstance
+        if (params.id) {
+            loanRequest_GHInstance = LoanRequest_GH.get(params.id)
+            loanRequest_GHInstance.properties = params
         }
         else {
-            loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Cancel
+            loanRequest_GHInstance = new LoanRequest_GH(params)
+            loanRequest_GHInstance.branch = branch
+            loanRequest_GHInstance.requestDate = new Date()
+        }
+        loanRequest_GHInstance.requestUser = principalService.user
+        loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Pending
+
+        if (!loanRequest_GHInstance.id && LoanRequest_GH.countByLoanNo(loanRequest_GHInstance.loanNo) > 0) {
+            flash.message = message(code: 'loan-no-not-unique')
 
         }
-
-        if(loanRequest_GHInstance.save(flush: true)){
-            def res = getPermitAmts()
-            render res as JSON
-        }else{
-            render loanRequest_GHInstance.errors.allErrors.collect{g.message(error: it)} as JSON
+        else {
+            loanRequest_GHInstance.save(flush: true)
         }
+        redirect(action: "list")
     }
 
     def show() {
@@ -140,5 +158,61 @@ class LoanRequest_GHController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'loanRequest_GH.label', default: 'LoanRequest_GH'), params.id])
             redirect(action: "show", id: params.id)
         }
+    }
+    def preAccept() {
+        def req = LoanRequest_GH.get(params.id)
+        if (loanService.checkResourceAvailabilityGH(req.branch, req.loanAmount)) {
+            render([result: "OK", message: message(code: "branch-ok", args: [req.loanAmount])] as JSON)
+        }
+        else
+            render([result: "CANCEL", message: message(code: "branch-cancel-t")] as JSON)
+    }
+
+    def acceptReject() {
+        def req = LoanRequest_GH.get(params.id)
+        if (req && req.loanRequestStatus == LoanRequest_GH.Pending) {
+            req.loanRequestStatus = LoanRequest_NT.Cancel
+            req.rejectUser = principalService.user
+            req.rejectDate = new Date()
+            req.save()
+        }
+        render 0
+    }
+
+    def acceptConfirm() {
+        def req = LoanRequest_GH.get(params.id)
+        if (req && req.loanRequestStatus == LoanRequest_GH.Pending) {
+            req.loanRequestStatus = LoanRequest_T.Confirm
+            req.loanIDCode = loanService.generateLoanId(req.branch, LoanType.get(req.loanType.id), new Date(), req.loanNo)
+            req.confirmUser = principalService.user
+            req.confirmedDate = new Date()
+            req.save()
+        }
+        render 0
+    }
+
+    def report() {
+        def columns = [
+                [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
+                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus==\\\'Confirm\\\'?obj.loanIDCode:\\\'\\\''],
+                [label: message(code: 'loanRequest_NT.loanType'), name: 'loanType'],
+                [label: message(code: 'loanRequest_NT.name'), name: 'name'],
+                [label: message(code: 'loanRequest_NT.family'), name: 'family'],
+                [label: message(code: 'loanRequest_NT.melliCode'), name: 'melliCode'],
+                [label: message(code: 'loanRequest_NT.loanAmount'), name: 'loanAmount'],
+                [label: message(code: 'loanRequest_NT.loanRequestStatus'), name: 'loanRequestStatus'],
+                [label: message(code: 'loanRequest_T.branch'), name: 'branch'],
+                [label: message(code: 'loanRequest_NT.rejectReason'), name: 'rejectReason'],
+                [label: message(code: 'loanRequest_T.requestUser'), name: 'requestUser'],
+                [label: message(code: 'loanRequest_T.rejectUser'), name: 'rejectUser'],
+                [label: message(code: 'loanRequest_T.confirmUser'), name: 'confirmUser'],
+                [label: message(code: 'loanRequest_T.requestDate'), name: 'requestDate']]
+        def selColumns = params.columns ? columns.findAll {params.columns.contains(it.name)} : columns.subList(0, 7);
+        [branch: principalService.branch,
+                branchHead: principalService.branchHead,
+                bankRegion: principalService.bankRegion,
+                columns: columns,
+                selColumns: selColumns,
+                selColumnsNames: selColumns.collect {it.name}]
     }
 }

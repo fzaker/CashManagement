@@ -6,7 +6,7 @@ import fi.joensuu.joyds1.calendar.JalaliCalendar
 class PermissionAmount_GHController {
 
     def principalService
-
+    def loanService
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -14,8 +14,14 @@ class PermissionAmount_GHController {
     }
 
     def list() {
-        def branchHead = principalService.branchHead
-        [branchHead: branchHead]
+        def br = principalService.getBranchHead()
+        def result
+        if (br)
+            result = loanService.getVosooliGH(br)
+        else
+            result = []
+
+        [resultParm: result, branchHead: br]
     }
 
     def create() {
@@ -23,14 +29,19 @@ class PermissionAmount_GHController {
     }
 
     def save() {
-        def permissionAmount_GHInstance = new PermissionAmount_GH(params)
-        if (!permissionAmount_GHInstance.save(flush: true)) {
-            render(view: "create", model: [permissionAmount_GHInstance: permissionAmount_GHInstance])
-            return
+        def region = principalService.branchHead
+        def date = params.date("date")
+        def branchs = Branch.findAllByBranchHead(region)
+        branchs.each {
+            def permissionAmount = PermissionAmount_GH.findByBranchAndPermissionDate(it, date)
+            if (!permissionAmount)
+                permissionAmount = new PermissionAmount_GH(branch: it, permissionDate: date)
+            def permAmt = params["branch_${it.id}"] ?: "0"
+            permAmt = permAmt.replace(",", "")
+            permissionAmount.permAmount = Double.valueOf(permAmt)
+            permissionAmount.save()
         }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'permissionAmount_GH.label', default: 'PermissionAmount_GH'), permissionAmount_GHInstance.id])
-        redirect(action: "show", id: permissionAmount_GHInstance.id)
+        redirect(action: "list")
     }
 
     def show() {

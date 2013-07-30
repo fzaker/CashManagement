@@ -64,13 +64,13 @@
 	<g:field type="number" name="permitReceivePercent" step="any" required="" value="${systemParametersInstance.permitReceivePercent}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'permitReceiveDaysNum', 'error')} required">
-	<label for="permitReceiveDaysNum">
-		<g:message code="systemParameters.permitReceiveDaysNum.label" default="Permit Receive Days Num" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field type="number" name="permitReceiveDaysNum" step="any" required="" value="${systemParametersInstance.permitReceiveDaysNum}"/>
-</div>
+%{--<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'permitReceiveDaysNum', 'error')} required">--}%
+	%{--<label for="permitReceiveDaysNum">--}%
+		%{--<g:message code="systemParameters.permitReceiveDaysNum.label" default="Permit Receive Days Num" />--}%
+		%{--<span class="required-indicator">*</span>--}%
+	%{--</label>--}%
+	%{--<g:field type="number" name="permitReceiveDaysNum" step="any" required="" value="${systemParametersInstance.permitReceiveDaysNum}"/>--}%
+%{--</div>--}%
 
 <div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'gharzolHasaneCentralBankPercent', 'error')} required">
 	<label for="ghCentralBankPercent">
@@ -80,13 +80,13 @@
 	<g:field type="number" name="ghCentralBankPercent" step="any" required="" value="${systemParametersInstance.ghCentralBankPercent}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'gharzolHasaneMonthlyPercent', 'error')} required">
-	<label for="ghMonthlyPercent">
-		<g:message code="systemParameters.gharzolHasaneMonthlyPercent.label" default="Gharzol Hasane Monthly Percent" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:field type="number" name="ghMonthlyPercent" step="any" required="" value="${systemParametersInstance.ghMonthlyPercent}"/>
-</div>
+%{--<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'gharzolHasaneMonthlyPercent', 'error')} required">--}%
+	%{--<label for="ghMonthlyPercent">--}%
+		%{--<g:message code="systemParameters.gharzolHasaneMonthlyPercent.label" default="Gharzol Hasane Monthly Percent" />--}%
+		%{--<span class="required-indicator">*</span>--}%
+	%{--</label>--}%
+	%{--<g:field type="number" name="ghMonthlyPercent" step="any" required="" value="${systemParametersInstance.ghMonthlyPercent}"/>--}%
+%{--</div>--}%
 
 <div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'today', 'error')} required">
     <label for="ghMonthlyPercent">

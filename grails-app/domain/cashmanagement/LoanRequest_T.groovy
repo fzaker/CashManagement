@@ -37,7 +37,7 @@ class LoanRequest_T {
         melliCode()
         loanAmount(nullable: false)
         requestDate(nullable: false)
-        loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
+        loanRequestStatus(inList: [Confirm, Cancel, Pending, Paid])
         branch(nullable: false)
         rejectReason(nullable: true)
         requestUser(nullable: true)

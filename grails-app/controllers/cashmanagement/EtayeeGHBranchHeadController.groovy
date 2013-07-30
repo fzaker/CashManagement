@@ -3,14 +3,20 @@ package cashmanagement
 import org.springframework.dao.DataIntegrityViolationException
 
 class EtayeeGHBranchHeadController {
-
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    def principalService
+    static allowedMethods = [save: "POST", update: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
     }
 
     def list() {
+        def branchHeads = []
+        if (principalService.user?.isAdmin)
+            branchHeads = BranchHead.list().sort()
+        if (principalService.user?.bankRegion)
+            branchHeads = BranchHead.findAllByBankRegion(principalService.user?.bankRegion).sort()
+        [branchHeads: branchHeads]
     }
 
     def create() {
@@ -18,14 +24,17 @@ class EtayeeGHBranchHeadController {
     }
 
     def save() {
-        def etayeeGHBranchHeadInstance = new EtayeeGHBranchHead(params)
-        if (!etayeeGHBranchHeadInstance.save(flush: true)) {
-            render(view: "create", model: [etayeeGHBranchHeadInstance: etayeeGHBranchHeadInstance])
-            return
+        def etayeeGHBranchHeadInstance
+        if (params.id) {
+            etayeeGHBranchHeadInstance = EtayeeGHBranchHead.get(params.id)
+            etayeeGHBranchHeadInstance.properties = params
         }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'etayeeGHBranchHead.label', default: 'EtayeeGHBranchHead'), etayeeGHBranchHeadInstance.id])
-        redirect(action: "show", id: etayeeGHBranchHeadInstance.id)
+        else
+            etayeeGHBranchHeadInstance = new EtayeeGHBranchHead(params)
+        etayeeGHBranchHeadInstance.date = new Date()
+        etayeeGHBranchHeadInstance.user = principalService.user
+        etayeeGHBranchHeadInstance.save(flush: true)
+        render 0
     }
 
     def show() {
@@ -82,20 +91,23 @@ class EtayeeGHBranchHeadController {
 
     def delete() {
         def etayeeGHBranchHeadInstance = EtayeeGHBranchHead.get(params.id)
-        if (!etayeeGHBranchHeadInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'etayeeGHBranchHead.label', default: 'EtayeeGHBranchHead'), params.id])
-            redirect(action: "list")
-            return
+        def count = LoanRequest_GH.createCriteria().get {
+            projections {
+                count("id")
+            }
+            branch {
+                branchHead {
+                    eq("id", etayeeGHBranchHeadInstance?.id)
+                }
+            }
+            ge("requestDate", etayeeGHBranchHeadInstance?.date)
         }
-
-        try {
-            etayeeGHBranchHeadInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'etayeeGHBranchHead.label', default: 'EtayeeGHBranchHead'), params.id])
-            redirect(action: "list")
+        if (count > 0) {
+            render message(code: 'cannot-delete-this')
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'etayeeGHBranchHead.label', default: 'EtayeeGHBranchHead'), params.id])
-            redirect(action: "show", id: params.id)
+        else {
+            etayeeGHBranchHeadInstance.delete()
+            render 1
         }
     }
 }

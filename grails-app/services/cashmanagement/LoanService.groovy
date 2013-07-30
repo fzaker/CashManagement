@@ -17,28 +17,33 @@ class LoanService {
     }
 
     def checkResourceAvailabilityGH(Branch branch, double amt) {
-        SystemParameters sysParam = SystemParameters.findAll().first()
+//        SystemParameters sysParam = SystemParameters.findAll().first()
+//
+//        def jc = getCurrentDate(sysParam.today)
+//        def year = jc.year
+//        def month = jc.month
+//        jc.set(jc.year, jc.month, 1)
+//        def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Confirm).sum {it.loanAmount}) ?: 0
+//        def sumBranchThisMonth = (LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateGreaterThanEquals(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount}) ?: 0
+//
+//        def permAmount = (PermissionAmount_GH.findByBranchAndYear(branch, year)?.permAmount) ?: 0
+//
+//        def usedAmountPrevMonths = LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateLessThan(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount} ?: 0
+//        def permitAmountPrevMonths = permAmount * (month - 1) * sysParam.ghMonthlyPercent - usedAmountPrevMonths
+//
+//
+//        if (permAmount < sumBranch + amt)
+//            return false
+//        if (sysParam.ghMonthlyPercent * permAmount + permitAmountPrevMonths < sumBranchThisMonth + amt)
+//            return false
+//        if (masarefBeManabeGharzolhasane() > sysParam.ghCentralBankPercent)
+//            return false
+//        return true
 
-        def jc = getCurrentDate(sysParam.today)
-        def year = jc.year
-        def month = jc.month
-        jc.set(jc.year, jc.month, 1)
+
         def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Confirm).sum {it.loanAmount}) ?: 0
-        def sumBranchThisMonth = (LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateGreaterThanEquals(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount}) ?: 0
-
-        def permAmount = (PermissionAmount_GH.findByBranchAndYear(branch, year)?.permAmount) ?: 0
-
-        def usedAmountPrevMonths = LoanRequest_GH.findAllByBranchAndLoanRequestStatusAndRequestDateLessThan(branch, LoanRequest_GH.Confirm, jc.toJavaUtilGregorianCalendar().time).sum {it.loanAmount} ?: 0
-        def permitAmountPrevMonths = permAmount * (month - 1) * sysParam.ghMonthlyPercent - usedAmountPrevMonths
-
-
-        if (permAmount < sumBranch + amt)
-            return false
-        if (sysParam.ghMonthlyPercent * permAmount + permitAmountPrevMonths < sumBranchThisMonth + amt)
-            return false
-        if (masarefBeManabeGharzolhasane() > sysParam.ghCentralBankPercent)
-            return false
-        return true
+        def permAmount = PermissionAmount_GH.findAllByBranch(branch).sum{it.permAmount}?: 0
+        return permAmount >= (sumBranch + amt)
     }
 
     def masarefBeManabeGharzolhasane() {
@@ -60,7 +65,7 @@ class LoanService {
         def sysParam = SystemParameters.findAll().first()
 
         def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Confirm).sum {it.loanAmount}) ?: 0
-        def permAmount = PermissionAmount_T.findAllByBranch(branch, [sort: 'permissionDate', order: 'desc', max: 1]).find()?.permAmount ?: 0
+        def permAmount = PermissionAmount_T.findAllByBranch(branch).sum{it.permAmount}?: 0
         return permAmount >= (sumBranch + amt)
     }
 
@@ -319,9 +324,9 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         def x = sql.firstRow("""select SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) AS amt
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
-  where branch_id=:branch
-  and tran_date=:today
-  and gl_group_id=:glgroup""", [today: today, branch: branch.id, glgroup: masarefGLGroup.id]);
+                          where branch_id=:branch
+                          and tran_date=:today
+                          and gl_group_id=:glgroup""", [today: today, branch: branch.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
         return x.amt
@@ -354,9 +359,9 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
                        FROM          dbo.gltransaction INNER JOIN
                                               dbo.glcode ON dbo.gltransaction.gl_code_id = dbo.glcode.id
                                               INNER JOIN branch on branch.id=branch_id
-  where branch_head_id=:branchhead
-  and tran_date=:today
-  and gl_group_id=:glgroup""", [today: today, branchhead: branchHead.id, glgroup: masarefGLGroup.id]);
+                          where branch_head_id=:branchhead
+                          and tran_date=:today
+                          and gl_group_id=:glgroup""", [today: today, branchhead: branchHead.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
         return x.amt
@@ -468,10 +473,10 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
             }
             order("date", "desc")
         }
-        def lastAmt = amts.find()
-        def prevAmt = amts.findAll {it[1] != lastAmt[1]}.sum {it[0]}
+        def lastAmt = amts.find() ?: []
+        def prevAmt = amts.findAll {it[1] != lastAmt[1]}.sum {it[0]} ?: 0
         def amt = lastAmt[0] ?: 0
-        def date = lastAmt[1]
+        def date = lastAmt[1] ?: new Date()
         def paidPerv = LoanRequest_T.createCriteria().get {
             projections {
                 sum("loanAmount")
@@ -506,6 +511,65 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         } ?: 0
         def vosool = amt * sysParam.permitReceivePercent
         def haddeGhabli = prevAmt * sysParam.permitReceivePercent - paidPerv
+        def haddeJari = vosool - paidLast + haddeGhabli + etebarDaryafti
+        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
+        return res
+    }
+
+    def getVosooliGH(BranchHead bh) {
+
+        SystemParameters sysParam = SystemParameters.findAll().first()
+
+        def amts = VosooliGH.createCriteria().list {
+            projections {
+                sum("amount")
+                groupProperty("date")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            order("date", "desc")
+        }
+        def lastAmt = amts.find() ?: []
+        def prevAmt = amts.findAll {it[1] != lastAmt[1]}.sum {it[0]} ?: 0
+        def amt = lastAmt[0] ?: 0
+        def date = lastAmt[1] ?: new Date()
+        def paidPerv = LoanRequest_GH.createCriteria().get {
+            projections {
+                sum("loanAmount")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            'in'('loanRequestStatus', ['Confirm', 'Paid'])
+            lt('requestDate', date)
+        } ?: 0
+        def paidLast = LoanRequest_GH.createCriteria().get {
+            projections {
+                sum("loanAmount")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            'in'('loanRequestStatus', ['Confirm', 'Paid'])
+            ge('requestDate', date)
+        } ?: 0
+        def etebarDaryafti = EtayeeGHBranchHead.createCriteria().get {
+            projections {
+                sum('amount')
+            }
+            branchHead {
+                eq('id', bh?.id)
+            }
+        } ?: 0
+        def vosool = amt * sysParam.ghCentralBankPercent
+        def haddeGhabli = prevAmt * sysParam.ghCentralBankPercent - paidPerv
         def haddeJari = vosool - paidLast + haddeGhabli + etebarDaryafti
         def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
         return res

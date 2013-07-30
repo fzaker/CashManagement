@@ -122,19 +122,18 @@
                                         code="LoanRequest.register.gh"/></a>
                             </li>
                         </c:isBranchUser>
-                        <c:isBankRegionUser>
-                            <li>
-                                <a href="<g:createLink controller="permissionAmount_GH"
-                                                       action="branchHeadList"/>"><g:message
-                                        code="Branch.PermitAssign.gh.branchHead"/></a>
-                            </li>
-                        </c:isBankRegionUser>
                         <c:isBranchHeadUser>
                             <li>
                                 <a href="<g:createLink controller="permissionAmount_GH"/>"><g:message
-                                        code="Branch.PermitAssign.gh"/></a>
+                                        code="Branch.PermitAssign.gh.branch"/></a>
                             </li>
                         </c:isBranchHeadUser>
+                        <c:isBankRegionOrAdmin>
+                            <li>
+                                <a href="<g:createLink controller="etayeeGHBranchHead"/>"><g:message
+                                        code="Branch.etayee.gh"/></a>
+                            </li>
+                        </c:isBankRegionOrAdmin>
 
                     </ul>
                 </li>

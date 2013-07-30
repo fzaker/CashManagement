@@ -52,14 +52,6 @@ class LoanRequest_TController {
             loanRequest_TInstance.requestDate = new Date()
         }
         loanRequest_TInstance.requestUser = principalService.user
-//        if (loanService.checkResourceAvailabilityT(branch, loanRequest_TInstance.loanAmount)) {
-//        loanRequest_TInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
-//            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Confirm
-//        }
-//        else {
-//            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Cancel
-//
-//        }
         loanRequest_TInstance.loanRequestStatus = LoanRequest_T.Pending
 
         if (!loanRequest_TInstance.id && LoanRequest_T.countByLoanNo(loanRequest_TInstance.loanNo) > 0) {
