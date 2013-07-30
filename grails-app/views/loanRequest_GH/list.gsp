@@ -26,6 +26,9 @@
 
 
 <div id="list-loanRequest_GH" ng-controller="loanRequest_GHController" class="content scaffold-list" role="main">
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <div class="fieldcontain">
         <span><g:message code="bankpercentgharzolhasane"/>: <g:formatNumber
                 number="${bankPercent}" type="number"/></span>

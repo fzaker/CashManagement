@@ -13,21 +13,36 @@
                                                                     default="Skip to content&hellip;"/></a>
 
 <div id="list-loanRequest_T" ng-controller="loanRequest_TController" class="content scaffold-list" role="main">
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
+    <div class="left" style="width: 50%">
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="paidLoanAmount"/></span>
+            <span class="property-value"><g:formatNumber number="${paidLoanAmount}" type="number"/></span>
+        </div>
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="paidLoanAmountThisPeriod"/></span>
+            <span class="property-value"><g:formatNumber number="${paidLoanAmountThisPeriod}" type="number"/></span>
+        </div>
 
-    <div class="fieldcontain">
-        <span class="property-label"><g:message code="assignedpermissionamountbranch"/></span>
-        <span class="property-value"><g:formatNumber number="${permitAmount}" type="number"/></span>
     </div>
+    <div class="right" style="width: 50%">
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="assignedpermissionamountbranch"/></span>
+            <span class="property-value"><g:formatNumber number="${permitAmount}" type="number"/></span>
+        </div>
 
-    <div class="fieldcontain">
-        <span class="property-label"><g:message code="usedpermissionamountbranch"/></span>
-        <span class="property-value" id="usedAmount"><g:formatNumber number="${usedAmount}" type="number"/></span>
-    </div>
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="usedpermissionamountbranch"/></span>
+            <span class="property-value" id="usedAmount"><g:formatNumber number="${usedAmount}" type="number"/></span>
+        </div>
 
-    <div class="fieldcontain">
-        <span class="property-label"><g:message code="permitpermissionamountbranch"/></span>
-        <span class="property-value" id="permitAmount"><g:formatNumber number="${permitAmount - usedAmount}"
-                                                                       type="number"/></span>
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="permitpermissionamountbranch"/></span>
+            <span class="property-value" id="permitAmount"><g:formatNumber number="${permitAmount - usedAmount}"
+                                                                           type="number"/></span>
+        </div>
     </div>
     <br>
 <g:form action="save">
@@ -104,7 +119,7 @@
                      showCommand="false"
                      firstColumnWidth="60"
                      caption="${message(code: "Pending")}"
-                     commands="${[[controller: 'loanRequest_T', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')],[controller: 'loanRequest_T', action: 'list', param: 'id=#id#', icon: 'application_edit',title:message(code:'edit')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: "reject")], [handler: 'accept(#id#)', icon: 'tick', title: message(code: "confirm")]]}"
+                     commands="${[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')],[controller: 'loanRequest_T', action: 'list', param: 'id=#id#', icon: 'application_edit',title:message(code:'edit')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: "reject")], [handler: 'accept(#id#)', icon: 'tick', title: message(code: "confirm")]]}"
                      idPostfix="PendingList">
                 <rg:criteria>
                     <rg:eq name="branch.id" value="${branch.id}"/>
@@ -119,7 +134,7 @@
                      showCommand="false"
                      firstColumnWidth="50"
                      caption="${message(code: "Confirm")}"
-                     commands="[[controller: 'loanRequest_T', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: 'reject')]]"
+                     commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: 'reject')]]"
                      idPostfix="ConfirmList">
                 <rg:criteria>
                     <rg:eq name="branch.id" value="${branch.id}"/>
@@ -133,7 +148,7 @@
                      columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
                      caption="${message(code: "Paid")}"
-                     commands="[[controller: 'loanRequest_T', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
+                     commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      idPostfix="PaidList">
                 <rg:criteria>
                     <rg:eq name="branch.id" value="${branch.id}"/>
@@ -147,7 +162,7 @@
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
                      showCommand="false"
                      caption="${message(code: "Rejected")}"
-                     commands="[[controller: 'loanRequest_T', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
+                     commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      idPostfix="RejectedList">
                 <rg:criteria>
                     <rg:eq name="branch.id" value="${branch.id}"/>
@@ -198,12 +213,43 @@
                             rejectReasonId:$("#rejectReason").val()
                         }
                     }).success(function(resp){
-                        $("#LoanRequest_TApprovedListGrid").trigger("reloadGrid")
+                        $("#LoanRequest_TPendingListGrid").trigger("reloadGrid")
+                        $("#LoanRequest_TConfirmListGrid").trigger("reloadGrid")
+                        $("#LoanRequest_TPaidListGrid").trigger("reloadGrid")
                         $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
                         $("#usedAmount").html(addCommas(resp.usedAmount))
                         $("#permitAmount").html(addCommas(resp.permitAmount-resp.usedAmount))
                         $("#reject-reason").dialog('close')
                     })
+                }
+                function accept(id){
+                    $.ajax({
+                            type:'post',
+                            url:'<g:createLink action="preAccept"/>',
+                            data:{id:id}
+                        }).success(function(data){
+                            if(data.result=="OK" && confirm(data.message)){
+                                $.ajax({
+                                    type:'post',
+                                    url:'<g:createLink action="acceptConfirm"/>',
+                                    data:{id:id}
+                                }).success(function(){
+                                    $("#LoanRequest_TPendingListGrid").trigger("reloadGrid")
+                                    $("#LoanRequest_TConfirmListGrid").trigger("reloadGrid")
+                                })
+                            }
+                            if(data.result=="CANCEL" && confirm(data.message)){
+                                $.ajax({
+                                    type:'post',
+                                    url:'<g:createLink action="acceptReject"/>',
+                                    data:{id:id}
+                                }).success(function(){
+                                    $("#LoanRequest_TPendingListGrid").trigger("reloadGrid")
+                                    $("#LoanRequest_TRejectedListGrid").trigger("reloadGrid")
+                                })
+                            }
+                        })
+
                 }
                 $(function(){
                     $( "#manoto" ).tabs();

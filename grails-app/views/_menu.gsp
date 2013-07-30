@@ -146,6 +146,9 @@
                     <li>
                         <a href="<g:createLink controller="loanRequest_NT" action="report"/>"><g:message code="loanRequest_NT.label"/></a>
                     </li>
+                    <li>
+                        <a href="<g:createLink controller="loanRequest_T" action="report"/>"><g:message code="loanRequest_T.label"/></a>
+                    </li>
                 </ul>
             </li>
 

@@ -30,7 +30,7 @@ class LoanRequest_T {
 
     static constraints = {
         loanNo(nullable: false, unique: true)
-        loanIDCode(nullable: true, unique: true)
+        loanIDCode(nullable: true)
         loanType(nullable: false)
         name()
         family()

@@ -17,12 +17,18 @@ class LoanRequest_GH {
     LoanType loanType
     Branch branch
     RejectReason rejectReason
+
+    User requestUser
+    User confirmUser
+    Date confirmedDate
+    User rejectUser
+    Date rejectDate
 //    Date registerTimeStamp
 //    String loginUser
 
     static constraints = {
         loanNo(nullable: false, unique: true)
-        loanIDCode(nullable: true, unique: true)
+        loanIDCode(nullable: true)
         loanType(nullable: false)
         name()
         family()
@@ -32,5 +38,10 @@ class LoanRequest_GH {
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
         branch(nullable: false)
         rejectReason(nullable: true)
+        requestUser(nullable: true)
+        confirmUser(nullable: true)
+        confirmedDate(nullable: true)
+        rejectUser(nullable: true)
+        rejectDate(nullable: true)
     }
 }
