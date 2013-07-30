@@ -1,16 +1,16 @@
-<%@ page import="cashmanagement.BranchHead; cashmanagement.Branch; cashmanagement.SystemParameters; cashmanagement.LoanRequest_NT" %>
+<%@ page import="cashmanagement.BranchHead; cashmanagement.Branch; cashmanagement.SystemParameters; cashmanagement.LoanRequest_GH" %>
 <!doctype html>
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'loanRequest_T.label', default: 'LoanRequest_T')}"/>
+    <g:set var="entityName" value="${message(code: 'loanRequest_GH.label', default: 'LoanRequest_GH')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
 </head>
 
 <body>
 <h2><g:message code="default.list.label" args="[entityName]"/></h2>
 
-<div id="list-loanRequest_NT" class="content scaffold-list" role="main">
+<div id="list-loanRequest_GH" class="content scaffold-list" role="main">
     <rg:criteria inline="true">
         <g:if test="${branch}">
             <rg:eq name="branch.id" value="${branch.id}" hidden="true"/>
@@ -26,7 +26,7 @@
         </g:elseif>
         <rg:gt name="requestDate" datePicker="true" label="${message(code:'date-from')}"/>
         <rg:lt name="requestDate" idPrefix="to" datePicker="true" label="${message(code:'date-to')}"/>
-        <rg:eq name="loanRequestStatus" valueMessagePrefix="loanRequest_NT.loanRequestStatus" label="${message(code:'loanRequest_NT.loanRequestStatus')}" optionkey="nill" from="${new cashmanagement.LoanRequest_NT().constraints.loanRequestStatus.inList}" noSelection="['':'']"/>
+        <rg:eq name="loanRequestStatus" valueMessagePrefix="loanRequest_NT.loanRequestStatus" label="${message(code:'loanRequest_NT.loanRequestStatus')}" optionkey="nill" from="${new cashmanagement.LoanRequest_GH().constraints.loanRequestStatus.inList}" noSelection="['':'']"/>
         <rg:like name="loanNo" label="${message(code:'loanRequest_NT.loanNo')}"/>
         <rg:like name="name" label="${message(code:'loanRequest_NT.name')}"/>
         <rg:like name="family" label="${message(code:'loanRequest_NT.family')}"/>
@@ -39,8 +39,8 @@
         </rg:nest>
         <rg:gt name="loanAmount" label="${message(code:'loanAmount-from')}"/>
         <rg:lt name="loanAmount" label="${message(code:'loanAmount-to')}"/>
-        <rg:filterGrid grid="LoanRequest_TGrid" label="${message(code:'search')}"/>
-        <rg:exportGrid grid="LoanRequest_TGrid" label="${message(code:'export-excel')}"/>
+        <rg:filterGrid grid="LoanRequest_GHGrid" label="${message(code:'search')}"/>
+        <rg:exportGrid grid="LoanRequest_GHGrid" label="${message(code:'export-excel')}"/>
     </rg:criteria>
     <div class="fieldcontain">
         <g:message code="selected-columns"/>:
@@ -50,11 +50,11 @@
         </g:form>
     </div>
     <br>
-    <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
+    <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
              columns="${selColumns}"
              caption=""
              showCommand="false"
-             commands="${[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier']]}">
+             commands="${[[controller: 'loanRequest_GH', action: 'show', param: 'id=#id#', icon: 'magnifier']]}">
         <rg:criteria>
             <g:if test="${branch}">
                 <rg:eq name="branch.id" value="${branch.id}" hidden="true"/>
