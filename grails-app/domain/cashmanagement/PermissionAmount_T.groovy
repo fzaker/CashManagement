@@ -3,8 +3,9 @@ package cashmanagement
 class PermissionAmount_T {
     Branch branch
     Double permAmount
-    Integer year
+    Date permissionDate
 
     static constraints = {
+        permissionDate(nullable: true)
     }
 }

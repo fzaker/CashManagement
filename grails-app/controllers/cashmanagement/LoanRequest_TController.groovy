@@ -15,17 +15,18 @@ class LoanRequest_TController {
     }
 
     def list() {
-        def res = viewParams()
+        def res = viewParams(params)
         res
     }
 
-    def viewParams() {
+    def viewParams(params) {
         def branch = principalService.branch
-        def year = new JalaliCalendar().year
-        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
-        def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, startDate, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0
-        def permitAmount = cashmanagement.PermissionAmount_T.findByBranchAndYear(branch, year)?.permAmount?:0
-        return [branch: branch, usedAmount: usedAmountBranch, permitAmount: permitAmount]
+//        def year = new JalaliCalendar().year
+//        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
+        def permitAmount = PermissionAmount_T.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find()
+        def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0
+        def loanRequest_t = LoanRequest_T.get(params.id)
+        return [branch: branch, usedAmount: usedAmountBranch, permitAmount: permitAmount?.permAmount, loanRequest_t: loanRequest_t]
     }
 
     def create() {
@@ -35,24 +36,28 @@ class LoanRequest_TController {
     def save() {
         def branch = principalService.getBranch()
 
-        def loanRequest_TInstance = new LoanRequest_T(params)
-        loanRequest_TInstance.branch = branch
-        loanRequest_TInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
-        loanRequest_TInstance.requestDate = new Date()
-        if (loanService.checkResourceAvailabilityT(branch, loanRequest_TInstance.loanAmount)) {
-            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Confirm
+        def loanRequest_TInstance
+        if (params.id) {
+            loanRequest_TInstance = LoanRequest_T.get(params.id)
+            loanRequest_TInstance.properties = params
         }
         else {
-            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Cancel
-
+            loanRequest_TInstance = new LoanRequest_T(params)
+            loanRequest_TInstance.branch = branch
+            loanRequest_TInstance.requestDate = new Date()
         }
-        if(loanRequest_TInstance.save(flush: true))
-            render viewParams() as JSON;
-        else
-            render loanRequest_TInstance.errors.allErrors.collect{g.message(error: it)} as JSON
+        loanRequest_TInstance.requestUser = principalService.user
+//        if (loanService.checkResourceAvailabilityT(branch, loanRequest_TInstance.loanAmount)) {
+//        loanRequest_TInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
+//            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Confirm
+//        }
+//        else {
+//            loanRequest_TInstance.loanRequestStatus = LoanRequest_NT.Cancel
 //
-//        flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_T.label', default: 'LoanRequest_NT'), loanRequest_TInstance.id])
-//        redirect(action: "show", id: loanRequest_TInstance.id)
+//        }
+        loanRequest_TInstance.loanRequestStatus = LoanRequest_T.Pending
+        loanRequest_TInstance.save(flush: true)
+        redirect(action: "list")
     }
 
     def show() {

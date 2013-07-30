@@ -5,6 +5,7 @@ class LoanRequest_T {
     static final String Cancel = "Cancel"
     static final String Confirm = "Confirm"
     static final String Sent = "Sent"
+    static final String Paid = "Paid"
 
     String loanNo
     String name
@@ -17,6 +18,12 @@ class LoanRequest_T {
     LoanType loanType
     Branch branch
     RejectReason rejectReason
+
+    User requestUser
+    User confirmUser
+    Date confirmedDate
+    User rejectUser
+    Date rejectDate
 
 //    Date registerTimeStamp
 //    String loginUser
@@ -33,5 +40,10 @@ class LoanRequest_T {
         loanRequestStatus(inList: [Confirm, Cancel, Pending, Sent])
         branch(nullable: false)
         rejectReason(nullable: true)
+        requestUser(nullable: true)
+        confirmUser(nullable: true)
+        confirmedDate(nullable: true)
+        rejectUser(nullable: true)
+        rejectDate(nullable: true)
     }
 }

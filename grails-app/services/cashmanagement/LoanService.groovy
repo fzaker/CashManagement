@@ -58,9 +58,9 @@ class LoanService {
 
     def checkResourceAvailabilityT(Branch branch, double amt) {
         def sysParam = SystemParameters.findAll().first()
-        def year = getCurrentDate(sysParam.today).year
+
         def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Confirm).sum {it.loanAmount}) ?: 0
-        def permAmount = (PermissionAmount_T.findByBranchAndYear(branch, year)?.permAmount) ?: 0
+        def permAmount = PermissionAmount_T.findAllByBranch(branch, [sort: 'permissionDate', order: 'desc', max: 1]).find()?.permAmount ?: 0
         return permAmount >= (sumBranch + amt)
     }
 
@@ -455,26 +455,60 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
     def getVosooli(BranchHead bh) {
 
         SystemParameters sysParam = SystemParameters.findAll().first()
-        def day_num = -1 * sysParam.permitReceiveDaysNum as Integer
 
-        def cal = getCurrentDate(sysParam.today).toJavaUtilGregorianCalendar()
-
-        cal.add(Calendar.DATE, day_num)
-
-        def pmjcal = new JalaliCalendar(cal)
-        def date = pmjcal.year * 10000 + pmjcal.month * 100 + pmjcal.day
-
-        //def bh=BranchHead.findByBranches(branch)
-
-        def bch = Branch.findAllByBranchHead(bh)
-
-        def vosooliGlGroup = sysParam.tabserei.manabe
-        def VosooliGlCode = GLCode.findAllByGlGroup(vosooliGlGroup)
-        def Vosooli = (GLTransaction.findAllByGlCodeInListAndBranchInListAndTranDateGreaterThanEquals(VosooliGlCode, bch, date).sum {it.glAmount * it.glCode.glFlag}) ?: 0
-
-        def vosool = Vosooli * sysParam.permitReceivePercent
-
-        return vosool
+        def amts = VosooliT.createCriteria().list {
+            projections {
+                sum("amount")
+                groupProperty("date")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            order("date", "desc")
+        }
+        def lastAmt = amts.find()
+        def prevAmt = amts.findAll {it[1] != lastAmt[1]}.sum {it[0]}
+        def amt = lastAmt[0] ?: 0
+        def date = lastAmt[1]
+        def paidPerv = LoanRequest_T.createCriteria().get {
+            projections {
+                sum("loanAmount")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            'in'('loanRequestStatus', ['Confirm', 'Paid'])
+            lt('requestDate', date)
+        } ?: 0
+        def paidLast = LoanRequest_T.createCriteria().get {
+            projections {
+                sum("loanAmount")
+            }
+            branch {
+                branchHead {
+                    eq('id', bh.id)
+                }
+            }
+            'in'('loanRequestStatus', ['Confirm', 'Paid'])
+            ge('requestDate', date)
+        } ?: 0
+        def etebarDaryafti = EtayeeTBranchHead.createCriteria().get {
+            projections {
+                sum('amount')
+            }
+            branchHead {
+                eq('id', bh?.id)
+            }
+        } ?: 0
+        def vosool = amt * sysParam.permitReceivePercent
+        def haddeGhabli = prevAmt * sysParam.permitReceivePercent - paidPerv
+        def haddeJari = vosool - paidLast + haddeGhabli + etebarDaryafti
+        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
+        return res
     }
 
     def getSystemParam(BranchHead branchHead) {

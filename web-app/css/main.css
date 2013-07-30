@@ -809,22 +809,22 @@ a.skip {
     padding: 5px;
 }
 .bank-region-percent .branch-head-name{
-    min-width: 200px;
+    width: 200px;
     display: inline-block;
     text-align: center;
 }
 .bank-region-percent .manabe{
-    min-width: 160px;
+    width: 160px;
     display: inline-block;
     text-align: center;
 }
 .bank-region-percent .manabe-percent{
-    min-width: 70px;
+    width: 70px;
     display: inline-block;
     text-align: center;
 }
 .bank-region-percent .max-permit-toward{
-    min-width: 190px;
+    width: 190px;
     display: inline-block;
     text-align: center;
 }

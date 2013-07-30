@@ -1200,6 +1200,7 @@ div.ui-tabs ul.ui-tabs-nav li {
 }
 .inline .fieldcontain{
     display: inline-block;
+    margin: 3px;
 }
 .clear{
     clear: both;

@@ -1,5 +1,5 @@
 
-<%@ page import="cashmanagement.LoanRequest_T; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_T" %>
+<%@ page import="java.math.RoundingMode; cashmanagement.LoanRequest_T; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_T" %>
 <!doctype html>
 <html>
 	<head>
@@ -11,35 +11,85 @@
         <h2><g:message code="default.list.label" args="[entityName]" /></h2>
 		<a href="#list-permissionAmount_T" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
-    <g:set var="year" value="${new JalaliCalendar().getYear()}"/>
-    <g:set var="startDate" value="${new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()}"/>
-    <g:set var="endDate" value="${new JalaliCalendar(year, 12, 29).toJavaUtilGregorianCalendar().getTime()}"/>
+
     <g:set var="branchs" value="${cashmanagement.Branch.findAllByBranchHead(branchHead)}"/>
     <g:set var="permissionAmountBranchHead"
-           value="${resultParm}"/>
+           value="${resultParm.haddeJari}"/>
 
     <div id="list-permissionAmount_T" class="content scaffold-list" role="main">
-        <div class="fieldcontain">
-            <span><g:message code="assignedpermissionamountbranchhead"/> ${branchHead}: <g:formatNumber
-                    number="${permissionAmountBranchHead}" type="number"/></span>
+        <div class="left" style="width: 50%">
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="haddeGhabli"/></span>
+                <span class="property-value"><g:formatNumber
+                        number="${resultParm.haddeGhabli}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/> <g:message code="rial" /></span>
+            </div>
+
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="vosooli"/></span>
+                <span class="property-value"><span id="vosooli"><g:formatNumber
+                        number="${resultParm.vosooli}" maxFractionDigits="2" type="number"/></span> <g:message code="rial" /></span>
+            </div>
+
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="vosooliDate" /></span>
+                <span class="property-value"><span id="vosooliDate"><rg:formatJalaliDate date="${resultParm.date}"/></span></span>
+            </div>
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="etebarDaryafti"/></span>
+                <span class="property-value"><g:formatNumber
+                        number="${resultParm.etebarDaryafti}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/> <g:message code="rial" /></span>
+            </div>
+        </div>
+        <div class="right" style="width: 50%">
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="vosooluGhabeleEstefade"/></span>
+                <span class="property-value"><g:formatNumber
+                        number="${resultParm.vosooliGhabeleEstefade}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/> <g:message code="rial" /></span>
+            </div>
+
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="mojavezSadere"/></span>
+                <span class="property-value"><span id="mojavezSadere"><g:formatNumber
+                        number="${resultParm.paidLast}" maxFractionDigits="2" type="number"/></span> <g:message code="rial" /></span>
+            </div>
+
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="haddeJari" /></span>
+                <span class="property-value"><span id="haddeJari"><g:formatNumber
+                        number="${resultParm.haddeJari}" maxFractionDigits="2" type="number"/> </span><g:message code="rial" /></span>
+            </div>
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="usedpermissionamountbranchhead"/></span>
+                <span class="property-value"><span id="usedAmount"></span> <g:message code="rial" /></span>
+            </div>
+            <div class="fieldcontain">
+                <span class="property-label"><g:message code="permitpermissionamountbranchhead"/></span>
+                <span class="property-value"><span id="permitAmount"></span> <g:message code="rial" /></span>
+            </div>
         </div>
 
-        <div class="fieldcontain">
-            <span><g:message code="usedpermissionamountbranchhead"/> ${branchHead}: <span id="usedAmount"></span></span>
-        </div>
-        <div class="fieldcontain">
-            <span><g:message code="permitpermissionamountbranchhead"/> ${branchHead}: <span id="permitAmount"></span></span>
-        </div>
+       <div>&nbsp;</div>
+
         <g:form action="save">
+            <g:hiddenField name="date" value="${resultParm.date}"/>
+            <div class="fieldcontain bank-region-percent">
+                <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
+                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmount" /></span>
+                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmount" /></span>
+                <span class="property-label-my min-growth"><g:message code="used.amount"/></span>
+            </div>
             <g:each in="${branchs}">
-                <div class="fieldcontain">
+                <div class="fieldcontain bank-region-percent">
                     <g:set var="permissionAmount"
-                           value="${cashmanagement.PermissionAmount_T.findByBranchAndYear(it, year)}"/>
+                           value="${cashmanagement.PermissionAmount_T.findByBranchAndPermissionDate(it, resultParm.date)}"/>
                     <g:set var="usedAmount"
-                           value="${cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateBetweenAndLoanRequestStatus(it, startDate, endDate, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0}"/>
-                    <span>${it}</span>: <g:textField class="branchPermission" name="branch_${it.id}"
-                                                     value="${formatNumber([number: permissionAmount?.permAmount, type: "number"])}"></g:textField>
-                    <span><g:message code="used.amount"/>: <g:formatNumber number="${usedAmount}" type="number"/></span>
+                           value="${cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(it, resultParm.date, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0}"/>
+                    <span class="property-value-my branch-head-name">${it}</span>
+                    <g:textField class="max-growth branchPermission" name="branch_${it.id}"
+                           value="${formatNumber([number: permissionAmount?.permAmount])}"></g:textField>
+                    <span class="property-value-my max-growth"><g:formatNumber number="${permissionAmount?.permAmount}" type="number"/></span>
+                    <span class="property-value-my min-growth"><g:formatNumber number="${usedAmount}" type="number"/></span>
+
                 </div>
             </g:each>
 
@@ -54,6 +104,7 @@
                     sum += isNaN(s) ? 0 : s
                 })
                 $("#usedAmount").html(addCommas(sum))
+                $(this).next().html(addCommas($(this).val()))
                 $("#permitAmount").html(addCommas(${permissionAmountBranchHead}-sum))
             }).keyup()
         })

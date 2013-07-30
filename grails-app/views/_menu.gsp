@@ -88,8 +88,6 @@
                         </c:isAdmin>
                     </ul>
                 </li>
-            </c:isBranchOrBranchHeadOrBankRegionOrAdmin>
-            <c:isBranchOrBranchHeadOrBankRegion>
 
                 <li class="MenuItem">
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>
@@ -106,6 +104,12 @@
                                         code="Branch.PermitAssign.t"/></a>
                             </li>
                         </c:isBranchHeadUser>
+                        <c:isBankRegionOrAdmin>
+                            <li>
+                                <a href="<g:createLink controller="etayeeTBranchHead"/>"><g:message
+                                        code="Branch.etayee.t"/></a>
+                            </li>
+                        </c:isBankRegionOrAdmin>
                     </ul>
                 </li>
 
@@ -134,7 +138,7 @@
 
                     </ul>
                 </li>
-            </c:isBranchOrBranchHeadOrBankRegion>
+            </c:isBranchOrBranchHeadOrBankRegionOrAdmin>
 
             <li class="MenuItem">
                 <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>

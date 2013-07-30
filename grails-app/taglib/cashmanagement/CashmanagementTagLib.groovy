@@ -9,7 +9,11 @@ class CashmanagementTagLib {
             out << body()
         }
     }
-
+    def isBankRegionOrAdmin = {attrs, body ->
+        if (principalService.user?.isAdmin || principalService.bankRegion) {
+            out << body()
+        }
+    }
     def isBasicInformation = { attrs, body ->
         if (principalService.user?.basicInformation) {
             out << body()

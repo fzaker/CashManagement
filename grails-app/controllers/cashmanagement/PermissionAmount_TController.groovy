@@ -16,9 +16,9 @@ class PermissionAmount_TController {
         def br = principalService.getBranchHead()
         def result
         if (br)
-            result = loanService.getVosooli(br) ?: 0
+            result = loanService.getVosooli(br)
         else
-            result = 0
+            result = []
 
         [resultParm: result, branchHead: br]
     }
@@ -29,12 +29,12 @@ class PermissionAmount_TController {
 
     def save() {
         def region = principalService.branchHead
-        def year = new JalaliCalendar().year
+        def date = params.date("date")
         def branchs = Branch.findAllByBranchHead(region)
         branchs.each {
-            def permissionAmount = PermissionAmount_T.findByBranchAndYear(it, year)
+            def permissionAmount = PermissionAmount_T.findByBranchAndPermissionDate(it, date)
             if (!permissionAmount)
-                permissionAmount = new PermissionAmount_T(branch: it, year: year)
+                permissionAmount = new PermissionAmount_T(branch: it, permissionDate: date)
             def permAmt = params["branch_${it.id}"] ?: "0"
             permAmt = permAmt.replace(",", "")
             permissionAmount.permAmount = Double.valueOf(permAmt)
