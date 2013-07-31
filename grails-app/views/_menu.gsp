@@ -151,9 +151,11 @@
                     <li>
                         <a href="<g:createLink controller="loanRequest_GH" action="report"/>"><g:message code="loanRequest_GH.label"/></a>
                     </li>
-                    <li>
-                        <a href="<g:createLink controller="loanRequest_NT" action="report_date"/>"><g:message code="loanRequest_NT.report.label"/></a>
-                    </li>
+                    <c:isBankRegionOrAdmin>
+                        <li>
+                            <a href="<g:createLink controller="loanRequest_NT" action="report_date"/>"><g:message code="loanRequest_NT.report.label"/></a>
+                        </li>
+                    </c:isBankRegionOrAdmin>
                 </ul>
             </li>
 
