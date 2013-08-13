@@ -1,5 +1,5 @@
 
-<%@ page import="java.math.RoundingMode; cashmanagement.LoanRequest_T; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_T" %>
+<%@ page import="java.text.SimpleDateFormat; java.math.RoundingMode; cashmanagement.LoanRequest_T; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_T" %>
 <!doctype html>
 <html>
 	<head>
@@ -17,6 +17,10 @@
            value="${resultParm.haddeJari}"/>
 
     <div id="list-permissionAmount_T" class="content scaffold-list" role="main">
+
+        <g:if test="${flash.message}">
+            <div class="message" role="status">${flash.message}</div>
+        </g:if>
         <div class="left" style="width: 50%">
             <div class="fieldcontain">
                 <span class="property-label"><g:message code="haddeGhabli"/></span>
@@ -71,7 +75,7 @@
        <div>&nbsp;</div>
 
         <g:form action="save">
-            <g:hiddenField name="date" value="${resultParm.date}"/>
+            <g:hiddenField name="date" value="${new SimpleDateFormat("yyyyMMdd").format(resultParm.date)}"/>
             <div class="fieldcontain bank-region-percent">
                 <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
                 <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmount" /></span>

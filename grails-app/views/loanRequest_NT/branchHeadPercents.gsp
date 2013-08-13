@@ -12,7 +12,10 @@
 <a href="#list-permissionAmount_T" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
 
-<div id="list-bank-region-params" class="content scaffold-list" role="main">
+<div id="list-bank-region-params" class="content scaffold-list" role="main" style="overflow-x: auto">
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <div class="fieldcontain">
         <span class="property-label"><g:message code="permitTowardPercent"/></span>
         <span class="property-value"><g:formatNumber
@@ -27,7 +30,7 @@
         <span class="property-value"><g:formatNumber
                 number="${sumManabe}" type="number" /></span>
     </div>
-    <g:form action="savePermitPercentsBranchHead">
+    <g:form action="savePermitPercentsBranchHead" style="width: 1200px">
         <div class="fieldcontain bank-region-percent">
             <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
             <span class="property-label-my max-growth"><g:message code="max-growth" /></span>

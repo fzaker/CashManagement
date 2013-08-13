@@ -14,12 +14,14 @@ class LoanRequest_NTController {
     def index() {
         redirect(action: "list", params: params)
     }
-    def report_date(){
-        def date=params.date?:new Date()
-        def res=loanService.getNTReport(date)
-        [branches:res,date: date]
+
+    def report_date() {
+        def date = params.date ?: new Date()
+        def res = loanService.getNTReport(date)
+        [branches: res, date: date]
 
     }
+
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
@@ -411,6 +413,10 @@ class LoanRequest_NTController {
     }
 
     def branchHeadPercents() {
+        getPermitPercents()
+    }
+
+    private def getPermitPercents() {
         def sysParam
         def branchs
         if (principalService.user?.branchHead) {
@@ -424,6 +430,7 @@ class LoanRequest_NTController {
             return
         }
         def branchsParams = []
+        def brp=[:]
         branchs.each {
             def ntParam = BranchNTParams.findByBranch(it) ?:
                 new BranchNTParams(branch: it, permitToward: sysParam.permitToward,
@@ -433,6 +440,7 @@ class LoanRequest_NTController {
         def sumManabe = branchsParams.sum {it.manabe ?: 0}
         branchsParams.each {
             it.manabePercent = it.manabe / sumManabe
+            brp["${it.branch.id}"]=it.manabe / sumManabe
         }
         def curManabeBeMasaref = branchsParams.sum {
             it.manabePercent * it.ntParam.permitToward
@@ -440,20 +448,38 @@ class LoanRequest_NTController {
         branchsParams.each {
             it.maxPermitToward = it.manabePercent ? ((sysParam.permitToward - curManabeBeMasaref) / it.manabePercent + it.ntParam.permitToward) : it.ntParam.permitToward
         }
-        [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchsParams: branchsParams]
+        [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchsParams: branchsParams,brp:brp]
+
     }
+
     def savePermitPercentsBranchHead() {
-        params.findAll {it.key.contains("_")}.groupBy {
-            it.key.split("_")[1]
-        }.each { key, val ->
-            def param = BranchNTParams.get(key as Long)
-            param.permitToward = val["permitToward_${key}"] as Double
-            param.maxGrowth = val["maxGrowth_${key}"] as Double
-            param.minGrowth = val["minGrowth_${key}"] as Double
-            param.save()
-        }
+//        def permitPercents = getPermitPercents()
+//        def avgPt = 0
+//        Map brp=permitPercents.brp.collectEntries {key,value->["${key}":value]}
+//        params.findAll {it.key.contains("_")}.groupBy {
+//            it.key.split("_")[1]
+//        }.each { key, val ->
+//            def param = BranchNTParams.get(key as Long)
+//            def pt = val["permitToward_${key}"] as Double
+//            def pr=brp["1156"]
+////            avgPt += pr* pt
+//        }
+//        if (avgPt > permitPercents.permitToward) {
+//            flash.message = message(code: 'more-than-permission-amount')
+//        } else {
+            params.findAll {it.key.contains("_")}.groupBy {
+                it.key.split("_")[1]
+            }.each { key, val ->
+                def param = BranchNTParams.get(key as Long)
+                param.permitToward = val["permitToward_${key}"] as Double
+                param.maxGrowth = val["maxGrowth_${key}"] as Double
+                param.minGrowth = val["minGrowth_${key}"] as Double
+                param.save()
+            }
+//        }
         redirect(action: "branchHeadPercents")
     }
+
     def savePermitPercents() {
         params.findAll {it.key.contains("_")}.groupBy {
             it.key.split("_")[1]

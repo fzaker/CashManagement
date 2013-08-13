@@ -1,8 +1,8 @@
 package cashmanagement
 
 class VosooliGH {
-    Branch branch
-    Date date
+    String branchCode
+    Integer date
     long amount
     static constraints = {
     }

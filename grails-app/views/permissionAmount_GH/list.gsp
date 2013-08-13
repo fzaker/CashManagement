@@ -1,5 +1,5 @@
 
-<%@ page import="java.math.RoundingMode; cashmanagement.LoanRequest_GH; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_GH" %>
+<%@ page import="java.text.SimpleDateFormat; java.math.RoundingMode; cashmanagement.LoanRequest_GH; fi.joensuu.joyds1.calendar.JalaliCalendar; cashmanagement.PermissionAmount_GH" %>
 <!doctype html>
 <html>
 <head>
@@ -17,6 +17,9 @@
        value="${resultParm.haddeJari}"/>
 
 <div id="list-permissionAmount_GH" class="content scaffold-list" role="main">
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <div class="left" style="width: 50%">
         <div class="fieldcontain">
             <span class="property-label"><g:message code="haddeGhabli"/></span>
@@ -41,11 +44,11 @@
         </div>
     </div>
     <div class="right" style="width: 50%">
-        <div class="fieldcontain">
-            <span class="property-label"><g:message code="vosooluGhabeleEstefade"/></span>
-            <span class="property-value"><g:formatNumber
-                    number="${resultParm.vosooliGhabeleEstefade}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/> <g:message code="rial" /></span>
-        </div>
+        %{--<div class="fieldcontain">--}%
+            %{--<span class="property-label"><g:message code="vosooluGhabeleEstefade"/></span>--}%
+            %{--<span class="property-value"><g:formatNumber--}%
+                    %{--number="${resultParm.vosooliGhabeleEstefade}" maxFractionDigits="0" roundingMode="${RoundingMode.DOWN}" type="number"/> <g:message code="rial" /></span>--}%
+        %{--</div>--}%
 
         <div class="fieldcontain">
             <span class="property-label"><g:message code="mojavezSadere"/></span>
@@ -71,7 +74,7 @@
     <div>&nbsp;</div>
 
     <g:form action="save">
-        <g:hiddenField name="date" value="${resultParm.date}"/>
+        <g:hiddenField name="date" value="${new SimpleDateFormat("yyyyMMdd").format(resultParm.date)}"/>
         <div class="fieldcontain bank-region-percent">
             <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
             <span class="property-label-my max-growth"><g:message code="permissionAmount_GH.permAmount" /></span>

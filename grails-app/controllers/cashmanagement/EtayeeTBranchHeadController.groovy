@@ -25,15 +25,49 @@ class EtayeeTBranchHeadController {
 
     def save() {
         def etayeeTBranchHeadInstance
-        if (params.id) {
-            etayeeTBranchHeadInstance = EtayeeTBranchHead.get(params.id)
-            etayeeTBranchHeadInstance.properties = params
-        }
-        else
-            etayeeTBranchHeadInstance = new EtayeeTBranchHead(params)
-        etayeeTBranchHeadInstance.date = new Date()
-        etayeeTBranchHeadInstance.user = principalService.user
-        etayeeTBranchHeadInstance.save(flush: true)
+//        def count = 0, c2 = 0
+//        if (params.id) {
+//            etayeeTBranchHeadInstance = EtayeeTBranchHead.get(params.id)
+//
+//            count = LoanRequest_T.createCriteria().get {
+//                projections {
+//                    count("id")
+//                }
+//                branch {
+//                    branchHead {
+//                        eq("id", etayeeTBranchHeadInstance?.id)
+//                    }
+//                }
+//                ge("requestDate", etayeeTBranchHeadInstance?.date)
+//            }
+//            c2 = PermissionAmount_T.createCriteria().get {
+//                projections {
+//                    count("id")
+//                }
+//                branch {
+//                    branchHead {
+//                        eq("id", etayeeTBranchHeadInstance?.id)
+//                    }
+//                }
+//                ge("permissionDate", etayeeTBranchHeadInstance?.date)
+//            }
+//        }
+//        if (count > 0 || c2 > 0) {
+//            render message(code: 'cannot-delete-this')
+//        }
+//        else {
+//
+
+            if (params.id) {
+                etayeeTBranchHeadInstance = EtayeeTBranchHead.get(params.id)
+                etayeeTBranchHeadInstance.properties = params
+            }
+            else
+                etayeeTBranchHeadInstance = new EtayeeTBranchHead(params)
+            etayeeTBranchHeadInstance.date = new Date()
+            etayeeTBranchHeadInstance.user = principalService.user
+            etayeeTBranchHeadInstance.save(flush: true)
+//        }
         render 0
     }
 
@@ -102,7 +136,18 @@ class EtayeeTBranchHeadController {
             }
             ge("requestDate", etayeeTBranchHeadInstance?.date)
         }
-        if (count > 0) {
+        def c2 = PermissionAmount_T.createCriteria().get {
+            projections {
+                count("id")
+            }
+            branch {
+                branchHead {
+                    eq("id", etayeeTBranchHeadInstance?.id)
+                }
+            }
+            ge("permissionDate", etayeeTBranchHeadInstance?.date)
+        }
+        if (count > 0 || c2 > 0) {
             render message(code: 'cannot-delete-this')
         }
         else {

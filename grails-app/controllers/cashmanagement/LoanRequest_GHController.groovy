@@ -21,15 +21,15 @@ class LoanRequest_GHController {
         def branch = principalService.branch
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
-        def permitAmount = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find()
+        def permitAmount = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find()?:new PermissionAmount_GH()
         def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Confirm).sum {it.loanAmount} ?: 0
         def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
         def paidAmountPeriod = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Paid).sum {it.loanAmount} ?: 0
         def loanRequest_gh = LoanRequest_GH.get(params.id)
-        return [branch: branch, usedAmount: usedAmountBranch,
-                permitAmount: permitAmount?.permAmount, loanRequest_gh: loanRequest_gh,
-                paidLoanAmount:paidAmount,
-                paidLoanAmountThisPeriod:paidAmountPeriod]
+        return [branch: branch, usedAmount: usedAmountBranch?:0,
+                permitAmount: permitAmount?.permAmount?:0, loanRequest_gh: loanRequest_gh,
+                paidLoanAmount:paidAmount?:0,
+                paidLoanAmountThisPeriod:paidAmountPeriod?:0]
     }
 
     def create() {
@@ -164,8 +164,14 @@ class LoanRequest_GHController {
         if (loanService.checkResourceAvailabilityGH(req.branch, req.loanAmount)) {
             render([result: "OK", message: message(code: "branch-ok", args: [req.loanAmount])] as JSON)
         }
-        else
-            render([result: "CANCEL", message: message(code: "branch-cancel-t")] as JSON)
+        else{
+            if(loanService.checkResourceAvailabilityGHOld(req.branch,req.loanAmount)){
+                render([result: "CANCEL", message: message(code: "branch-cancel-t")] as JSON)
+            }
+            else{
+                render([result: "CANCEL", message: message(code: "branch-cancel-gh-central-bank")] as JSON)
+            }
+        }
     }
 
     def acceptReject() {

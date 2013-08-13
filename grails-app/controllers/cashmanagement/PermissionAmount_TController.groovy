@@ -29,16 +29,29 @@ class PermissionAmount_TController {
 
     def save() {
         def region = principalService.branchHead
-        def date = params.date("date")
+        def date = params.date("date","yyyyMMdd")
         def branchs = Branch.findAllByBranchHead(region)
+        def totalAmount = 0
+        def vosoolis = loanService.getVosooli(region)
         branchs.each {
-            def permissionAmount = PermissionAmount_T.findByBranchAndPermissionDate(it, date)
-            if (!permissionAmount)
-                permissionAmount = new PermissionAmount_T(branch: it, permissionDate: date)
             def permAmt = params["branch_${it.id}"] ?: "0"
             permAmt = permAmt.replace(",", "")
-            permissionAmount.permAmount = Double.valueOf(permAmt)
-            permissionAmount.save()
+            def permAmount = Double.valueOf(permAmt)
+            totalAmount += permAmount
+        }
+        if (totalAmount > vosoolis.haddeJari) {
+            flash.message = message(code: 'more-than-permission-amount')
+        }
+        else {
+            branchs.each {
+                def permissionAmount = PermissionAmount_T.findByBranchAndPermissionDate(it, date)
+                if (!permissionAmount)
+                    permissionAmount = new PermissionAmount_T(branch: it, permissionDate: date)
+                def permAmt = params["branch_${it.id}"] ?: "0"
+                permAmt = permAmt.replace(",", "")
+                permissionAmount.permAmount = Double.valueOf(permAmt)
+                permissionAmount.save()
+            }
         }
         redirect(action: "list")
     }

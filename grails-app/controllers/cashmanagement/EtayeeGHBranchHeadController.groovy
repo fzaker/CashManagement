@@ -25,15 +25,48 @@ class EtayeeGHBranchHeadController {
 
     def save() {
         def etayeeGHBranchHeadInstance
-        if (params.id) {
-            etayeeGHBranchHeadInstance = EtayeeGHBranchHead.get(params.id)
-            etayeeGHBranchHeadInstance.properties = params
-        }
-        else
-            etayeeGHBranchHeadInstance = new EtayeeGHBranchHead(params)
-        etayeeGHBranchHeadInstance.date = new Date()
-        etayeeGHBranchHeadInstance.user = principalService.user
-        etayeeGHBranchHeadInstance.save(flush: true)
+        def count = 0, c2 = 0
+//        if (params.id) {
+//            etayeeGHBranchHeadInstance = EtayeeGHBranchHead.get(params.id)
+//
+//            count = LoanRequest_GH.createCriteria().get {
+//                projections {
+//                    sum("id")
+//                }
+//                branch {
+//                    branchHead {
+//                        eq("id", etayeeGHBranchHeadInstance?.branchHead?.id)
+//                    }
+//                }
+//                ge("requestDate", etayeeGHBranchHeadInstance?.date)
+//            } ?: 0
+//            c2 = PermissionAmount_GH.createCriteria().get {
+//                projections {
+//                    sum("id")
+//                }
+//                branch {
+//                    branchHead {
+//                        eq("id", etayeeGHBranchHeadInstance?.branchHead?.id)
+//                    }
+//                }
+//                ge("permissionDate", etayeeGHBranchHeadInstance?.date)
+//            } ?: 0
+//        }
+//        if (count > 0 || c2 > 0) {
+//            render message(code: 'cannot-delete-this')
+//        }
+//        else {
+
+            if (params.id) {
+                etayeeGHBranchHeadInstance = EtayeeGHBranchHead.get(params.id)
+                etayeeGHBranchHeadInstance.properties = params
+            }
+            else
+                etayeeGHBranchHeadInstance = new EtayeeGHBranchHead(params)
+            etayeeGHBranchHeadInstance.date = new Date()
+            etayeeGHBranchHeadInstance.user = principalService.user
+            etayeeGHBranchHeadInstance.save(flush: true)
+//        }
         render 0
     }
 
@@ -97,12 +130,23 @@ class EtayeeGHBranchHeadController {
             }
             branch {
                 branchHead {
-                    eq("id", etayeeGHBranchHeadInstance?.id)
+                    eq("id", etayeeGHBranchHeadInstance?.branchHead?.id)
                 }
             }
             ge("requestDate", etayeeGHBranchHeadInstance?.date)
-        }
-        if (count > 0) {
+        } ?: 0
+        def c2 = PermissionAmount_GH.createCriteria().get {
+            projections {
+                sum("id")
+            }
+            branch {
+                branchHead {
+                    eq("id", etayeeGHBranchHeadInstance?.branchHead?.id)
+                }
+            }
+            ge("permissionDate", etayeeGHBranchHeadInstance?.date)
+        } ?: 0
+        if (count > 0 || c2 > 0) {
             render message(code: 'cannot-delete-this')
         }
         else {
