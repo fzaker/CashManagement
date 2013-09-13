@@ -9,8 +9,13 @@ class CashmanagementTagLib {
             out << body()
         }
     }
-    def isBankRegionOrAdmin = {attrs, body ->
+    def isBankRegionOrAdmin = { attrs, body ->
         if (principalService.user?.isAdmin || principalService.bankRegion) {
+            out << body()
+        }
+    }
+    def isBranchHeadOrAdmin = { attrs, body ->
+        if (principalService.user?.isAdmin || principalService.branchHead) {
             out << body()
         }
     }
@@ -52,7 +57,11 @@ class CashmanagementTagLib {
             out << body()
         }
     }
-    def loginmessage = {attrs, body ->
+    def branchHeadId = {
+        attrs, body ->
+            out << principalService.branchHead?.id
+    }
+    def loginmessage = { attrs, body ->
         if (principalService.user) {
             out << message(code: 'user.name.label')
             out << ': <b>' + principalService.user.name + "</b>  "

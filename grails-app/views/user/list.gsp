@@ -13,8 +13,15 @@
                                                            default="Skip to content&hellip;"/></a>
 <g:javascript plugin="rapid-grails" src="jquery.form.js"></g:javascript>
 <div id="list-user" class="content scaffold-list" role="main">
-    <rg:grid domainClass="${cashmanagement.User}"
+    <g:set var="jsonurl" value="${createLink(controller: "rapidGrails",action: "jsonList",params: [domainClass:User.class.name,maxColumns:6])}"/>
+    <g:set var="colCount" value="6"/>
+    <c:isBranchHeadUser>
+        <g:set var="jsonurl" value="${createLink(controller: "user",action: "jsonList")}"/>
+        <g:set var="colCount" value="4"/>
+    </c:isBranchHeadUser>
+    <rg:grid url="${jsonurl}" domainClass="${cashmanagement.User}"
              showCommand="false"
+             maxColumns="${colCount}"
              commands="[[handler: 'addToGrid(#id#)', icon: 'application_edit',title:message(code: 'edit')], [handler: 'changepass(#id#)', icon: 'application_key',title:message(code: 'changepass')]]"></rg:grid>
     <input type="button" onclick="addToGrid()" value="${message(code: "create")}"/>
     <g:javascript>

@@ -26,7 +26,7 @@ class LoanRequest_NT {
     User confirmUser
 
     static constraints = {
-        loanNo(nullable: false, unique: true)
+        loanNo(nullable: false)
         loanType(nullable: false)
         name()
         family()

@@ -28,7 +28,7 @@
                 number="${sumManabe}" type="number" /></span>
     </div>
     <g:form action="savePermitPercents">
-        <div class="fieldcontain bank-region-percent">
+        <div class="fieldcontain bank-region-percent fix-at-top">
             <span class="property-label-my branch-head-name"><g:message code="branchHead" /></span>
             <span class="property-label-my max-growth"><g:message code="max-growth" /></span>
             <span class="property-label-my min-growth"><g:message code="min-growth" /></span>
@@ -48,7 +48,7 @@
                              value="${formatNumber([number: it.ntParam.minGrowth, type: "number"])}"></g:textField>
 
 
-                <g:textField class=" permit-toward" name="permitToward_${it.ntParam.id}"
+                <g:textField class="permit-toward" name="permitToward_${it.ntParam.id}" orig="${formatNumber([number: it.ntParam.permitToward, type: "number"])}" max="${it.maxPermitToward}" weight="${it.manabePercent}"
                                                  value="${formatNumber([number: it.ntParam.permitToward, type: "number"])}"></g:textField>
 
                 <span class="property-value-my max-permit-toward"><g:formatNumber number="${it.maxPermitToward}" type="number"/></span>
@@ -60,5 +60,28 @@
         <g:submitButton name="submit" value="${message(code: "save.label")}"/>
     </g:form>
 </div>
+<g:javascript>
+$(document).ready(function(){
+    $("input.permit-toward").keyup(function(e){
+        var ths=$(this)
+        if(ths.val()>ths.attr("max")){
+            alert('<g:message code="cannot-greter-than-max" />')
+            ths.val(ths.attr('orig'))
+            return
+        }
+        var curPermit=0;
+        $("input.permit-toward").each(function(){
+            curPermit+=(parseFloat($(this).val())*parseFloat($(this).attr('weight')))
+        })
+        $("input.permit-toward").each(function(){
+            var max=(${permitToward}-curPermit)/parseFloat($(this).attr('weight'))+parseFloat($(this).val())
+            $(this).attr('max',max)
+            $(this).parent().find(".max-permit-toward").html(Math.round(max*1000)/1000)
+        })
+//        ths.attr('orig',ths.val())
+
+    })
+})
+</g:javascript>
 </body>
 </html>

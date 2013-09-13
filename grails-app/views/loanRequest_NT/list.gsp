@@ -69,9 +69,11 @@
 
         <div class="fieldcontain">
             <span class="property-label"><g:message code="permitToward"/>:</span>
-            <span class="property-value"><span id="permitToward"><g:formatNumber
-                    number="${permitToward}" maxFractionDigits="2" type="number"/>(<g:formatNumber
-                    number="${permitToward * 100}" maxFractionDigits="2" type="number"/>%)</span></span>
+            <span class="property-value"><span id="permitToward">
+                %{--<g:formatNumber number="${permitToward}" maxFractionDigits="2" type="number"/>(--}%
+                <g:formatNumber number="${permitToward * 100}" maxFractionDigits="2" type="number"/>%
+                %{--)--}%
+            </span></span>
         </div>
     </div>
 

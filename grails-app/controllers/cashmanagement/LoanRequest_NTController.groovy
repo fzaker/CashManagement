@@ -40,13 +40,13 @@ class LoanRequest_NTController {
                 [label: message(code: 'loanRequest_NT.rejectUser'), name: 'rejectUser'],
                 [label: message(code: 'loanRequest_NT.confirmUser'), name: 'confirmUser'],
                 [label: message(code: 'loanRequest_NT.requestDate'), name: 'requestDate']]
-        def selColumns = params.columns ? columns.findAll {params.columns.contains(it.name)} : columns.subList(0, 7);
+        def selColumns = params.columns ? columns.findAll { params.columns.contains(it.name) } : columns.subList(0, 7);
         [branch: principalService.branch,
                 branchHead: principalService.branchHead,
                 bankRegion: principalService.bankRegion,
                 columns: columns,
                 selColumns: selColumns,
-                selColumnsNames: selColumns.collect {it.name}]
+                selColumnsNames: selColumns.collect { it.name }]
     }
 
     def list() {
@@ -97,8 +97,7 @@ class LoanRequest_NTController {
         def req = LoanRequest_NT.get(params.id)
         if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
             render([result: "OK", message: message(code: "branch-ok", args: [req.loanAmount])] as JSON)
-        }
-        else
+        } else
             render([result: "CANCEL", message: message(code: "branch-cancel")] as JSON)
     }
 
@@ -131,6 +130,7 @@ class LoanRequest_NTController {
             req.loanRequestStatus = LoanRequest_NT.Cancel
             req.rejectReason = RejectReason.get(params.rejectReasonId)
             req.rejectUser = principalService.user
+            req.loanIDCode = null
             req.save()
         }
         render 0
@@ -142,7 +142,7 @@ class LoanRequest_NTController {
             def mojoodi = []
             def sum = 0;
             def count = 0;
-            LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).eachWithIndex {barrow, index ->
+            LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).eachWithIndex { barrow, index ->
                 mojoodi << message(code: "link-amount-branch", args: [index + 1, barrow.debit, barrow.otherSide.branch])
                 sum += barrow.debit
                 count = index
@@ -151,8 +151,7 @@ class LoanRequest_NTController {
                 mojoodi << message(code: "link-amount-branch", args: [count + 2, req.loanAmount - sum, req.branch])
 
             render([result: "OK", message: message(code: "branch-head-ok", args: [mojoodi.join("\n")])] as JSON)
-        }
-        else
+        } else
             render([result: "CANCEL", message: message(code: "branchead-cancel")] as JSON)
     }
 
@@ -221,14 +220,14 @@ class LoanRequest_NTController {
     def preAcceptBankRegion() {
         def req = LoanRequestNT_BankRegion.get(params.id)
         if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
-            def branchHeads = LoanRequestNTBarrow.findAllByRequest(req.loanRequest_nt).collect {it.branch.branchHead}.unique()
+            def branchHeads = LoanRequestNTBarrow.findAllByRequest(req.loanRequest_nt).collect { it.branch.branchHead }.unique()
             if (branchHeads.size() > 1) {
                 render([result: "CANCEL", message: message(code: "branch-head-ok-headOfficeReq")] as JSON)
             } else {
                 def mojoodi = []
                 def sum = 0;
                 def count = 0;
-                LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).eachWithIndex {barrow, index ->
+                LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).eachWithIndex { barrow, index ->
                     mojoodi << message(code: "link-amount-branch", args: [index + 1, barrow.debit, barrow.otherSide.branch])
                     sum += barrow.debit
                     count = index
@@ -239,8 +238,7 @@ class LoanRequest_NTController {
 
                 render([result: "OK", message: message(code: "branch-head-ok", args: [mojoodi.join("\n")])] as JSON)
             }
-        }
-        else
+        } else
             render([result: "CANCEL", message: message(code: "bankregion-cancel")] as JSON)
     }
 
@@ -316,8 +314,7 @@ class LoanRequest_NTController {
                 redirect(action: "list")
                 return
             }
-        }
-        else
+        } else
             loanRequest_NTInstance = new LoanRequest_NT(params)
         loanRequest_NTInstance.branch = branch
 //        loanRequest_NTInstance.loanIDCode = loanService.generateLoanId(branch, LoanType.get(params.loanType.id), new Date(), params.loanNo)
@@ -330,11 +327,10 @@ class LoanRequest_NTController {
         loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Pending
 
 //        }
-        if (!loanRequest_NTInstance.id && LoanRequest_NT.countByLoanNo(loanRequest_NTInstance.loanNo) > 0) {
+        if (!loanRequest_NTInstance.id && LoanRequest_NT.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_NTInstance.loanNo,LoanRequest_NT.Cancel) > 0) {
             flash.message = message(code: 'loan-no-not-unique')
 
-        }
-        else {
+        } else {
             if (loanRequest_NTInstance.save()) {
 //                flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
             }
@@ -387,8 +383,7 @@ class LoanRequest_NTController {
         else if (principalService.user?.bankRegion) {
             def bankRegion = principalService.getBankRegion()
             branchHeads = BranchHead.findAllByBankRegion(bankRegion)
-        }
-        else {
+        } else {
             render "Permission Denied"
             return
         }
@@ -399,7 +394,7 @@ class LoanRequest_NTController {
                         maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
             branchHeadsParams << [branchHead: it, ntParam: ntParam, manabe: loanService.getManabeGT(it) ?: 0]
         }
-        def sumManabe = branchHeadsParams.sum {it.manabe ?: 0}
+        def sumManabe = branchHeadsParams.sum { it.manabe ?: 0 }
         branchHeadsParams.each {
             it.manabePercent = it.manabe / sumManabe
         }
@@ -424,23 +419,22 @@ class LoanRequest_NTController {
             def branchHead = principalService.getBranchHead()
             sysParam = loanService.getSystemParam(branchHead)
             branchs = Branch.findAllByBranchHead(branchHead)
-        }
-        else {
+        } else {
             render "Permission Denied"
             return
         }
         def branchsParams = []
-        def brp=[:]
+        def brp = [:]
         branchs.each {
             def ntParam = BranchNTParams.findByBranch(it) ?:
                 new BranchNTParams(branch: it, permitToward: sysParam.permitToward,
                         maxGrowth: sysParam.maxGrowth, minGrowth: sysParam.minGrowth).save()
             branchsParams << [branch: it, ntParam: ntParam, manabe: loanService.getManabeGT(it) ?: 0]
         }
-        def sumManabe = branchsParams.sum {it.manabe ?: 0}
+        def sumManabe = branchsParams.sum { it.manabe ?: 0 }
         branchsParams.each {
             it.manabePercent = it.manabe / sumManabe
-            brp["${it.branch.id}"]=it.manabe / sumManabe
+            brp["${it.branch.id}"] = it.manabe / sumManabe
         }
         def curManabeBeMasaref = branchsParams.sum {
             it.manabePercent * it.ntParam.permitToward
@@ -448,7 +442,7 @@ class LoanRequest_NTController {
         branchsParams.each {
             it.maxPermitToward = it.manabePercent ? ((sysParam.permitToward - curManabeBeMasaref) / it.manabePercent + it.ntParam.permitToward) : it.ntParam.permitToward
         }
-        [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchsParams: branchsParams,brp:brp]
+        [permitToward: sysParam.permitToward, sumManabe: sumManabe, curManabeBeMasaref: curManabeBeMasaref, branchsParams: branchsParams, brp: brp]
 
     }
 
@@ -467,21 +461,21 @@ class LoanRequest_NTController {
 //        if (avgPt > permitPercents.permitToward) {
 //            flash.message = message(code: 'more-than-permission-amount')
 //        } else {
-            params.findAll {it.key.contains("_")}.groupBy {
-                it.key.split("_")[1]
-            }.each { key, val ->
-                def param = BranchNTParams.get(key as Long)
-                param.permitToward = val["permitToward_${key}"] as Double
-                param.maxGrowth = val["maxGrowth_${key}"] as Double
-                param.minGrowth = val["minGrowth_${key}"] as Double
-                param.save()
-            }
+        params.findAll { it.key.contains("_") }.groupBy {
+            it.key.split("_")[1]
+        }.each { key, val ->
+            def param = BranchNTParams.get(key as Long)
+            param.permitToward = val["permitToward_${key}"] as Double
+            param.maxGrowth = val["maxGrowth_${key}"] as Double
+            param.minGrowth = val["minGrowth_${key}"] as Double
+            param.save()
+        }
 //        }
         redirect(action: "branchHeadPercents")
     }
 
     def savePermitPercents() {
-        params.findAll {it.key.contains("_")}.groupBy {
+        params.findAll { it.key.contains("_") }.groupBy {
             it.key.split("_")[1]
         }.each { key, val ->
             def param = BranchHeadNTParams.get(key as Long)
@@ -514,17 +508,14 @@ class LoanRequest_NTController {
             def req = LoanRequestNT_BranchHead.get(params.reqId)
             def amt = params.amt ?: "0"
             def amount = amt as Double
-            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum {it.debit} ?: 0
+            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum { it.debit } ?: 0
             if (amount <= 0) {
                 render message(code: 'please-enter-amount')
-            }
-            else if (amount > destBranch.available) {
+            } else if (amount > destBranch.available) {
                 render message(code: 'branch-available-is-less-than-request')
-            }
-            else if (amount > req.loanAmount - sumDebit) {
+            } else if (amount > req.loanAmount - sumDebit) {
                 render message(code: 'cannot-link-more-than-loanAmount')
-            }
-            else {
+            } else {
                 def user = principalService.user
                 def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt, user: user)
                 def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user, otherSide: debitBarrow)
@@ -554,17 +545,14 @@ class LoanRequest_NTController {
             def amt = params.amt ?: "0"
             def amount = amt as Double
             def req = LoanRequestNT_BankRegion.get(params.reqId)
-            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum {it.debit} ?: 0
+            def sumDebit = LoanRequestNTBarrow.findAllByRequestAndBranch(req.loanRequest_nt, req.branch).sum { it.debit } ?: 0
             if (amount <= 0) {
                 render message(code: 'please-enter-amount')
-            }
-            else if (amount > destBranch.available) {
+            } else if (amount > destBranch.available) {
                 render message(code: 'branch-available-is-less-than-request')
-            }
-            else if (amount > req.loanAmount - sumDebit) {
+            } else if (amount > req.loanAmount - sumDebit) {
                 render message(code: 'cannot-link-more-than-loanAmount')
-            }
-            else {
+            } else {
                 def user = principalService.user
                 def debitBarrow = new LoanRequestNTBarrow(branch: req.branch, date: new Date(), debit: amount, request: req.loanRequest_nt, user: user)
                 def creditBarrow = new LoanRequestNTBarrow(branch: destBranch, date: new Date(), credit: amount, request: req.loanRequest_nt, user: user, otherSide: debitBarrow)

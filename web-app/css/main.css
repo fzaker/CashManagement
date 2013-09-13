@@ -863,3 +863,7 @@ a.skip {
     font-weight: bold;
     padding: 4px;
 }
+.fix-at-top-impl{
+    position: fixed;
+    top: 0px;
+}

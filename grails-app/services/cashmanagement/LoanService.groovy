@@ -103,7 +103,7 @@ class LoanService {
             def mj = mojavezSadere.get("${br.id}") ?: 0
             def d = sumD.get("${br.id}") ?: 0
             def c = sumC.get("${br.id}") ?: 0
-            [id: br.id, name: br.toString(),
+            [id: br.id, name: br.toString(), code:br.branchCode as int,
                     manabe: m,
                     masaref: ms,
                     mojavezSadere: mj,
@@ -111,7 +111,7 @@ class LoanService {
                     sumC: c,
                     percent: (ms + mj - d + c) / ((m) ?: 1) * 100]
         }
-        return res.sort {it.name}
+        return res.sort {it.code}
     }
 
     def checkAvailable_numofdays_curMonth(Branch branch, Double amt) {
@@ -609,7 +609,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         } ?: 0
         def vosool = amt * sysParam.permitReceivePercent
         def haddeGhabli = prevAmt * sysParam.permitReceivePercent - paidPerv
-        def haddeJari = vosool - paidLast + haddeGhabli + etebarDaryafti
+        def haddeJari = vosool /*- paidLast */+ haddeGhabli + etebarDaryafti
         def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
         return res
     }
@@ -678,7 +678,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         } ?: 0
         def vosool = amt// * sysParam.ghCentralBankPercent
         def haddeGhabli = prevAmt /** sysParam.ghCentralBankPercent*/ - paidPerv
-        def haddeJari = vosool - paidLast + haddeGhabli + etebarDaryafti
+        def haddeJari = vosool /*- paidLast*/ + haddeGhabli + etebarDaryafti
         def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
         return res
     }

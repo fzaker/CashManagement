@@ -135,6 +135,27 @@
             type:'error', 'text':text, position:'bottom-left'
         });
     }
+    function isScrolledIntoView(elem)
+    {
+        var docViewTop = $(window).scrollTop();
+        var docViewBottom = docViewTop + $(window).height();
+
+        var elemTop = $(elem).offset().top;
+        var elemBottom = elemTop + $(elem).height();
+
+        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    }
+    $(function(){
+        $(document).on('scroll',function(){
+            $(".fix-at-top").each(function(){
+                console.log(isScrolledIntoView(this))
+                $(this).removeClass('fix-at-top-impl')
+                if(!isScrolledIntoView(this))
+                    $(this).addClass('fix-at-top-impl')
+            })
+        })
+
+    })
 </script>
 </body>
 </html>

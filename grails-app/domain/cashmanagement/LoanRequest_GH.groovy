@@ -27,7 +27,7 @@ class LoanRequest_GH {
 //    String loginUser
 
     static constraints = {
-        loanNo(nullable: false, unique: true)
+        loanNo(nullable: false)
         loanIDCode(nullable: true)
         loanType(nullable: false)
         name()

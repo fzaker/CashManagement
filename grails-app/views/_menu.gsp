@@ -75,16 +75,17 @@
                                 <a href="<g:createLink controller="LoanRequest_NT" action="bankRegion"/>"><g:message
                                         code="loanList.BankRegion"/></a>
                             </li>
+                            <li>
+                                <a href="<g:createLink controller="LoanRequest_NT" action="bankRegionPercents"/>"><g:message
+                                        code="loanList.bankRegionPercents"/></a>
+                            </li>
                         </c:isBankRegionUser>
                         <c:isAdmin>
                             <li>
                                 <a href="<g:createLink controller="LoanRequest_NT" action="headOffice"/>"><g:message
                                         code="loanList.HeadOffice"/></a>
                             </li>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="bankRegionPercents"/>"><g:message
-                                        code="loanList.bankRegionPercents"/></a>
-                            </li>
+
                         </c:isAdmin>
                     </ul>
                 </li>
@@ -159,7 +160,7 @@
                 </ul>
             </li>
 
-            <c:isAdmin>
+            <c:isBranchHeadOrAdmin>
                 <li class="MenuItem">
 
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
@@ -170,7 +171,7 @@
 
                     </ul>
                 </li>
-            </c:isAdmin>
+            </c:isBranchHeadOrAdmin>
             <li class="MenuItem">
 
                 <a href="#" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>

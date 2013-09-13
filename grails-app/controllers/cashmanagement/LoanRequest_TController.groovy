@@ -54,7 +54,7 @@ class LoanRequest_TController {
         loanRequest_TInstance.requestUser = principalService.user
         loanRequest_TInstance.loanRequestStatus = LoanRequest_T.Pending
 
-        if (!loanRequest_TInstance.id && LoanRequest_T.countByLoanNo(loanRequest_TInstance.loanNo) > 0) {
+        if (!loanRequest_TInstance.id && LoanRequest_T.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_TInstance.loanNo,LoanRequest_T.Cancel) > 0) {
             flash.message = message(code: 'loan-no-not-unique')
 
         }

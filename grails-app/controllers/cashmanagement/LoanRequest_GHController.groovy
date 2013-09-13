@@ -79,7 +79,7 @@ class LoanRequest_GHController {
         loanRequest_GHInstance.requestUser = principalService.user
         loanRequest_GHInstance.loanRequestStatus = LoanRequest_GH.Pending
 
-        if (!loanRequest_GHInstance.id && LoanRequest_GH.countByLoanNo(loanRequest_GHInstance.loanNo) > 0) {
+        if (!loanRequest_GHInstance.id && LoanRequest_GH.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_GHInstance.loanNo,LoanRequest_GH.Cancel) > 0) {
             flash.message = message(code: 'loan-no-not-unique')
 
         }
