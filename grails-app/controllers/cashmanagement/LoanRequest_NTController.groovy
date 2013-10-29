@@ -303,9 +303,36 @@ class LoanRequest_NTController {
         render 0
     }
 
+    private def checkMelliCode(String melliCode) {
+        try {
+            if (!melliCode || melliCode.length() != 10)
+                return false;
+            def checkDigit = 0
+            def orig = 0
+            melliCode.eachWithIndex { String entry, int i ->
+                if (i < 9)
+                    checkDigit += (entry as int) * (10 - i)
+                else
+                    orig = entry as int
+            }
+            checkDigit = checkDigit % 11
+            if (checkDigit < 2)
+                return orig == checkDigit
+            else
+                return orig == (11 - checkDigit)
+        } catch (x) {
+            return false
+        }
+    }
+
     def save() {
         def branch = principalService.getBranch()
         def loanRequest_NTInstance
+        if (!checkMelliCode(params.melliCode)) {
+            flash.message = message(code: 'melli-code')
+            redirect(action: "list")
+            return
+        }
         if (params.id) {
             loanRequest_NTInstance = LoanRequest_NT.get(params.id)
             if (loanRequest_NTInstance.loanRequestStatus == LoanRequest_NT.Pending)
@@ -327,7 +354,7 @@ class LoanRequest_NTController {
         loanRequest_NTInstance.loanRequestStatus = LoanRequest_NT.Pending
 
 //        }
-        if (!loanRequest_NTInstance.id && LoanRequest_NT.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_NTInstance.loanNo,LoanRequest_NT.Cancel) > 0) {
+        if (!loanRequest_NTInstance.id && LoanRequest_NT.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_NTInstance.loanNo, LoanRequest_NT.Cancel) > 0) {
             flash.message = message(code: 'loan-no-not-unique')
 
         } else {

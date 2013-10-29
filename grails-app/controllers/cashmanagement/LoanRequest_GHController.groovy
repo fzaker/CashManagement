@@ -62,10 +62,34 @@ class LoanRequest_GHController {
                 branch: principalService.branch, bankPercent: loanService.masarefBeManabeGharzolhasane(), permitAmountPrevMonths: permitAmountPrevMonths]
         return res
     }
-
+    private def checkMelliCode(String melliCode) {
+        try {
+            if (!melliCode || melliCode.length() != 10)
+                return false;
+            def checkDigit = 0
+            def orig = 0
+            melliCode.eachWithIndex { String entry, int i ->
+                if (i < 9)
+                    checkDigit += (entry as int) * (10 - i)
+                else
+                    orig = entry as int
+            }
+            checkDigit = checkDigit % 11
+            if (checkDigit < 2)
+                return orig == checkDigit
+            else
+                return orig == (11 - checkDigit)
+        } catch (x) {
+            return false
+        }
+    }
     def save() {
         def branch = principalService.getBranch()
-
+        if (!checkMelliCode(params.melliCode)) {
+            flash.message = message(code: 'melli-code')
+            redirect(action: "list")
+            return
+        }
         def loanRequest_GHInstance
         if (params.id) {
             loanRequest_GHInstance = LoanRequest_GH.get(params.id)

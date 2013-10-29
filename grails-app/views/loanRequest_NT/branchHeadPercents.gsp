@@ -30,8 +30,8 @@
         <span class="property-value"><g:formatNumber
                 number="${sumManabe}" type="number" /></span>
     </div>
-    <g:form action="savePermitPercentsBranchHead" style="width: 1200px">
-        <div class="fieldcontain bank-region-percent fix-at-top">
+    <g:form action="savePermitPercentsBranchHead" style="overflow-x: auto;margin:5px;">
+        <div class="fieldcontain bank-region-percent fix-at-top" style="width: 1200px;">
             <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
             <span class="property-label-my max-growth"><g:message code="max-growth" /></span>
             <span class="property-label-my min-growth"><g:message code="min-growth" /></span>
@@ -41,7 +41,7 @@
             <span class="property-label-my manabe"><g:message code="manabe"/></span>
         </div>
         <g:each in="${branchsParams}">
-            <div class="fieldcontain bank-region-percent">
+            <div class="fieldcontain bank-region-percent" style="width: 1200px;">
 
                 <span class="property-value-my branch-head-name">${it.branch}</span>
                 <g:textField class=" max-growth" name="maxGrowth_${it.ntParam.id}"

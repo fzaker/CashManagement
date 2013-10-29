@@ -72,6 +72,9 @@ class LoginController {
             redirect action: 'full', params: params
         }
     }
+    def deny={
+        render (view: 'denied')
+    }
 
     /**
      * Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page.

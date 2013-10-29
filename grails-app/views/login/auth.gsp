@@ -66,7 +66,7 @@
         float: none;
         margin-right: 0;
         text-align: right;
-        width: 150px
+        width: 100px
     }
 
     #login .inner .login_message {
@@ -104,9 +104,9 @@
                 <input type='password' class='text_' name='j_password' id='password'/>
             </p>
 
-            <p id="remember_me_holder">
-                <input type='checkbox' class='chk' name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>/>
+            <p id="">
                 <label for='remember_me'><g:message code="springSecurity.login.remember.me.label"/></label>
+                <input type='checkbox' class='chk' name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>/>
             </p>
 
             <p>

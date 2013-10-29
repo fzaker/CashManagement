@@ -16,7 +16,7 @@
 
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
              showCommand="false"
-             firstColumnWidth="50"
+             firstColumnWidth="110"
              maxColumns="9"
              commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')],[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")], [handler: 'accept(#id#)', icon: 'tick',title:message(code:"confirm")]]}">
         <rg:criteria>

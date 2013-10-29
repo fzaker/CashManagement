@@ -53,6 +53,7 @@
     <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
              columns="${selColumns}"
              caption=""
+             firstColumnWidth="40"
              showCommand="false"
              commands="${[[controller: 'loanRequest_GH', action: 'show', param: 'id=#id#', icon: 'magnifier']]}">
         <rg:criteria>

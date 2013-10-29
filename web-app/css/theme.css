@@ -39,7 +39,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     line-height: 44px;
-    position: relative;
+    position: absolute;
 }
 
 #header h2 img {
@@ -141,7 +141,7 @@ body {
 
 #content {
     clear: both;
-    padding-top: 5px;
+    padding-top: 20px;
     padding-bottom: 30px;
 }
 

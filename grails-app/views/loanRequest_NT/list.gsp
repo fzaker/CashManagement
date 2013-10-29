@@ -153,7 +153,7 @@
                      maxColumns="7"
                      caption="${message(code: "Pending")}"
                      showCommand="false"
-                     firstColumnWidth="60"
+                     firstColumnWidth="110"
                      commands="${[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')],[controller: 'loanRequest_NT', action: 'list', param: 'id=#id#', icon: 'application_edit',title:message(code:'edit')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: "reject")], [handler: 'accept(#id#)', icon: 'tick', title: message(code: "confirm")]]}">
                 <rg:criteria>
                     <rg:eq name="loanRequestStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
@@ -167,7 +167,7 @@
                      columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      idPostfix="ConfirmList"
                      showCommand="false"
-                     firstColumnWidth="50"
+                     firstColumnWidth="70"
                      commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: 'reject')]]"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
@@ -181,6 +181,7 @@
                      columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      idPostfix="PaidList"
                      showCommand="false"
+                     firstColumnWidth="40"
                      commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Confirm")}">
                 <rg:criteria>
@@ -194,6 +195,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequest_NT}"
                      idPostfix="SentList"
                      maxColumns="7"
+                     firstColumnWidth="40"
                      showCommand="false"
                      commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Sent")}">
@@ -209,6 +211,7 @@
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason'], [name: 'rejectUser']]"
                      idPostfix="RejectedList"
                      showCommand="false"
+                     firstColumnWidth="40"
                      commands="[[controller: 'loanRequest_NT', action: 'showRequestDetails', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      caption="${message(code: "Rejected")}">
                 <rg:criteria>

@@ -117,7 +117,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
-                     firstColumnWidth="60"
+                     firstColumnWidth="110"
                      caption="${message(code: "Pending")}"
                      commands="${[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')],[controller: 'loanRequest_T', action: 'list', param: 'id=#id#', icon: 'application_edit',title:message(code:'edit')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: "reject")], [handler: 'accept(#id#)', icon: 'tick', title: message(code: "confirm")]]}"
                      idPostfix="PendingList">
@@ -132,7 +132,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
-                     firstColumnWidth="50"
+                     firstColumnWidth="70"
                      caption="${message(code: "Confirm")}"
                      commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')], [handler: 'reject(#id#)', icon: 'cancel', title: message(code: 'reject')]]"
                      idPostfix="ConfirmList">
@@ -147,6 +147,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
+                     firstColumnWidth="40"
                      caption="${message(code: "Paid")}"
                      commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      idPostfix="PaidList">
@@ -161,6 +162,7 @@
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
                      showCommand="false"
+                     firstColumnWidth="40"
                      caption="${message(code: "Rejected")}"
                      commands="[[controller: 'loanRequest_T', action: 'show', param: 'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]"
                      idPostfix="RejectedList">

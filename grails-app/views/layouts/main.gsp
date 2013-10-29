@@ -1,10 +1,22 @@
-<!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6" id="ng-app" ng-app> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7" id="ng-app" ng-app> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8" id="ng-app" ng-app> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9" id="ng-app" ng-app> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js" ng-app><!--<![endif]-->
 <head>
+    <!--[if lte IE 8]>
+<script>
+document.createElement('ng-include');
+document.createElement('ng-pluralize');
+document.createElement('ng-view');
+
+// Optionally these for CSS
+document.createElement('ng:include');
+document.createElement('ng:pluralize');
+document.createElement('ng:view');
+</script>
+<![endif]-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="Grails"/></title>
@@ -24,7 +36,6 @@
     <link rel="stylesheet" href="${resource(plugin: 'rapid-grails', dir: 'css', file: 'jquery-ui-rtl.css')}"
           type="text/css">
 
-    <ckeditor:resources/>
     <g:javascript plugin="rapid-grails" src="angular.min.js"></g:javascript>
     <g:javascript library="jquery"></g:javascript>
     <r:layoutResources/>
