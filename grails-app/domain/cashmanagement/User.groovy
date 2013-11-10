@@ -12,17 +12,23 @@ class User {
     boolean passwordExpired
     boolean isAdmin
     boolean basicInformation
+    Boolean tabsare=true
+    Boolean ntabsare=true
+    Boolean gharzolhasane=true
 
 
-    transient def getBranch(){
-        (authorities?.find {it instanceof BranchRole} as BranchRole)?.branch
+    transient def getBranch() {
+        (authorities?.find { it instanceof BranchRole } as BranchRole)?.branch
     }
-    transient def getBranchHead(){
-        (authorities?.find {it instanceof BranchHeadRole} as BranchHeadRole)?.branchHead
+
+    transient def getBranchHead() {
+        (authorities?.find { it instanceof BranchHeadRole } as BranchHeadRole)?.branchHead
     }
-    transient def getBankRegion(){
-        (authorities?.find {it instanceof BankRegionRole} as BankRegionRole)?.bankRegion
+
+    transient def getBankRegion() {
+        (authorities?.find { it instanceof BankRegionRole } as BankRegionRole)?.bankRegion
     }
+
     static constraints = {
         name()
         username blank: false, unique: true
@@ -32,15 +38,19 @@ class User {
         bankRegion()
         isAdmin()
         basicInformation()
+        tabsare(nullable: true, blank: true)
+        ntabsare(nullable: true, blank: true)
+        gharzolhasane(nullable: true, blank: true)
     }
 
     static mapping = {
         table 'UserAccount'
         password column: '`password`'
+
     }
 
     Set<Role> getAuthorities() {
-        if(this.id)
+        if (this.id)
             UserRole.findAllByUser(this).collect { it.role } as Set
     }
 
@@ -57,7 +67,8 @@ class User {
     protected void encodePassword() {
         password = springSecurityService.encodePassword(password)
     }
-    String toString(){
+
+    String toString() {
         name
     }
 }

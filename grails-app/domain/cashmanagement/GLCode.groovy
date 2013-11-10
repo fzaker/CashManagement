@@ -4,13 +4,13 @@ class GLCode {
     GLGroup glGroup
     String glCode
     String title
-    Long glFlag
+    Double glFlag=1
 
     static constraints = {
         glGroup()
         glCode(unique: true)
         title(nullable: true)
-        glFlag(inList:[1L,-1L] )
+        glFlag()
 
     }
     String toString(){

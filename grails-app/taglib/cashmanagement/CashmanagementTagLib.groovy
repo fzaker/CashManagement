@@ -25,6 +25,21 @@ class CashmanagementTagLib {
         }
     }
 
+    def isT= { attrs, body ->
+        if (principalService.user?.tabsare) {
+            out << body()
+        }
+    }
+    def isNT= { attrs, body ->
+        if (principalService.user?.ntabsare) {
+            out << body()
+        }
+    }
+    def isGH= { attrs, body ->
+        if (principalService.user?.gharzolhasane) {
+            out << body()
+        }
+    }
     def isBranchUser = { attrs, body ->
         if (principalService.branch != null) {
             out << body()

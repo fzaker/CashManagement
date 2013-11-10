@@ -12,6 +12,11 @@
 		<a href="#list-GLGroup" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
         <div id="list-GLGroup" ng-controller="GLGroupController" class="content scaffold-list" role="main">
+            <rg:criteria inline="true">
+                <rg:ilike name="glGroupCode"  label="code"/>
+                <rg:ilike name="glGroupName"  label="title"/>
+                <rg:filterGrid grid="GLGroupGrid"/>
+            </rg:criteria>
             <rg:grid showCommand="false" domainClass="${cashmanagement.GLGroup}">
                 <rg:commands>
                     <rg:deleteCommand/>

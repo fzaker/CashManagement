@@ -13,6 +13,19 @@ class Branch {
             service.getAvailable(this)
         }
     }
+    transient Double getPermitTowardGT(){
+        if (this?.id) {
+            def service = ApplicationHolder.application.getMainContext().getBean("loanService")
+            service.getPermitTowardGT(this)
+        }
+    }
+    transient Double getKasri() {
+        if (this?.id) {
+            def service = ApplicationHolder.application.getMainContext().getBean("loanService")
+            def k=service.getAvailable(this,Long.MIN_VALUE)
+            Math.abs(Math.min(k,0))
+        }
+    }
     transient def getPercentCurMonth() {
         if (this?.id) {
             def service = ApplicationHolder.application.getMainContext().getBean("loanService")

@@ -32,6 +32,16 @@
             <span class="property-value"><span id="vosooli"><g:formatNumber
                     number="${resultParm.vosooli}" maxFractionDigits="2" type="number"/></span> <g:message code="rial" /></span>
         </div>
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="percenteGhabeleEstefade"/></span>
+            <span class="property-value"><span id="percenteGhabeleEstefade"><g:formatNumber
+                    number="${resultParm.percenteGhabeleEstefade*100}" maxFractionDigits="2" type="number"/></span>%</span>
+        </div>
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="vosooliGhabeleEstefade"/></span>
+            <span class="property-value"><span id="vosooliGhabeleEstefade"><g:formatNumber
+                    number="${resultParm.vosooliGhabeleEstefade}" maxFractionDigits="2" type="number"/></span> <g:message code="rial" /></span>
+        </div>
 
         <div class="fieldcontain">
             <span class="property-label"><g:message code="vosooliDate" /></span>

@@ -12,6 +12,11 @@
 		<a href="#list-bankRegion" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
         <div id="list-bankRegion" ng-controller="bankRegionController" class="content scaffold-list" role="main">
+            <rg:criteria inline="true">
+                <rg:like name='bankRegionCode' label='code'/>
+                <rg:ilike name='bankRegionName' label='title'/>
+                <rg:filterGrid grid="BankRegionGrid"/>
+            </rg:criteria>
             <rg:grid showCommand="false" domainClass="${cashmanagement.BankRegion}">
                 <rg:commands>
                     <rg:deleteCommand/>

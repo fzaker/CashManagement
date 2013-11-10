@@ -13,7 +13,24 @@
                                                                      default="Skip to content&hellip;"/></a>
 
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
-
+<rg:criteria inline="true" >
+    <rg:nest name="loanRequest_nt">
+        <rg:ilike name='loanNo'/>
+        <rg:ilike name='melliCode'/>
+    </rg:nest>
+    <rg:eq hidden='true' name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
+    <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
+    <rg:nest name="loanRequest_nt">
+        <rg:nest name="branch">
+            <rg:nest name="branchHead">
+                <rg:nest name="bankRegion">
+                    <rg:eq hidden='true' name="id" value="${bankRegion?.id}"/>
+                </rg:nest>
+            </rg:nest>
+        </rg:nest>
+    </rg:nest>
+    <rg:filterGrid grid="LoanRequestNT_BankRegionGrid"/>
+</rg:criteria>
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
              showCommand="false"
              firstColumnWidth="110"
@@ -32,7 +49,16 @@
             </rg:nest>
         </rg:criteria>
     </rg:grid>
-
+     <rg:criteria inline="true" id='brnch'>
+         <rg:ilike name='branchCode' label='code'/>
+         <rg:ilike name='branchName' label='title'/>
+         <rg:nest name="branchHead">
+             <rg:nest name="bankRegion">
+                 <rg:eq name="id" hidden='true' value="${bankRegion?.id}"/>
+             </rg:nest>
+         </rg:nest>
+         <rg:filterGrid grid="BranchGrid"/>
+     </rg:criteria>
     <rg:grid domainClass="${cashmanagement.Branch}"
              showCommand="false"
              groupby="branchHead"
@@ -64,6 +90,23 @@
 
 
         <div id="Confirm">
+            <rg:criteria inline="true" id='conf' >
+                <rg:nest name="loanRequest_nt">
+                    <rg:ilike name='loanNo'/>
+                    <rg:ilike name='melliCode'/>
+                </rg:nest>
+                <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                <rg:nest name="loanRequest_nt">
+                    <rg:nest name="branch">
+                        <rg:nest name="branchHead">
+                            <rg:nest name="bankRegion">
+                                <rg:eq name="id" hidden='true' value="${bankRegion?.id}"/>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:nest>
+                <rg:filterGrid grid="LoanRequestNT_BankRegionConfirmListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="ConfirmList"
                      showCommand="false"
@@ -86,6 +129,23 @@
         </div>
 
         <div id="Test">
+            <rg:criteria inline="true" id='sent' >
+                <rg:nest name="loanRequest_nt">
+                    <rg:ilike name='loanNo'/>
+                    <rg:ilike name='melliCode'/>
+                </rg:nest>
+                <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Sent}"/>
+                <rg:nest name="loanRequest_nt">
+                    <rg:nest name="branch">
+                        <rg:nest name="branchHead">
+                            <rg:nest name="bankRegion">
+                                <rg:eq name="id" hidden='true' value="${bankRegion?.id}"/>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:nest>
+                <rg:filterGrid grid="LoanRequestNT_BankRegionSentListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      idPostfix="SentList"
                      showCommand="false"
@@ -107,6 +167,23 @@
         </div>
 
         <div id="Rejected">
+            <rg:criteria inline="true" id='rej' >
+                <rg:nest name="loanRequest_nt">
+                    <rg:ilike name='loanNo'/>
+                    <rg:ilike name='melliCode'/>
+                </rg:nest>
+                <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+                <rg:nest name="loanRequest_nt">
+                    <rg:nest name="branch">
+                        <rg:nest name="branchHead">
+                            <rg:nest name="bankRegion">
+                                <rg:eq name="id" hidden='true' value="${bankRegion?.id}"/>
+                            </rg:nest>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:nest>
+                <rg:filterGrid grid="LoanRequestNT_BankRegionRejectedListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
                      columns="[[name:'loanNo'],[name:'loanIDCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"

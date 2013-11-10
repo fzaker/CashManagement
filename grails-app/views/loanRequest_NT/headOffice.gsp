@@ -15,6 +15,14 @@
 <div id="list-loanRequest_NT" class="content scaffold-list" role="main">
 
 <div class="sep"></div>
+    <rg:criteria inline="true">
+        <rg:nest name="loanRequest_nt">
+            <rg:ilike name='loanNo'/>
+            <rg:ilike name='melliCode'/>
+        </rg:nest>
+        <rg:eq hidden='true' name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
+        <rg:filterGrid grid="LoanRequestNT_HeadOfficeGrid"/>
+    </rg:criteria>
 <rg:grid domainClass="${cashmanagement.LoanRequestNT_HeadOffice}"
          maxColumns="8"
          showCommand="false"
@@ -39,6 +47,14 @@
 
 
     <div id="Confirm">
+        <rg:criteria inline="true" id="conf">
+            <rg:nest name="loanRequest_nt">
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+            </rg:nest>
+            <rg:eq hidden='true' name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+            <rg:filterGrid grid="LoanRequestNT_HeadOfficeConfirmListGrid"/>
+        </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequestNT_HeadOffice}"
                  idPostfix="ConfirmList"
                  columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'melliCode'], [name: 'loanAmount'],[name: 'branch']]"
@@ -54,6 +70,14 @@
 
 
     <div id="Rejected">
+        <rg:criteria inline="true" id="rej">
+            <rg:nest name="loanRequest_nt">
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+            </rg:nest>
+            <rg:eq hidden='true' name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+            <rg:filterGrid grid="LoanRequestNT_HeadOfficeRejectedListGrid"/>
+        </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequestNT_HeadOffice}"
                  columns="[[name:'loanNo'],[name:'name'],[name:'melliCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                  idPostfix="RejectedList"

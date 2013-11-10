@@ -12,6 +12,14 @@
 		<a href="#list-loanType" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 
         <div id="list-loanType" ng-controller="loanTypeController" class="content scaffold-list" role="main">
+            <rg:criteria inline="true">
+                <rg:nest name="loanGroup">
+                    <rg:eq name='id' from="${cashmanagement.LoanGroup.list()}"  noSelection="['':'']" label='loanGroup'/>
+                </rg:nest>
+                <rg:like name='loanTypeCode' label='code'/>
+                <rg:ilike name='loanTypeName' label='title'/>
+                <rg:filterGrid grid="LoanTypeGrid"/>
+            </rg:criteria>
             <rg:grid showCommand="false" domainClass="${cashmanagement.LoanType}">
                 <rg:commands>
                     <rg:deleteCommand/>

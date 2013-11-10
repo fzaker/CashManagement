@@ -38,7 +38,8 @@
                                 <a href="<g:createLink controller="GLCode"/>"><g:message code="glCode.definition"/></a>
                             </li>
                             <li>
-                                <a href="<g:createLink controller="RejectReason"/>"><g:message code="rejectReason.definition"/></a>
+                                <a href="<g:createLink controller="RejectReason"/>"><g:message
+                                        code="rejectReason.definition"/></a>
                             </li>
                         </c:isBasicInformation>
                         <c:isAdmin>
@@ -51,110 +52,130 @@
                 </li>
             </c:isAdminOrBasicInformation>
             <c:isBranchOrBranchHeadOrBankRegionOrAdmin>
-                <li class="MenuItem">
-                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh.loans"/></a>
-                    <ul>
-                        <c:isBranchUser>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT"/>"><g:message
-                                        code="LoanRequest.register.nt"/></a>
-                            </li>
-                        </c:isBranchUser>
-                        <c:isBranchHeadUser>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="branchHead"/>"><g:message
-                                        code="loanList.branchHead"/></a>
-                            </li>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="branchHeadPercents"/>"><g:message
-                                        code="loanList.branchHeadPercents"/></a>
-                            </li>
-                        </c:isBranchHeadUser>
-                        <c:isBankRegionUser>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="bankRegion"/>"><g:message
-                                        code="loanList.BankRegion"/></a>
-                            </li>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="bankRegionPercents"/>"><g:message
-                                        code="loanList.bankRegionPercents"/></a>
-                            </li>
-                        </c:isBankRegionUser>
-                        <c:isAdmin>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_NT" action="headOffice"/>"><g:message
-                                        code="loanList.HeadOffice"/></a>
-                            </li>
+                <c:isNT>
+                    <li class="MenuItem">
+                        <a href="#" class="sf-top-level-anchor toplevel"><g:message code="GheireTabsareh.loans"/></a>
+                        <ul>
+                            <c:isBranchUser>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT"/>"><g:message
+                                            code="LoanRequest.register.nt"/></a>
+                                </li>
+                            </c:isBranchUser>
+                            <c:isBranchHeadUser>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT" action="branchHead"/>"><g:message
+                                            code="loanList.branchHead"/></a>
+                                </li>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT"
+                                                           action="branchHeadPercents"/>"><g:message
+                                            code="loanList.branchHeadPercents"/></a>
+                                </li>
+                            </c:isBranchHeadUser>
+                            <c:isBankRegionUser>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT" action="bankRegion"/>"><g:message
+                                            code="loanList.BankRegion"/></a>
+                                </li>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT"
+                                                           action="bankRegionPercents"/>"><g:message
+                                            code="loanList.bankRegionPercents"/></a>
+                                </li>
+                            </c:isBankRegionUser>
+                            <c:isAdmin>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_NT" action="headOffice"/>"><g:message
+                                            code="loanList.HeadOffice"/></a>
+                                </li>
 
-                        </c:isAdmin>
-                    </ul>
-                </li>
+                            </c:isAdmin>
+                        </ul>
+                    </li>
+                </c:isNT>
+                <c:isT>
+                    <li class="MenuItem">
+                        <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>
+                        <ul>
+                            <c:isBranchUser>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_T"/>"><g:message
+                                            code="LoanRequest.register.t"/></a>
+                                </li>
+                            </c:isBranchUser>
+                            <c:isBranchHeadUser>
+                                <li>
+                                    <a href="<g:createLink controller="permissionAmount_T"/>"><g:message
+                                            code="Branch.PermitAssign.t"/></a>
+                                </li>
+                            </c:isBranchHeadUser>
+                            <c:isBankRegionOrAdmin>
+                                <li>
+                                    <a href="<g:createLink controller="etayeeTBranchHead"/>"><g:message
+                                            code="Branch.etayee.t"/></a>
+                                </li>
+                            </c:isBankRegionOrAdmin>
+                        </ul>
+                    </li>
 
-                <li class="MenuItem">
-                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Tabsareh.loans"/></a>
-                    <ul>
-                        <c:isBranchUser>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_T"/>"><g:message
-                                        code="LoanRequest.register.t"/></a>
-                            </li>
-                        </c:isBranchUser>
-                        <c:isBranchHeadUser>
-                            <li>
-                                <a href="<g:createLink controller="permissionAmount_T"/>"><g:message
-                                        code="Branch.PermitAssign.t"/></a>
-                            </li>
-                        </c:isBranchHeadUser>
-                        <c:isBankRegionOrAdmin>
-                            <li>
-                                <a href="<g:createLink controller="etayeeTBranchHead"/>"><g:message
-                                        code="Branch.etayee.t"/></a>
-                            </li>
-                        </c:isBankRegionOrAdmin>
-                    </ul>
-                </li>
+                </c:isT>
+                <c:isGH>
+                    <li class="MenuItem">
+                        <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane.loans"/></a>
+                        <ul>
+                            <c:isBranchUser>
+                                <li>
+                                    <a href="<g:createLink controller="LoanRequest_GH"/>"><g:message
+                                            code="LoanRequest.register.gh"/></a>
+                                </li>
+                            </c:isBranchUser>
+                            <c:isBranchHeadUser>
+                                <li>
+                                    <a href="<g:createLink controller="permissionAmount_GH"/>"><g:message
+                                            code="Branch.PermitAssign.gh.branch"/></a>
+                                </li>
+                            </c:isBranchHeadUser>
+                            <c:isBankRegionOrAdmin>
+                                <li>
+                                    <a href="<g:createLink controller="etayeeGHBranchHead"/>"><g:message
+                                            code="Branch.etayee.gh"/></a>
+                                </li>
+                            </c:isBankRegionOrAdmin>
 
-                <li class="MenuItem">
-                    <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Gharzolhasane.loans"/></a>
-                    <ul>
-                        <c:isBranchUser>
-                            <li>
-                                <a href="<g:createLink controller="LoanRequest_GH"/>"><g:message
-                                        code="LoanRequest.register.gh"/></a>
-                            </li>
-                        </c:isBranchUser>
-                        <c:isBranchHeadUser>
-                            <li>
-                                <a href="<g:createLink controller="permissionAmount_GH"/>"><g:message
-                                        code="Branch.PermitAssign.gh.branch"/></a>
-                            </li>
-                        </c:isBranchHeadUser>
-                        <c:isBankRegionOrAdmin>
-                            <li>
-                                <a href="<g:createLink controller="etayeeGHBranchHead"/>"><g:message
-                                        code="Branch.etayee.gh"/></a>
-                            </li>
-                        </c:isBankRegionOrAdmin>
-
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                </c:isGH>
             </c:isBranchOrBranchHeadOrBankRegionOrAdmin>
 
             <li class="MenuItem">
                 <a href="#" class="sf-top-level-anchor toplevel"><g:message code="Reports"/></a>
                 <ul>
                     <li>
-                        <a href="<g:createLink controller="loanRequest_NT" action="report"/>"><g:message code="loanRequest_NT.label"/></a>
+                        <a href="<g:createLink controller="loanRequest_NT" action="report"/>"><g:message
+                                code="loanRequest_NT.label"/></a>
                     </li>
                     <li>
-                        <a href="<g:createLink controller="loanRequest_T" action="report"/>"><g:message code="loanRequest_T.label"/></a>
+                        <a href="<g:createLink controller="loanRequest_NT" action="barrowReport"/>"><g:message
+                                code="barrow.label"/></a>
                     </li>
                     <li>
-                        <a href="<g:createLink controller="loanRequest_GH" action="report"/>"><g:message code="loanRequest_GH.label"/></a>
+                        <a href="<g:createLink controller="loanRequest_NT" action="availableReport"/>"><g:message
+                                code="available.label"/></a>
                     </li>
+                    <li>
+                        <a href="<g:createLink controller="loanRequest_T" action="report"/>"><g:message
+                                code="loanRequest_T.label"/></a>
+                    </li>
+                    <li>
+                        <a href="<g:createLink controller="loanRequest_GH" action="report"/>"><g:message
+                                code="loanRequest_GH.label"/></a>
+                    </li>
+
                     <c:isBankRegionOrAdmin>
                         <li>
-                            <a href="<g:createLink controller="loanRequest_NT" action="report_date"/>"><g:message code="loanRequest_NT.report.label"/></a>
+                            <a href="<g:createLink controller="loanRequest_NT" action="report_date"/>"><g:message
+                                    code="loanRequest_NT.report.label"/></a>
                         </li>
                     </c:isBankRegionOrAdmin>
                 </ul>
@@ -177,10 +198,11 @@
                 <a href="#" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>
                 <ul>
                     <li>
-                        <a href="<g:createLink controller="logout" />"><g:message code="logout"/></a>
+                        <a href="<g:createLink controller="logout"/>"><g:message code="logout"/></a>
                     </li>
                     <li>
-                        <a href="<g:createLink controller="user" action="changePasswordUser"/>"><g:message code="changepass"/></a>
+                        <a href="<g:createLink controller="user" action="changePasswordUser"/>"><g:message
+                                code="changepass"/></a>
                     </li>
 
                 </ul>

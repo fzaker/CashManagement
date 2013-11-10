@@ -48,6 +48,14 @@
 	<g:field type="number" name="permitToward" step="any" required="" value="${systemParametersInstance.permitToward}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'soodeMazad', 'error')} required">
+    <label for="soodeMazad">
+        <g:message code="systemParameters.soodeMazad.label" default="soodeMazad" />
+        <span class="required-indicator">*</span>
+    </label>
+    <g:field type="number" name="soodeMazad" step="any" required="" value="${systemParametersInstance.soodeMazad}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'numofDays', 'error')} required">
 	<label for="numofDays">
 		<g:message code="systemParameters.numofDays.label" default="Numof Days" />
@@ -80,13 +88,13 @@
 	<g:field type="number" name="ghCentralBankPercent" step="any" required="" value="${systemParametersInstance.ghCentralBankPercent}"/>
 </div>
 
-%{--<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'gharzolHasaneMonthlyPercent', 'error')} required">--}%
-	%{--<label for="ghMonthlyPercent">--}%
-		%{--<g:message code="systemParameters.gharzolHasaneMonthlyPercent.label" default="Gharzol Hasane Monthly Percent" />--}%
-		%{--<span class="required-indicator">*</span>--}%
-	%{--</label>--}%
-	%{--<g:field type="number" name="ghMonthlyPercent" step="any" required="" value="${systemParametersInstance.ghMonthlyPercent}"/>--}%
-%{--</div>--}%
+<div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'gharzolHasaneMonthlyPercent', 'error')} required">
+	<label for="ghMonthlyPercent">
+		<g:message code="systemParameters.gharzolHasaneMonthlyPercent.label" default="Gharzol Hasane Monthly Percent" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field type="number" name="ghMonthlyPercent" step="any" required="" value="${systemParametersInstance.ghMonthlyPercent}"/>
+</div>
 
 <div class="fieldcontain ${hasErrors(bean: systemParametersInstance, field: 'today', 'error')} required">
     <label for="ghMonthlyPercent">

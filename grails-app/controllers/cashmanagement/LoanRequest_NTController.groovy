@@ -22,6 +22,17 @@ class LoanRequest_NTController {
 
     }
 
+    def barrowReport() {
+        def user = principalService.user
+        [user: user]
+    }
+
+    def availableReport() {
+        def sysParam = SystemParameters.findAll().first()
+        def user = principalService.user
+        [user: user, sysParam: sysParam]
+    }
+
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
@@ -303,6 +314,33 @@ class LoanRequest_NTController {
         render 0
     }
 
+    def loanNoCheck = [2, 3, 4, 5, 6, 7, 8, 9, 3, 4, 5, 6, 7]
+    def loanNoBrCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 6, 7]
+
+    private def checkLoanNo(String loanNo) {
+        try {
+            if (!loanNo || loanNo.length() != 15)
+                return false
+            def ch2 = 0
+            loanNoCheck.eachWithIndex { int entry, int i ->
+                ch2 += entry * (loanNo[i] as int)
+            }
+            if ((ch2 % 11) % 10 != (loanNo[14] as int))
+                return false
+            def ch1 = 0
+            loanNoBrCheck.eachWithIndex { int entry, int i ->
+                ch1 += entry * (loanNo[i] as int)
+            }
+            if ((ch1 % 11) % 10 != (loanNo[13] as int))
+                return false
+
+            return true
+        } catch (e) {
+            return false
+        }
+
+    }
+
     private def checkMelliCode(String melliCode) {
         try {
             if (!melliCode || melliCode.length() != 10)
@@ -326,11 +364,17 @@ class LoanRequest_NTController {
     }
 
     def save() {
+        def prms = [:]
         def branch = principalService.getBranch()
         def loanRequest_NTInstance
         if (!checkMelliCode(params.melliCode)) {
             flash.message = message(code: 'melli-code')
-            redirect(action: "list")
+            redirect(action: "list", params: params)
+            return
+        }
+        if (!checkLoanNo(params.loanNo)) {
+            flash.message = message(code: 'loan-no-rej')
+            redirect(action: "list", params: params)
             return
         }
         if (params.id) {
@@ -356,13 +400,19 @@ class LoanRequest_NTController {
 //        }
         if (!loanRequest_NTInstance.id && LoanRequest_NT.countByLoanNoAndLoanRequestStatusNotEqual(loanRequest_NTInstance.loanNo, LoanRequest_NT.Cancel) > 0) {
             flash.message = message(code: 'loan-no-not-unique')
+            prms = params
 
         } else {
             if (loanRequest_NTInstance.save()) {
 //                flash.message = message(code: 'default.created.message', args: [message(code: 'loanRequest_NT.label', default: 'LoanRequest_NT'), loanRequest_NTInstance.id])
+            } else {
+                flash.message = loanRequest_NTInstance.errors.allErrors.collect {
+                    message(error: it)
+                }.join("\n")
+                prms = params
             }
         }
-        redirect(action: "list")
+        redirect(action: "list", params: prms)
     }
 
     def branchHead() {

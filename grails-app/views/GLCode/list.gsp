@@ -13,6 +13,12 @@
                                                              default="Skip to content&hellip;"/></a>
 
 <div id="list-GLCode" ng-controller="GLCodeController" class="content scaffold-list" role="main">
+    <rg:criteria inline="true">
+        <rg:eq name="glGroup.id" label="GLGroup.label" from="${cashmanagement.GLGroup.list()}" noSelection="['':'']"/>
+        <rg:ilike name="glCode"  label="code"/>
+        <rg:ilike name="title"  label="title"/>
+        <rg:filterGrid grid="GLCodeGrid"/>
+    </rg:criteria>
     <rg:grid showCommand="false"
              domainClass="${cashmanagement.GLCode}"
              columns="[[name:'glGroup'],[name:'glCode'],[name:'title'],[name:'glFlag',formatter:'string']]">

@@ -168,7 +168,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 				and (branch_id=:branch)
 				and (tran_date <= :todate) AND (tran_date >= :fromdate)
                        GROUP BY dbo.gltransaction.tran_date) AS derivedtbl_1""", [fromdate: fromDate, todate: toDate, branch: branch.id, glgroup: manabeGLGroup.id]);
-        def manabe = x.avgAmt
+        def manabe = x.avgAmt?:1
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         sql = new Sql(sessionFactory.currentSession.connection())
@@ -180,15 +180,13 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
   and gl_group_id=:glgroup""", [today: toDate, branch: branch.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
-        def masaref = x.amt
+        def masaref = x.amt?:0
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatusAndRequestDateLessThanEquals(branch, LoanRequest_NT.Confirm, toDateD).sum { it.loanAmount }) ?: 0
 
         def barrows = LoanRequestNTBarrow.findAllByBranchAndDateLessThanEquals(branch, toDateD)
         def sumDebit = (barrows.sum { it.debit ?: 0 }) ?: 0
         def sumCredit = (barrows.sum { it.credit ?: 0 }) ?: 0
-
-
         def old_toward = (masaref + mojavezSadere - sumDebit + sumCredit) / (manabe)
 
         return old_toward
@@ -525,7 +523,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
             return Math.max(0, Math.min(bhparam.permitToward, bhparam.maxGrowth + oldMonth))
     }
 
-    def getAvailable(Branch branch) {
+    def getAvailable(Branch branch, def max = 0) {
         def manabe = getManabeGT(branch)
         def masaref = getMasarefGT(branch)
         def mojavezSadere = getMojavezSadereGT(branch)
@@ -533,8 +531,8 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
         def sumCredit = getEtebarEtayeeGT(branch)
         def permitToward = getPermitTowardGT(branch)
 
-        def avail = Math.max((permitToward * manabe) - (masaref), 0) - (mojavezSadere - sumDebit + sumCredit)
-        return Math.max(avail, 0)
+        def avail = Math.max((permitToward * manabe) - (masaref), max) - (mojavezSadere - sumDebit + sumCredit)
+        return Math.max(avail, max)
     }
 
     def getAvailable(BranchHead branchHead) {
@@ -677,9 +675,10 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
             }
         } ?: 0
         def vosool = amt// * sysParam.ghCentralBankPercent
-        def haddeGhabli = prevAmt /** sysParam.ghCentralBankPercent*/ - paidPerv
-        def haddeJari = vosool /*- paidLast*/ + haddeGhabli + etebarDaryafti
-        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, vosooli: amt, paidLast: paidLast, vosooliGhabeleEstefade: vosool, haddeJari: haddeJari, date: date]
+        def vosooliGhabeleEstefade = (vosool ?: 0) * (sysParam.ghMonthlyPercent ?:1  )
+        def haddeGhabli = (prevAmt /** sysParam.ghCentralBankPercent*/ - paidPerv) * (sysParam.ghMonthlyPercent?:1)
+        def haddeJari = vosooliGhabeleEstefade /*- paidLast*/ + haddeGhabli + etebarDaryafti
+        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, percenteGhabeleEstefade: sysParam.ghMonthlyPercent?:1, vosooliGhabeleEstefade: vosooliGhabeleEstefade, vosooli: amt, paidLast: paidLast, haddeJari: haddeJari, date: date]
         return res
     }
 

@@ -53,32 +53,32 @@
                 <label for="loanType.id"><g:message code="loanType"/></label>
                 <g:select
                         from="${cashmanagement.LoanType.findAllByLoanGroup(SystemParameters.findAll().first().tabserei)}"
-                        optionKey="id" name="loanType.id" value="${loanRequest_t?.loanType?.id}"/>
+                        optionKey="id" name="loanType.id" value="${loanRequest_t?.loanType?.id?:params['loanType.id']}"/>
             </div>
 
             <div class="fieldcontain">
                 <label for="loanNo"><g:message code="loanNo"/></label>
-                <g:textField name="loanNo" required="true" value="${loanRequest_t?.loanNo}"/>
+                <g:textField name="loanNo" required="true" value="${loanRequest_t?.loanNo?:params['loanNo']}"/>
             </div>
 
             <div class="fieldcontain">
                 <label for="name"><g:message code="loanRequest_T.name"/></label>
-                <g:textField name="name" required="true" value="${loanRequest_t?.name}"/>
+                <g:textField name="name" required="true" value="${loanRequest_t?.name?:params['name']}"/>
             </div>
 
             <div class="fieldcontain">
                 <label for="family"><g:message code="loanRequest_T.family"/></label>
-                <g:textField name="family" required="true" value="${loanRequest_t?.family}"/>
+                <g:textField name="family" required="true" value="${loanRequest_t?.family?:params['family']}"/>
             </div>
 
             <div class="fieldcontain">
                 <label for="melliCode"><g:message code="loanRequest_T.melliCode"/></label>
-                <g:textField name="melliCode" required="true" value="${loanRequest_t?.melliCode}"/>
+                <g:textField name="melliCode" required="true" value="${loanRequest_t?.melliCode?:params['melliCode']}"/>
             </div>
 
             <div class="fieldcontain">
                 <label for="loanAmount"><g:message code="loanAmount"/></label>
-                <g:textField name="loanAmount" required="true" value="${g.formatNumber(number:loanRequest_t?.loanAmount)}"/>
+                <g:textField name="loanAmount" required="true" value="${g.formatNumber(number:loanRequest_t?.loanAmount)?:params['loanAmount']}"/>
                 <span id="loanAmountValue"></span>
             </div>
             %{--<div class="fieldcontain">--}%
@@ -114,6 +114,13 @@
 
 
         <div id="pending">
+            <rg:criteria inline="true" id='pend'>
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+                <rg:eq name="loanRequestStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Pending}"/>
+                <rg:eq hidden='true' name="branch.id" value="${branch?.id}"/>
+                <rg:filterGrid grid="LoanRequest_TPendingListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
@@ -129,6 +136,13 @@
         </div>
 
         <div id="Confirm">
+            <rg:criteria inline="true" id='conf'>
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+                <rg:eq name="loanRequestStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                <rg:eq hidden='true' name="branch.id" value="${branch?.id}"/>
+                <rg:filterGrid grid="LoanRequest_TConfirmListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
@@ -144,6 +158,13 @@
         </div>
 
         <div id="Paid">
+            <rg:criteria inline="true" id='paid'>
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+                <rg:eq name="loanRequestStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Paid}"/>
+                <rg:eq hidden='true' name="branch.id" value="${branch?.id}"/>
+                <rg:filterGrid grid="LoanRequest_TPaidListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
@@ -159,6 +180,13 @@
         </div>
 
         <div id="Rejected">
+            <rg:criteria inline="true" id='rej'>
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+                <rg:eq name="loanRequestStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+                <rg:eq hidden='true' name="branch.id" value="${branch?.id}"/>
+                <rg:filterGrid grid="LoanRequest_TRejectedListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
                      columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
                      showCommand="false"

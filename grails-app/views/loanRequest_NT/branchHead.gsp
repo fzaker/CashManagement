@@ -78,6 +78,21 @@
 </div>
 
 <div class="sep"></div>
+<rg:criteria inline="true" >
+    <rg:nest name="loanRequest_nt">
+        <rg:ilike name='loanNo'/>
+        <rg:ilike name='melliCode'/>
+    </rg:nest>
+    <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Pending}"/>
+    <rg:nest name="loanRequest_nt">
+        <rg:nest name="branch">
+            <rg:nest name="branchHead">
+                <rg:eq hidden='true' name="id" value="${branchHead?.id}"/>
+            </rg:nest>
+        </rg:nest>
+    </rg:nest>
+    <rg:filterGrid grid="LoanRequestNT_BranchHeadGrid"/>
+</rg:criteria>
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
              maxColumns="8"
              showCommand="false"
@@ -94,7 +109,12 @@
             </rg:nest>
         </rg:criteria>
     </rg:grid>
-
+<rg:criteria inline="true" id='brnch'>
+    <rg:ilike name='branchCode' label='code'/>
+    <rg:ilike name='branchName' label='title'/>
+    <rg:eq hidden='true' name="branchHead.id" value="${branchHead?.id}"/>
+    <rg:filterGrid grid="BranchGrid"/>
+</rg:criteria>
     <rg:grid domainClass="${cashmanagement.Branch}"
              columns="${[[name:'branchCode'],[name:'branchName'],[name:'available'],[name:'percentCurMonth'],[name:'percentOldMonth']]}"
              commands="${[[controller:'loanRequest_NT', action:'showBranchDetails',param:'id=#id#', icon: 'magnifier',title:message(code:'show-details')]]}"
@@ -124,6 +144,21 @@
 
 
         <div id="Confirm">
+            <rg:criteria inline="true" id='conf'>
+                <rg:nest name="loanRequest_nt">
+                    <rg:ilike name='loanNo'/>
+                    <rg:ilike name='melliCode'/>
+                </rg:nest>
+                <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Confirm}"/>
+                <rg:nest name="loanRequest_nt">
+                    <rg:nest name="branch">
+                        <rg:nest name="branchHead">
+                            <rg:eq hidden='true' name="id" value="${branchHead?.id}"/>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:nest>
+                <rg:filterGrid grid="LoanRequestNT_BranchHeadConfirmListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="ConfirmList"
                      columns="[[name: 'loanIDCode'], [name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'melliCode'], [name: 'loanAmount'],[name: 'branch']]"
@@ -144,6 +179,21 @@
         </div>
 
         <div id="Test">
+            <rg:criteria inline="true" id="sent">
+                <rg:nest name="loanRequest_nt">
+                    <rg:ilike name='loanNo'/>
+                    <rg:ilike name='melliCode'/>
+                </rg:nest>
+                <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Sent}"/>
+                <rg:nest name="loanRequest_nt">
+                    <rg:nest name="branch">
+                        <rg:nest name="branchHead">
+                            <rg:eq hidden='true' name="id" value="${branchHead?.id}"/>
+                        </rg:nest>
+                    </rg:nest>
+                </rg:nest>
+                <rg:filterGrid grid="LoanRequestNT_BranchHeadSentListGrid"/>
+            </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      idPostfix="SentList"
                      showCommand="false"
@@ -163,6 +213,21 @@
         </div>
 
         <div id="Rejected">
+            <rg:criteria inline="true" id='cance'>
+            <rg:nest name="loanRequest_nt">
+                <rg:ilike name='loanNo'/>
+                <rg:ilike name='melliCode'/>
+            </rg:nest>
+            <rg:eq name="loanReqStatus" hidden='true' value="${cashmanagement.LoanRequest_NT.Cancel}"/>
+            <rg:nest name="loanRequest_nt">
+                <rg:nest name="branch">
+                    <rg:nest name="branchHead">
+                        <rg:eq hidden='true' name="id" value="${branchHead?.id}"/>
+                    </rg:nest>
+                </rg:nest>
+            </rg:nest>
+            <rg:filterGrid grid="LoanRequestNT_BranchHeadRejectedListGrid"/>
+        </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
                      columns="[[name:'loanNo'],[name:'name'],[name:'melliCode'],[name:'loanType'],[name:'loanAmount'],[name:'requestDate'],[name:'rejectReason']]"
                      idPostfix="RejectedList"

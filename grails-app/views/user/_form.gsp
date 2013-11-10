@@ -67,6 +67,33 @@
     <g:checkBox name="basicInformation" required="" value="${userInstance?.basicInformation}"/>
 </div>
 
+<div class="fieldcontain required">
+    <label for="basicInformation">
+        <g:message code="user.nt.label"/>
+        <span class="required-indicator">*</span>
+    </label>
+    <g:checkBox name="nt" required="" value="${userInstance?.nt}"/>
+</div>
+
+
+<div class="fieldcontain required">
+    <label for="basicInformation">
+        <g:message code="user.t.label"/>
+        <span class="required-indicator">*</span>
+    </label>
+    <g:checkBox name="t" required="" value="${userInstance?.t}"/>
+</div>
+
+
+<div class="fieldcontain required">
+    <label for="basicInformation">
+        <g:message code="user.gh.label"/>
+        <span class="required-indicator">*</span>
+    </label>
+    <g:checkBox name="gh" required="" value="${userInstance?.gh}"/>
+</div>
+
+
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'basicInformation', 'error')} required">
     <label for="enabled">
         <g:message code="user.enabled.label" default="Password"/>
