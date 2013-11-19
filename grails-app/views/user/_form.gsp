@@ -72,7 +72,7 @@
         <g:message code="user.nt.label"/>
         <span class="required-indicator">*</span>
     </label>
-    <g:checkBox name="nt" required="" value="${userInstance?.nt}"/>
+    <g:checkBox name="ntabsare" required="" value="${userInstance?.ntabsare}"/>
 </div>
 
 
@@ -81,7 +81,7 @@
         <g:message code="user.t.label"/>
         <span class="required-indicator">*</span>
     </label>
-    <g:checkBox name="t" required="" value="${userInstance?.t}"/>
+    <g:checkBox name="tabsare" required="" value="${userInstance?.tabsare}"/>
 </div>
 
 
@@ -90,7 +90,7 @@
         <g:message code="user.gh.label"/>
         <span class="required-indicator">*</span>
     </label>
-    <g:checkBox name="gh" required="" value="${userInstance?.gh}"/>
+    <g:checkBox name="gharzolhasane" required="" value="${userInstance?.gharzolhasane}"/>
 </div>
 
 
