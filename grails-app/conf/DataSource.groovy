@@ -13,6 +13,7 @@ hibernate {
 environments {
     development {
         dataSource {
+            logSql = true
             dbCreate = "update" // one of 'create', '   create-drop', 'update', 'validate', ''
 //            url = "jdbc:h2:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
 //            url = "jdbc:mysql://localhost/refah?useUnicode=true&characterEncoding=UTF-8"

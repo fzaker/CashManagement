@@ -3,12 +3,12 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'barrow.label', default: 'LoanRequest_NT')}"/>
-    <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <g:set var="entityName" value="${message(code: 'available.label', default: 'LoanRequest_NT')}"/>
+    <title><g:message code="available.label"/></title>
 </head>
 
 <body>
-<h2><g:message code="default.list.label" args="[entityName]"/></h2>
+<h2><g:message code="available.label" /></h2>
 
 <div class="content scaffold-list" role="main">
 

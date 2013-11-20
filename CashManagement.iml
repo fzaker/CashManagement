@@ -80,6 +80,19 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.7.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.grails/grails-datastore-gorm-test/jars/grails-datastore-gorm-test-1.0.7.RELEASE.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.fasterxml.jackson.core/jackson-annotations/jars/jackson-annotations-2.0.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.fasterxml.jackson.core/jackson-databind/bundles/jackson-databind-2.0.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.fasterxml.jackson.core/jackson-core/bundles/jackson-core-2.0.5.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.castor/castor/jars/castor-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/jfree/jfreechart/jars/jfreechart-1.0.12.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/jfree/jcommon/jars/jcommon-1.0.15.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.bouncycastle/bcmail-jdk14/jars/bcmail-jdk14-1.38.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.bouncycastle/bcprov-jdk14/jars/bcprov-jdk14-1.38.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.bouncycastle/bctsp-jdk14/jars/bctsp-jdk14-1.38.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.lowagie/itext/jars/itext-2.1.7.js2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-digester/commons-digester/jars/commons-digester-2.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.jasperreports/jasperreports/jars/jasperreports-5.2.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/ar.com.fdvs/DynamicJasper/jars/DynamicJasper-5.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

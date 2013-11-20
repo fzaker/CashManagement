@@ -14,6 +14,7 @@ class UserController {
     }
 
     def list() {
+        [branchHead: principalService.branchHead]
     }
 
     def create() {
@@ -34,7 +35,7 @@ class UserController {
             user = new User()
         }
         if (principalService.branchHead)
-            render(template: "formBranchHead", model: [userInstance: user, branch: branch, branchHead: principalService.branchHead ])
+            render(template: "formBranchHead", model: [userInstance: user, branch: branch, branchHead: principalService.branchHead])
         else
             render(template: "form", model: [userInstance: user, branch: branch, branchHead: branchHead, bankRegion: bankRegion])
     }
