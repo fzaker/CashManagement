@@ -11,6 +11,7 @@
 
 <div id="edit-user" class="content scaffold-edit" role="main">
     <h1><g:message code="changepass"  /></h1>
+    <div class="message" role="status">${flash.message}</div>
     <g:form method="post" >
         <fieldset class="form">
             <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'password', 'error')} required">

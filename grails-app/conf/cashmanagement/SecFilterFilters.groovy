@@ -10,6 +10,7 @@ class SecFilterFilters {
     def bankRegionOrAdmin = ['etayeeTBranchHead', 'etayeeGHBranchHead', 'loanRequest_NT:report_date']
     def branchHeadOrAdmin = ['user']
     def filters = {
+
         basicInformation.each {
             all(controller: it, action: '*') {
                 before = {
@@ -86,9 +87,12 @@ class SecFilterFilters {
             all(controller: it.split(':')[0], action: (it.contains(':')) ? (it.split(':')[1]) : '*') {
                 before = {
                     if (request.method == 'GET') {
-                        if (!(principalService.user?.isAdmin || principalService.user?.branchHead)) {
-                            redirect(controller: 'login', action: 'deny')
-                            return false
+                        if (params.controller == 'user' && params.action in (['changePasswordUser', 'savepassuser'])) {
+                        } else {
+                            if (!(principalService.user?.isAdmin || principalService.user?.branchHead)) {
+                                redirect(controller: 'login', action: 'deny')
+                                return false
+                            }
                         }
                     }
                 }

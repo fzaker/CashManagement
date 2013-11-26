@@ -39,7 +39,7 @@
     </div>
 
     <div class="fieldcontain">
-        <span class="property-label"><g:message code="permitpermissionamountbranch"/></span>
+        <span class="property-label"><g:message code="ghpermitpermissionamountbranch"/></span>
         <span class="property-value" id="permitAmount"><g:formatNumber number="${permitAmount - usedAmount}"
                                                                        type="number"/></span>
     </div>

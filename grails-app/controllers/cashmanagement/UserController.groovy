@@ -55,6 +55,10 @@ class UserController {
             def user = principalService.user
             user.password = params.password
             user.save()
+            flash.message=message(code:'change-pass-success')
+        }
+        else{
+            flash.message=message(code:'change-pass-unsuccess')
         }
         redirect(action: "changePasswordUser")
     }
