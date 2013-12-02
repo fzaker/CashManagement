@@ -36,7 +36,7 @@ class LoanRequest_NTController {
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
-                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus==\\\'Confirm\\\'?obj.loanIDCode:\\\'\\\''],
+                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus in [\\\'Confirm\\\',\\\'Paid\\\']?obj.loanIDCode:\\\'\\\''],
                 [label: message(code: 'loanRequest_NT.loanType'), name: 'loanType'],
                 [label: message(code: 'loanRequest_NT.name'), name: 'name'],
                 [label: message(code: 'loanRequest_NT.family'), name: 'family'],
@@ -106,7 +106,7 @@ class LoanRequest_NTController {
 
     def preAccept() {
         def req = LoanRequest_NT.get(params.id)
-        if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
+        if (loanService.checkResourceAvailability(req.branch, req.loanAmount, req)) {
             render([result: "OK", message: message(code: "branch-ok", args: [req.loanAmount])] as JSON)
         } else
             render([result: "CANCEL", message: message(code: "branch-cancel")] as JSON)
@@ -149,7 +149,7 @@ class LoanRequest_NTController {
 
     def preAcceptBranchHead() {
         def req = LoanRequestNT_BranchHead.get(params.id)
-        if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
+        if (loanService.checkResourceAvailability(req.branch, req.loanAmount, req.loanRequest_nt)) {
             def mojoodi = []
             def sum = 0;
             def count = 0;
@@ -169,7 +169,7 @@ class LoanRequest_NTController {
     def acceptConfirmBranchHead() {
         def req = LoanRequestNT_BranchHead.get(params.id)
 
-        if (req && req.loanReqStatus == LoanRequest_NT.Pending && loanService.getAvailable(req.branch) >= req.loanAmount) {
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending && loanService.checkResourceAvailability(req.branch, req.loanAmount, req.loanRequest_nt)) {
             req.loanReqStatus = LoanRequest_NT.Confirm
             req.changeDate = new Date()
             req.user = principalService.user
@@ -230,7 +230,7 @@ class LoanRequest_NTController {
 
     def preAcceptBankRegion() {
         def req = LoanRequestNT_BankRegion.get(params.id)
-        if (loanService.checkResourceAvailability(req.branch, req.loanAmount)) {
+        if (loanService.checkResourceAvailability(req.branch, req.loanAmount, req.loanRequest_nt)) {
             def branchHeads = LoanRequestNTBarrow.findAllByRequest(req.loanRequest_nt).collect { it.branch.branchHead }.unique()
             if (branchHeads.size() > 1) {
                 render([result: "CANCEL", message: message(code: "branch-head-ok-headOfficeReq")] as JSON)
@@ -256,7 +256,7 @@ class LoanRequest_NTController {
     def acceptConfirmBankRegion() {
         def req = LoanRequestNT_BankRegion.get(params.id)
 
-        if (req && req.loanReqStatus == LoanRequest_NT.Pending && loanService.getAvailable(req.branch) >= req.loanAmount) {
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending && loanService.checkResourceAvailability(req.branch, req.loanAmount, req.loanRequest_nt)) {
             req.loanReqStatus = LoanRequest_NT.Confirm
             req.changeDate = new Date()
             req.user = principalService.user

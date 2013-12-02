@@ -38,7 +38,8 @@ class LoanRequestNT_HeadOffice {
 
     transient Double getRemainingAmount() {
         if (id) {
-            return Math.max(loanAmount  - branch.available,0)
+            def barrows = LoanRequestNTBarrow.findAllByRequestAndBranch(loanRequest_nt, loanRequest_nt.branch).collect { it.debit }.sum()?:0
+            return Math.max(loanAmount - barrows, 0)
         }
         return 0
 

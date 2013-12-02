@@ -24,7 +24,7 @@ class LoanRequest_TController {
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
         def permitAmount = PermissionAmount_T.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find() ?: new PermissionAmount_T()
-        def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_T.Confirm).sum { it.loanAmount } ?: 0
+        def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatusInList(branch, permitAmount.permissionDate, [LoanRequest_T.Confirm, LoanRequest_T.Paid]).sum { it.loanAmount } ?: 0
         def paidAmount = cashmanagement.LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Paid).sum { it.loanAmount } ?: 0
         def paidAmountPeriod = cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_T.Paid).sum { it.loanAmount } ?: 0
         def loanRequest_t = LoanRequest_T.get(params.id)
@@ -92,7 +92,7 @@ class LoanRequest_TController {
         def branch = principalService.getBranch()
         if (!checkMelliCode(params.melliCode)) {
             flash.message = message(code: 'melli-code')
-            redirect(action: "list",params: params)
+            redirect(action: "list", params: params)
             return
         }
         if (!checkLoanNo(params.loanNo)) {
@@ -243,7 +243,7 @@ class LoanRequest_TController {
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
-                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus==\\\'Confirm\\\'?obj.loanIDCode:\\\'\\\''],
+                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus in [\\\'Confirm\\\',\\\'Paid\\\']?obj.loanIDCode:\\\'\\\''],
                 [label: message(code: 'loanRequest_NT.loanType'), name: 'loanType'],
                 [label: message(code: 'loanRequest_NT.name'), name: 'name'],
                 [label: message(code: 'loanRequest_NT.family'), name: 'family'],

@@ -23,7 +23,7 @@ class LoanRequest_GHController {
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
         def permitAmount = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find() ?: new PermissionAmount_GH()
-        def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Confirm).sum { it.loanAmount } ?: 0
+        def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatusInList(branch, permitAmount.permissionDate, [LoanRequest_GH.Confirm, LoanRequest_GH.Paid]).sum { it.loanAmount } ?: 0
         def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum { it.loanAmount } ?: 0
         def paidAmountPeriod = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Paid).sum { it.loanAmount } ?: 0
         def loanRequest_gh = LoanRequest_GH.get(params.id)
@@ -91,6 +91,7 @@ class LoanRequest_GHController {
         }
 
     }
+
     private def checkMelliCode(String melliCode) {
         try {
             if (!melliCode || melliCode.length() != 10)
@@ -264,7 +265,7 @@ class LoanRequest_GHController {
     def report() {
         def columns = [
                 [label: message(code: 'loanRequest_NT.loanNo'), name: "loanNo"],
-                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus==\\\'Confirm\\\'?obj.loanIDCode:\\\'\\\''],
+                [label: message(code: 'loanRequest_NT.loanIDCode'), name: 'loanIDCode', expression: 'obj.loanRequestStatus in [\\\'Confirm\\\',\\\'Paid\\\']?obj.loanIDCode:\\\'\\\''],
                 [label: message(code: 'loanRequest_NT.loanType'), name: 'loanType'],
                 [label: message(code: 'loanRequest_NT.name'), name: 'name'],
                 [label: message(code: 'loanRequest_NT.family'), name: 'family'],

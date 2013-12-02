@@ -41,7 +41,7 @@ class LoanService {
     }
 
     def checkResourceAvailabilityGH(Branch branch, double amt) {
-        def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Confirm).sum { it.loanAmount }) ?: 0
+        def sumBranch = (LoanRequest_GH.findAllByBranchAndLoanRequestStatusInList(branch, [LoanRequest_GH.Confirm, LoanRequest_GH.Paid]).sum { it.loanAmount }) ?: 0
         def permAmount = PermissionAmount_GH.findAllByBranch(branch).sum { it.permAmount } ?: 0
         if (permAmount >= (sumBranch + amt)) {
             return checkResourceAvailabilityGHOld(branch, amt)
@@ -67,12 +67,12 @@ class LoanService {
     def checkResourceAvailabilityT(Branch branch, double amt) {
         def sysParam = SystemParameters.findAll().first()
 
-        def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Confirm).sum { it.loanAmount }) ?: 0
+        def sumBranch = (LoanRequest_T.findAllByBranchAndLoanRequestStatusInList(branch, [LoanRequest_T.Confirm, LoanRequest_T.Paid]).sum { it.loanAmount }) ?: 0
         def permAmount = PermissionAmount_T.findAllByBranch(branch).sum { it.permAmount } ?: 0
         return permAmount >= (sumBranch + amt)
     }
 
-    def checkResourceAvailability(Branch branch, double amt) {
+    def checkResourceAvailability(Branch branch, double amt, LoanRequest_NT req) {
 //        SystemParameters sysParam = SystemParameters.findAll().first()
 //
 //        if (checkAvailable_numofdays_curMonth(branch, amt) < sysParam.permitToward) {
@@ -88,7 +88,11 @@ class LoanService {
 //                return false
 //        }
         def avail = getAvailable(branch)
-        return amt <= Math.ceil(avail)
+        if (amt > Math.ceil(avail)) {
+            def barrows = LoanRequestNTBarrow.findAllByRequestAndBranch(req, branch).collect { it.debit }.sum() ?: 0
+            return amt - barrows <= 0
+        }
+        return true
     }
 
     def getNTReport(Date date) {
@@ -168,7 +172,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 				and (branch_id=:branch)
 				and (tran_date <= :todate) AND (tran_date >= :fromdate)
                        GROUP BY dbo.gltransaction.tran_date) AS derivedtbl_1""", [fromdate: fromDate, todate: toDate, branch: branch.id, glgroup: manabeGLGroup.id]);
-        def manabe = x.avgAmt?:1
+        def manabe = x.avgAmt ?: 1
 
         def masarefGLGroup = sysParam.gheyreTabserei.masaref
         sql = new Sql(sessionFactory.currentSession.connection())
@@ -180,7 +184,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
   and gl_group_id=:glgroup""", [today: toDate, branch: branch.id, glgroup: masarefGLGroup.id]);
 
         //mande akharin rooz
-        def masaref = x.amt?:0
+        def masaref = x.amt ?: 0
 
         def mojavezSadere = (LoanRequest_NT.findAllByBranchAndLoanRequestStatusAndRequestDateLessThanEquals(branch, LoanRequest_NT.Confirm, toDateD).sum { it.loanAmount }) ?: 0
 
@@ -675,10 +679,10 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
             }
         } ?: 0
         def vosool = amt// * sysParam.ghCentralBankPercent
-        def vosooliGhabeleEstefade = (vosool ?: 0) * (sysParam.ghMonthlyPercent ?:1  )
-        def haddeGhabli = (prevAmt /** sysParam.ghCentralBankPercent*/ - paidPerv) * (sysParam.ghMonthlyPercent?:1)
+        def vosooliGhabeleEstefade = (vosool ?: 0) * (sysParam.ghMonthlyPercent ?: 1)
+        def haddeGhabli = (prevAmt /** sysParam.ghCentralBankPercent*/ - paidPerv) * (sysParam.ghMonthlyPercent ?: 1)
         def haddeJari = vosooliGhabeleEstefade /*- paidLast*/ + haddeGhabli + etebarDaryafti
-        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, percenteGhabeleEstefade: sysParam.ghMonthlyPercent?:1, vosooliGhabeleEstefade: vosooliGhabeleEstefade, vosooli: amt, paidLast: paidLast, haddeJari: haddeJari, date: date]
+        def res = [etebarDaryafti: etebarDaryafti, haddeGhabli: haddeGhabli, percenteGhabeleEstefade: sysParam.ghMonthlyPercent ?: 1, vosooliGhabeleEstefade: vosooliGhabeleEstefade, vosooli: amt, paidLast: paidLast, haddeJari: haddeJari, date: date]
         return res
     }
 
