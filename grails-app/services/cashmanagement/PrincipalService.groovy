@@ -17,25 +17,27 @@ class PrincipalService {
         def user = getUser()
         def branch
         user?.authorities.each {
-            if(it instanceof BranchRole)
+            if (it.instanceOf(BranchRole))
                 branch = it.branch
         }
         return branch
     }
+
     def getBranchHead() {
         def user = getUser()
         def branchhead
         user?.authorities.each {
-            if(it instanceof BranchHeadRole)
+            if (it.instanceOf(BranchHeadRole))
                 branchhead = it.branchHead
         }
         return branchhead
     }
+
     def getBankRegion() {
         def user = getUser()
         def bankRegion
         user?.authorities.each {
-            if(it instanceof BankRegionRole)
+            if (it.instanceOf(BankRegionRole))
                 bankRegion = it.bankRegion
         }
         return bankRegion

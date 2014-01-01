@@ -78,8 +78,8 @@
             <g:hiddenField name="date" value="${new SimpleDateFormat("yyyyMMdd").format(resultParm.date)}"/>
             <div class="fieldcontain bank-region-percent fix-at-top">
                 <span class="property-label-my branch-head-name"><g:message code="branch" /></span>
-                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmount" /></span>
-                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmount" /></span>
+                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmountCurrent" /></span>
+                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmountCurrent" /></span>
                 <span class="property-label-my min-growth"><g:message code="used.amount"/></span>
             </div>
             <g:each in="${branchs}">

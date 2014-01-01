@@ -30,6 +30,10 @@
 <div class="right" style="width: 50%">
     <div class="fieldcontain">
         <span class="property-label"><g:message code="assignedpermissionamountbranch"/></span>
+        <span class="property-value"><g:formatNumber number="${sumPermitAmount}" type="number"/></span>
+    </div>
+    <div class="fieldcontain">
+        <span class="property-label"><g:message code="assignedpermissionamountbranchCurrent"/></span>
         <span class="property-value"><g:formatNumber number="${permitAmount}" type="number"/></span>
     </div>
 
@@ -40,7 +44,7 @@
 
     <div class="fieldcontain">
         <span class="property-label"><g:message code="ghpermitpermissionamountbranch"/></span>
-        <span class="property-value" id="permitAmount"><g:formatNumber number="${permitAmount - usedAmount}"
+        <span class="property-value" id="permitAmount"><g:formatNumber number="${sumPermitAmount - usedAmount}"
                                                                        type="number"/></span>
     </div>
 </div>
@@ -59,6 +63,14 @@
             <div class="fieldcontain">
                 <label for="loanNo"><g:message code="loanNo"/></label>
                 <g:textField name="loanNo" required="true" value="${loanRequest_gh?.loanNo?:params['loanNo']}"/>
+            </div>
+
+            <div class="fieldcontain">
+                <label for="customerType"><g:message code="customerType"/></label>
+                <g:select
+                        from="${new cashmanagement.LoanRequest_GH().constraints.customerType.inList}"
+                        name="customerType" valueMessagePrefix="customerType"
+                        value="${loanRequest_gh?.customerType ?: params['customerType']}"/>
             </div>
 
             <div class="fieldcontain">
@@ -122,7 +134,7 @@
             <rg:filterGrid grid="LoanRequest_GHPendingListGrid"/>
         </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
-                 columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                 columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'customerType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                  showCommand="false"
                  firstColumnWidth="110"
                  caption="${message(code: "Pending")}"
@@ -144,7 +156,7 @@
             <rg:filterGrid grid="LoanRequest_GHConfirmListGrid"/>
         </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
-                 columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                 columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'customerType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                  showCommand="false"
                  firstColumnWidth="70"
                  caption="${message(code: "Confirm")}"
@@ -166,7 +178,7 @@
             <rg:filterGrid grid="LoanRequest_GHPaidListGrid"/>
         </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
-                 columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                 columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'customerType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                  showCommand="false"
                  firstColumnWidth="40"
                  caption="${message(code: "Paid")}"
@@ -188,7 +200,7 @@
             <rg:filterGrid grid="LoanRequest_GHRejectedListGrid"/>
         </rg:criteria>
         <rg:grid domainClass="${cashmanagement.LoanRequest_GH}"
-                 columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
+                 columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'customerType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
                  showCommand="false"
                  firstColumnWidth="40"
                  caption="${message(code: "Rejected")}"

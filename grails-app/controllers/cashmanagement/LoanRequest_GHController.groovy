@@ -22,12 +22,14 @@ class LoanRequest_GHController {
         def branch = principalService.branch
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
-        def permitAmount = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"]).find() ?: new PermissionAmount_GH()
-        def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatusInList(branch, permitAmount.permissionDate, [LoanRequest_GH.Confirm, LoanRequest_GH.Paid]).sum { it.loanAmount } ?: 0
+        def permitAmounts = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"])
+        def permitAmount = permitAmounts.find() ?: new PermissionAmount_GH()
+        def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatusInList(branch, [LoanRequest_GH.Confirm, LoanRequest_GH.Paid]).sum { it.loanAmount } ?: 0
         def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum { it.loanAmount } ?: 0
         def paidAmountPeriod = cashmanagement.LoanRequest_GH.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(branch, permitAmount.permissionDate, LoanRequest_GH.Paid).sum { it.loanAmount } ?: 0
         def loanRequest_gh = LoanRequest_GH.get(params.id)
         return [branch: branch, usedAmount: usedAmountBranch ?: 0,
+                sumPermitAmount:permitAmounts.collect {it.permAmount}.sum(),
                 permitAmount: permitAmount?.permAmount ?: 0, loanRequest_gh: loanRequest_gh,
                 paidLoanAmount: paidAmount ?: 0,
                 paidLoanAmountThisPeriod: paidAmountPeriod ?: 0]
@@ -92,33 +94,12 @@ class LoanRequest_GHController {
 
     }
 
-    private def checkMelliCode(String melliCode) {
-        try {
-            if (!melliCode || melliCode.length() != 10)
-                return false;
-            def checkDigit = 0
-            def orig = 0
-            melliCode.eachWithIndex { String entry, int i ->
-                if (i < 9)
-                    checkDigit += (entry as int) * (10 - i)
-                else
-                    orig = entry as int
-            }
-            checkDigit = checkDigit % 11
-            if (checkDigit < 2)
-                return orig == checkDigit
-            else
-                return orig == (11 - checkDigit)
-        } catch (x) {
-            return false
-        }
-    }
 
     def save() {
         def prms = [:]
 
         def branch = principalService.getBranch()
-        if (!checkMelliCode(params.melliCode)) {
+        if (!loanService.checkMelliCode(params.melliCode,params.customerType)) {
             flash.message = message(code: 'melli-code')
             redirect(action: "list", params: params)
             return

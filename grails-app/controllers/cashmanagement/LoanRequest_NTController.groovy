@@ -124,6 +124,34 @@ class LoanRequest_NTController {
         render 0
     }
 
+    def redoBranchHead() {
+        def req = LoanRequestNT_BranchHead.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            req.loanReqStatus = LoanRequest_NT.Cancel
+            req.user = principalService.user
+            req.changeDate = new Date()
+            req.save()
+            req.loanRequest_nt.loanRequestStatus = LoanRequest_NT.Pending
+            req.loanRequest_nt.rejectUser = principalService.user
+            req.save()
+        }
+        render 0
+    }
+
+    def redoBankRegion() {
+        def req = LoanRequestNT_BankRegion.get(params.id)
+        if (req && req.loanReqStatus == LoanRequest_NT.Pending) {
+            req.loanReqStatus = LoanRequest_NT.Cancel
+            req.user = principalService.user
+            req.changeDate = new Date()
+            req.save()
+            def reqReg = LoanRequestNT_BranchHead.findByLoanRequest_nt(req.loanRequest_nt)
+            reqReg.loanReqStatus = LoanRequest_NT.Pending
+            reqReg.save()
+        }
+        render 0
+    }
+
     def acceptConfirm() {
         def req = LoanRequest_NT.get(params.id)
         if (req && req.loanRequestStatus == LoanRequest_NT.Pending) {
@@ -341,33 +369,13 @@ class LoanRequest_NTController {
 
     }
 
-    private def checkMelliCode(String melliCode) {
-        try {
-            if (!melliCode || melliCode.length() != 10)
-                return false;
-            def checkDigit = 0
-            def orig = 0
-            melliCode.eachWithIndex { String entry, int i ->
-                if (i < 9)
-                    checkDigit += (entry as int) * (10 - i)
-                else
-                    orig = entry as int
-            }
-            checkDigit = checkDigit % 11
-            if (checkDigit < 2)
-                return orig == checkDigit
-            else
-                return orig == (11 - checkDigit)
-        } catch (x) {
-            return false
-        }
-    }
+
 
     def save() {
         def prms = [:]
         def branch = principalService.getBranch()
         def loanRequest_NTInstance
-        if (!checkMelliCode(params.melliCode)) {
+        if (!loanService.checkMelliCode(params.melliCode, params.customerType)) {
             flash.message = message(code: 'melli-code')
             redirect(action: "list", params: params)
             return
@@ -414,6 +422,7 @@ class LoanRequest_NTController {
         }
         redirect(action: "list", params: prms)
     }
+
 
     def branchHead() {
         def branchHead = principalService.getBranchHead()

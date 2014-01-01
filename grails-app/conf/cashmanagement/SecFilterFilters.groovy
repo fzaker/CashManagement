@@ -8,7 +8,7 @@ class SecFilterFilters {
     def branchHead = ['loanRequest_NT:branchHead', 'loanRequest_NT:branchHeadPercents', 'permissionAmount_T', 'permissionAmount_GH']
     def bankRegion = ['loanRequest_NT:bankRegion', 'loanRequest_NT:bankRegionPercents']
     def bankRegionOrAdmin = ['etayeeTBranchHead', 'etayeeGHBranchHead', 'loanRequest_NT:report_date']
-    def branchHeadOrAdmin = ['user']
+    def branchHeadOrBankRegionOrAdmin = ['user']
     def filters = {
 
         basicInformation.each {
@@ -83,13 +83,13 @@ class SecFilterFilters {
                 }
             }
         }
-        branchHeadOrAdmin.each {
+        branchHeadOrBankRegionOrAdmin.each {
             all(controller: it.split(':')[0], action: (it.contains(':')) ? (it.split(':')[1]) : '*') {
                 before = {
                     if (request.method == 'GET') {
                         if (params.controller == 'user' && params.action in (['changePasswordUser', 'savepassuser'])) {
                         } else {
-                            if (!(principalService.user?.isAdmin || principalService.user?.branchHead)) {
+                            if (!(principalService.user?.isAdmin || principalService.user?.branchHead || principalService.user?.bankRegion)) {
                                 redirect(controller: 'login', action: 'deny')
                                 return false
                             }

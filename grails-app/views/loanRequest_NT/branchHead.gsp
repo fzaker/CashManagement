@@ -96,8 +96,13 @@
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BranchHead}"
              maxColumns="8"
              showCommand="false"
-             firstColumnWidth="110"
-             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'branchHead=#id#', icon: 'magnifier',title:message(code:'show-details')],[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")], [handler: 'accept(#id#)', icon: 'tick',title:message(code:"confirm")]]}">
+             firstColumnWidth="110">
+        <rg:commands>
+            <rg:command controller="loanRequest_NT" action="showRequestDetails" param="branchHead=#id#" icon="magnifier" title="${message(code:'show-details')}"/>
+            <rg:command handler="redo(#id#)" icon="arrow_redo" title="${message(code:"redo-branch")}"/>
+            <rg:command handler="reject(#id#)" icon="cancel" title="${message(code:"reject")}"/>
+            <rg:command handler="accept(#id#)" icon="tick" title="${message(code:"confirm")}"/>
+        </rg:commands>
         <rg:criteria>
             <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
             <rg:nest name="loanRequest_nt">
@@ -374,6 +379,17 @@
                         })
                     }
                 })
+        }
+        function redo(id){
+            if(confirm('${message(code:'are.you.sure.to.redo.reuqest')}')){
+                $.ajax({
+                    type:'post',
+                    url:'<g:createLink action="redoBranchHead"/>',
+                    data:{id:id}
+                }).success(function(){
+                    $("#LoanRequestNT_BranchHeadGrid").trigger("reloadGrid")
+                })
+            }
         }
         $(function() {
             $( "#manoto" ).tabs();

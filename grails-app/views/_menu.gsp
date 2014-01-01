@@ -171,6 +171,10 @@
                         <a href="<g:createLink controller="loanRequest_GH" action="report"/>"><g:message
                                 code="loanRequest_GH.label"/></a>
                     </li>
+                    <li>
+                        <a href="<g:createLink controller="loanDifference" />"><g:message
+                                code="loanDifference"/></a>
+                    </li>
 
                     <c:isBankRegionOrAdmin>
                         <li>
@@ -181,7 +185,7 @@
                 </ul>
             </li>
 
-            <c:isBranchHeadOrAdmin>
+            <c:isBranchHeadOrBankRegionOrAdmin>
                 <li class="MenuItem">
 
                     <a href="#" class="sf-top-level-anchor toplevel"><g:message code="SystemManagement"/></a>
@@ -192,7 +196,7 @@
 
                     </ul>
                 </li>
-            </c:isBranchHeadOrAdmin>
+            </c:isBranchHeadOrBankRegionOrAdmin>
             <li class="MenuItem">
 
                 <a href="#" class="sf-top-level-anchor toplevel"><g:message code="profile"/></a>

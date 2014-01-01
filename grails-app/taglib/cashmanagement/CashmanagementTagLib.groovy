@@ -19,23 +19,28 @@ class CashmanagementTagLib {
             out << body()
         }
     }
+    def isBranchHeadOrBankRegionOrAdmin = { attrs, body ->
+        if (principalService.user?.isAdmin || principalService.branchHead || principalService.bankRegion) {
+            out << body()
+        }
+    }
     def isBasicInformation = { attrs, body ->
         if (principalService.user?.basicInformation) {
             out << body()
         }
     }
 
-    def isT= { attrs, body ->
+    def isT = { attrs, body ->
         if (principalService.user?.tabsare) {
             out << body()
         }
     }
-    def isNT= { attrs, body ->
+    def isNT = { attrs, body ->
         if (principalService.user?.ntabsare) {
             out << body()
         }
     }
-    def isGH= { attrs, body ->
+    def isGH = { attrs, body ->
         if (principalService.user?.gharzolhasane) {
             out << body()
         }

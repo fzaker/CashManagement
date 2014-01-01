@@ -14,7 +14,7 @@ class UserController {
     }
 
     def list() {
-        [branchHead: principalService.branchHead]
+        [branchHead: principalService.branchHead, bankRegion: principalService.bankRegion]
     }
 
     def create() {
@@ -28,14 +28,16 @@ class UserController {
         def bankRegion
         if (params.id) {
             user = User.get(params.id)
-            branch = (user.authorities?.find { it instanceof BranchRole } as BranchRole)?.branch
-            branchHead = (user.authorities?.find { it instanceof BranchHeadRole } as BranchHeadRole)?.branchHead
-            bankRegion = (user.authorities?.find { it instanceof BankRegionRole } as BankRegionRole)?.bankRegion
+            branch = (user.authorities?.find { it.instanceOf(BranchRole) })?.branch
+            branchHead = (user.authorities?.find { it.instanceOf(BranchHeadRole) })?.branchHead
+            bankRegion = (user.authorities?.find { it.instanceOf(BankRegionRole) })?.bankRegion
         } else {
             user = new User()
         }
         if (principalService.branchHead)
             render(template: "formBranchHead", model: [userInstance: user, branch: branch, branchHead: principalService.branchHead])
+        if (principalService.bankRegion)
+            render(template: "formBankRegion", model: [userInstance: user, branch: branch, branchHead: branchHead, bankRegion: principalService.bankRegion])
         else
             render(template: "form", model: [userInstance: user, branch: branch, branchHead: branchHead, bankRegion: bankRegion])
     }
@@ -55,10 +57,9 @@ class UserController {
             def user = principalService.user
             user.password = params.password
             user.save()
-            flash.message=message(code:'change-pass-success')
-        }
-        else{
-            flash.message=message(code:'change-pass-unsuccess')
+            flash.message = message(code: 'change-pass-success')
+        } else {
+            flash.message = message(code: 'change-pass-unsuccess')
         }
         redirect(action: "changePasswordUser")
     }
@@ -88,23 +89,23 @@ class UserController {
         if (params.branchId) {
             def branch = Branch.get(params.branchId)
             def branchRole = BranchRole.findByBranch(branch) ?: new BranchRole(branch: branch, authority: "branch_${branch.id}").save()
-            user.authorities.findAll { it instanceof BranchRole }.each { UserRole.remove(user, it) }
+            user.authorities.findAll { it.instanceOf(BranchRole) }.each { UserRole.remove(user, it) }
             if (branchRole)
                 UserRole.create(user, branchRole)
 
         } else {
-            def branchRole = user.authorities.find { it instanceof BranchRole }
+            def branchRole = user.authorities.find { it.instanceOf(BranchRole) }
             if (branchRole)
                 UserRole.remove(user, branchRole)
         }
         if (params.branchHeadId) {
             def branchH = BranchHead.get(params.branchHeadId)
             def branchRole = BranchHeadRole.findByBranchHead(branchH) ?: new BranchHeadRole(branchHead: branchH, authority: "branchHead_${branchH.id}").save()
-            user.authorities.findAll { it instanceof BranchHeadRole }.each { UserRole.remove(user, it) }
+            user.authorities.findAll { it.instanceOf(BranchHeadRole) }.each { UserRole.remove(user, it) }
             if (branchRole)
                 UserRole.create(user, branchRole)
         } else {
-            def branchRole = user.authorities.find { it instanceof BranchHeadRole }
+            def branchRole = user.authorities.find { it.instanceOf(BranchHeadRole) }
             if (branchRole)
                 UserRole.remove(user, branchRole)
         }
@@ -112,11 +113,11 @@ class UserController {
         if (params.bankRegionId) {
             def bankRegion = BankRegion.get(params.bankRegionId)
             def branchRole = BankRegionRole.findByBankRegion(bankRegion) ?: new BankRegionRole(bankRegion: bankRegion, authority: "bankRegion_${bankRegion.id}").save()
-            user.authorities.findAll { it instanceof BankRegionRole }.each { UserRole.remove(user, it) }
+            user.authorities.findAll { it.instanceOf(BankRegionRole) }.each { UserRole.remove(user, it) }
             if (branchRole)
                 UserRole.create(user, branchRole)
         } else {
-            def branchRole = user.authorities.find { it instanceof BankRegionRole }
+            def branchRole = user.authorities.find { it.instanceOf(BankRegionRole) }
             if (branchRole)
                 UserRole.remove(user, branchRole)
         }

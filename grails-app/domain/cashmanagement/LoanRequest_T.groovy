@@ -10,6 +10,7 @@ class LoanRequest_T {
     String loanNo
     String name
     String family
+    String customerType
     String melliCode
     String loanIDCode
     String loanRequestStatus
@@ -24,7 +25,7 @@ class LoanRequest_T {
     Date confirmedDate
     User rejectUser
     Date rejectDate
-
+    Date payDate
 //    Date registerTimeStamp
 //    String loginUser
 
@@ -32,6 +33,7 @@ class LoanRequest_T {
         loanNo(nullable: false)
         loanIDCode(nullable: true)
         loanType(nullable: false)
+        customerType(nullable: true, inList: ['indv', 'corp', 'frgn'])
         name()
         family()
         melliCode()
@@ -45,5 +47,6 @@ class LoanRequest_T {
         confirmedDate(nullable: true)
         rejectUser(nullable: true)
         rejectDate(nullable: true)
+        payDate(nullable: true)
     }
 }

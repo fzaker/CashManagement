@@ -7,6 +7,122 @@ class LoanService {
     def dataSource
     def sessionFactory
 
+    private def checkMelliCode(String melliCode,String customerType) {
+
+
+        try {
+            if(customerType=='corp')
+                return checkCorpCode(melliCode)
+            if(customerType=='frgn')
+                return melliCode.length()==13
+            if (!melliCode || melliCode.length() != 10)
+                return false;
+            def checkDigit = 0
+            def orig = 0
+            melliCode.eachWithIndex { String entry, int i ->
+                if (i < 9)
+                    checkDigit += (entry as int) * (10 - i)
+                else
+                    orig = entry as int
+            }
+            checkDigit = checkDigit % 11
+            if (checkDigit < 2)
+                return orig == checkDigit
+            else
+                return orig == (11 - checkDigit)
+        } catch (x) {
+            return false
+        }
+    }
+
+    def checkCorpCode(String NationalCode){
+        if (NationalCode.length() == 11)
+        {
+            //خواندن عدد 11 رقمی
+            def FirstDigit = (NationalCode[0]as int);
+            def SecoundDigit = (NationalCode[1]as int);
+            def thirdDigit = (NationalCode[2]as int);
+            def FourthDigit = (NationalCode[3]as int);
+            def FivthDigit = (NationalCode[4]as int);
+            def SixthDigit = (NationalCode[5]as int);
+            def SeventhDigit = (NationalCode[6]as int);
+            def eighthDigit = (NationalCode[7]as int);
+            def NinethDigit = (NationalCode[8]as int);
+            def tenthDigit = (NationalCode[9]as int);
+            def EleventhDigit = (NationalCode[10].toString());
+            //تجمیع رقم دهم با 10 رقم اول
+            FirstDigit = FirstDigit + tenthDigit;
+            SecoundDigit = SecoundDigit + tenthDigit;
+            thirdDigit = thirdDigit + tenthDigit;
+            FourthDigit = FourthDigit + tenthDigit;
+            FivthDigit = FivthDigit + tenthDigit;
+            SixthDigit = SixthDigit + tenthDigit;
+            SeventhDigit = SeventhDigit + tenthDigit;
+            eighthDigit = eighthDigit + tenthDigit;
+            NinethDigit = NinethDigit + tenthDigit;
+            tenthDigit = tenthDigit + tenthDigit;
+            //جمع عدد 2 به ارقام حاصل از مرحله قبل
+            FirstDigit += 2;
+            SecoundDigit += 2;
+            thirdDigit += 2;
+            FourthDigit += 2;
+            FivthDigit += 2;
+            SixthDigit += 2;
+            SeventhDigit += 2;
+            eighthDigit += 2;
+            NinethDigit += 2;
+            tenthDigit += 2;
+            //ارقام را در ضرایب تعیین شده ضرب می کنیم
+            FirstDigit *= 29;
+            SecoundDigit *= 27;
+            thirdDigit *= 23;
+            FourthDigit *= 19;
+            FivthDigit *= 17;
+            SixthDigit *= 29;
+            SeventhDigit *= 27;
+            eighthDigit *= 23;
+            NinethDigit *= 19;
+            tenthDigit *= 17;
+            //جمع 10 رقم اول
+            def SumTenDigits = FirstDigit + SecoundDigit + thirdDigit +
+                    FourthDigit + FivthDigit + SixthDigit +
+                    SeventhDigit + eighthDigit + NinethDigit +
+                    tenthDigit;
+            //باقیمانده مرحله قبل به عدد 11
+            def Remain = SumTenDigits - ((SumTenDigits / 11) * 11);
+            if (Remain.toString().length() == 2)
+            {
+                //اگر 2 رقمی است دهگانش باید با رقم یازدهم یکی باشد
+                ////////////////////////////////////////////////////////
+                /////////////باید یکان چک شود ////////////////////////
+                //////////////به نظر می رسد الگوریتم ایراد دارد////
+                //////////////////////////////////////////////////////
+                String test = Remain.toString()[1].toString();
+                if ((test) == EleventhDigit)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                //اگر 1 رقمی است خودش باید با رقم یازدهم برابر باشد
+                if (Remain.toString() == EleventhDigit)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+    }
+    
     def generateLoanId(Branch branch, LoanType loanType, Date date, String loanNo) {
         def cal = Calendar.getInstance()
         cal.setTime(date)

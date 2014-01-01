@@ -13,7 +13,8 @@ hibernate {
 environments {
     development {
         dataSource {
-
+            logSql=false
+            formatSql=true
             dbCreate = "update" // one of 'create', '   create-drop', 'update', 'validate', ''
 //            url = "jdbc:h2:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
 //            url = "jdbc:mysql://localhost/refah?useUnicode=true&characterEncoding=UTF-8"
@@ -34,7 +35,7 @@ environments {
 //            }
             username = "sa"
             password = "Salam123"
-            url = "jdbc:sqlserver://192.168.47.165:1433;databaseName=CashDB"
+            url = "jdbc:sqlserver://192.168.47.166:1433;databaseName=CashDB"
 
             driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
             dialect = "org.hibernate.dialect.SQLServerDialect"

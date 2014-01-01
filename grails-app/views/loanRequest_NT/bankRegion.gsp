@@ -19,7 +19,6 @@
         <rg:ilike name='melliCode'/>
     </rg:nest>
     <rg:eq hidden='true' name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
-    <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
     <rg:nest name="loanRequest_nt">
         <rg:nest name="branch">
             <rg:nest name="branchHead">
@@ -34,8 +33,13 @@
     <rg:grid domainClass="${cashmanagement.LoanRequestNT_BankRegion}"
              showCommand="false"
              firstColumnWidth="110"
-             maxColumns="9"
-             commands="${[[controller:'loanRequest_NT', action:'showRequestDetails',param:'bankRegion=#id#', icon: 'magnifier',title:message(code:'show-details')],[handler: 'reject(#id#)', icon: 'cancel',title:message(code:"reject")], [handler: 'accept(#id#)', icon: 'tick',title:message(code:"confirm")]]}">
+             maxColumns="9">
+        <rg:commands>
+            <rg:command controller="loanRequest_NT" action="showRequestDetails" param='bankRegion=#id#' icon="magnifier" title="${message(code:'show-details')}"/>
+            <rg:command handler="redo(#id#)" icon="arrow_redo" title="${message(code:"redo-branch-head")}"/>
+            <rg:command handler='reject(#id#)' icon='cancel' title="${message(code:"reject")}"/>
+            <rg:command handler='accept(#id#)' icon='tick' title="${message(code:"confirm")}"/>
+        </rg:commands>
         <rg:criteria>
             <rg:eq name="loanReqStatus" value="${cashmanagement.LoanRequest_NT.Pending}"/>
             <rg:nest name="loanRequest_nt">
@@ -285,6 +289,17 @@
             })
 
 
+        }
+        function redo(id){
+            if(confirm('${message(code:'are.you.sure.to.redo.reuqest')}')){
+                $.ajax({
+                    type:'post',
+                    url:'<g:createLink action="redoBankRegion"/>',
+                    data:{id:id}
+                }).success(function(){
+                    $("#LoanRequestNT_BankRegionGrid").trigger("reloadGrid")
+                })
+            }
         }
          function reject(id){
             $("#loanId").val(id)

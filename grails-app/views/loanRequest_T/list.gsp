@@ -30,6 +30,11 @@
     <div class="right" style="width: 50%">
         <div class="fieldcontain">
             <span class="property-label"><g:message code="assignedpermissionamountbranch"/></span>
+            <span class="property-value"><g:formatNumber number="${sumPermitAmount}" type="number"/></span>
+        </div>
+
+        <div class="fieldcontain">
+            <span class="property-label"><g:message code="assignedpermissionamountbranchCurrent"/></span>
             <span class="property-value"><g:formatNumber number="${permitAmount}" type="number"/></span>
         </div>
 
@@ -40,7 +45,7 @@
 
         <div class="fieldcontain">
             <span class="property-label"><g:message code="tpermitpermissionamountbranch"/></span>
-            <span class="property-value" id="permitAmount"><g:formatNumber number="${permitAmount - usedAmount}"
+            <span class="property-value" id="permitAmount"><g:formatNumber number="${sumPermitAmount - usedAmount}"
                                                                            type="number"/></span>
         </div>
     </div>
@@ -60,7 +65,13 @@
                 <label for="loanNo"><g:message code="loanNo"/></label>
                 <g:textField name="loanNo" required="true" value="${loanRequest_t?.loanNo?:params['loanNo']}"/>
             </div>
-
+            <div class="fieldcontain">
+                <label for="customerType"><g:message code="customerType"/></label>
+                <g:select
+                        from="${new cashmanagement.LoanRequest_T().constraints.customerType.inList}"
+                        name="customerType" valueMessagePrefix="customerType"
+                        value="${loanRequest_t?.customerType ?: params['customerType']}"/>
+            </div>
             <div class="fieldcontain">
                 <label for="name"><g:message code="loanRequest_T.name"/></label>
                 <g:textField name="name" required="true" value="${loanRequest_t?.name?:params['name']}"/>
@@ -122,7 +133,7 @@
                 <rg:filterGrid grid="LoanRequest_TPendingListGrid"/>
             </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
-                     columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                     columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'customerType'], [name: 'name'], [name: 'family'], [name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
                      firstColumnWidth="110"
                      caption="${message(code: "Pending")}"
@@ -144,7 +155,7 @@
                 <rg:filterGrid grid="LoanRequest_TConfirmListGrid"/>
             </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
-                     columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                     columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'customerType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
                      firstColumnWidth="70"
                      caption="${message(code: "Confirm")}"
@@ -166,7 +177,7 @@
                 <rg:filterGrid grid="LoanRequest_TPaidListGrid"/>
             </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
-                     columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
+                     columns="[[name: 'loanNo'], [name: 'loanIDCode'], [name: 'loanType'], [name: 'customerType'], [name: 'name'],[name:'family'],[name:'melliCode'], [name: 'loanAmount'], [name: 'requestDate']]"
                      showCommand="false"
                      firstColumnWidth="40"
                      caption="${message(code: "Paid")}"
@@ -188,7 +199,7 @@
                 <rg:filterGrid grid="LoanRequest_TRejectedListGrid"/>
             </rg:criteria>
             <rg:grid domainClass="${cashmanagement.LoanRequest_T}"
-                     columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
+                     columns="[[name: 'loanNo'], [name: 'loanType'], [name: 'customerType'], [name: 'name'], [name: 'family'],[name: 'melliCode'], [name: 'loanAmount'], [name: 'requestDate'], [name: 'rejectReason']]"
                      showCommand="false"
                      firstColumnWidth="40"
                      caption="${message(code: "Rejected")}"
