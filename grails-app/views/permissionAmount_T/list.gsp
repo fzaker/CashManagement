@@ -81,18 +81,29 @@
                 <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmountCurrent" /></span>
                 <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmountCurrent" /></span>
                 <span class="property-label-my min-growth"><g:message code="used.amount"/></span>
+                <span class="property-label-my max-growth"><g:message code="permissionAmount_T.permAmountCurrent.last" /></span>
+                <span class="property-label-my min-growth"><g:message code="used.amount.last"/></span>
             </div>
             <g:each in="${branchs}">
                 <div class="fieldcontain bank-region-percent">
                     <g:set var="permissionAmount"
                            value="${cashmanagement.PermissionAmount_T.findByBranchAndPermissionDate(it, resultParm.date)}"/>
                     <g:set var="usedAmount"
-                           value="${cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatus(it, resultParm.date, LoanRequest_T.Confirm).sum {it.loanAmount} ?: 0}"/>
+                           value="${cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateGreaterThanEqualsAndLoanRequestStatusInList(it, resultParm.date, [LoanRequest_T.Confirm,LoanRequest_T.Paid]).sum {it.loanAmount} ?: 0}"/>
+                    <g:set var="permissionAmounts"
+                           value="${cashmanagement.PermissionAmount_T.findAllByBranchAndPermissionDateLessThan(it, resultParm.date).sort {it.permissionDate}}"/>
+                    <g:set var="permissionAmountLast"
+                           value="${permissionAmounts?permissionAmounts.last():null}"/>
+                    <g:set var="usedAmountLast"
+                           value="${cashmanagement.LoanRequest_T.findAllByBranchAndRequestDateLessThanAndRequestDateGreaterThanEqualsAndLoanRequestStatusInList(it, resultParm.date,(permissionAmountLast?.permissionDate)?:new Date(), [LoanRequest_T.Confirm,LoanRequest_T.Paid]).sum {it.loanAmount} ?: 0}"/>
                     <span class="property-value-my branch-head-name">${it}</span>
                     <g:textField class="max-growth branchPermission" name="branch_${it.id}"
                            value="${formatNumber([number: permissionAmount?.permAmount])}"></g:textField>
                     <span class="property-value-my max-growth"><g:formatNumber number="${permissionAmount?.permAmount}" type="number"/></span>
                     <span class="property-value-my min-growth"><g:formatNumber number="${usedAmount}" type="number"/></span>
+
+                    <span class="property-value-my max-growth"><g:formatNumber number="${permissionAmountLast?.permAmount?:0}" type="number"/></span>
+                    <span class="property-value-my min-growth"><g:formatNumber number="${usedAmountLast}" type="number"/></span>
 
                 </div>
             </g:each>

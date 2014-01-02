@@ -684,7 +684,7 @@ FROM         (SELECT     SUM(dbo.gltransaction.gl_amount * dbo.glcode.gl_flag) A
 //            order("date", "desc")
 //        }
         def sql = new Sql(sessionFactory.currentSession.connection())
-        def amts = sql.rows("select sum(amount) as amt, date from vosoolit inner join branch on vosoolit  .branch_code=branch.branch_code where branch.branch_head_id=:bhid group by date order by date desc", [bhid: bh?.id])
+        def amts = sql.rows("select sum(amount) as amt, date from vosoolit inner join branch on vosoolit.branch_code=branch.branch_code where branch.branch_head_id=:bhid group by date order by date desc", [bhid: bh?.id])
         def lastAmt = amts.find() ?: [:]
         def prevAmt = amts.findAll { it.date != lastAmt.date }.sum { it.amt } ?: 0
         def amt = lastAmt.amt ?: 0
