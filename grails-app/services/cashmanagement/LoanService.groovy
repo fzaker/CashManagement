@@ -89,7 +89,7 @@ class LoanService {
                     SeventhDigit + eighthDigit + NinethDigit +
                     tenthDigit;
             //باقیمانده مرحله قبل به عدد 11
-            def Remain = SumTenDigits - ((SumTenDigits / 11) * 11);
+            def Remain = SumTenDigits %11
             if (Remain.toString().length() == 2)
             {
                 //اگر 2 رقمی است دهگانش باید با رقم یازدهم یکی باشد

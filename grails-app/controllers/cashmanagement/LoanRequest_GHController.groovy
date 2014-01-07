@@ -22,7 +22,7 @@ class LoanRequest_GHController {
         def branch = principalService.branch
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
-        def permitAmounts = PermissionAmount_GH.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"])
+        def permitAmounts = PermissionAmount_GH.findAllByBranch(branch, [ sort: "permissionDate", order: "desc"])
         def permitAmount = permitAmounts.find() ?: new PermissionAmount_GH()
         def usedAmountBranch = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatusInList(branch, [LoanRequest_GH.Confirm, LoanRequest_GH.Paid]).sum { it.loanAmount } ?: 0
         def paidAmount = cashmanagement.LoanRequest_GH.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_GH.Paid).sum { it.loanAmount } ?: 0

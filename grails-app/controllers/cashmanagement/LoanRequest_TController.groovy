@@ -23,7 +23,7 @@ class LoanRequest_TController {
         def branch = principalService.branch
 //        def year = new JalaliCalendar().year
 //        def startDate = new JalaliCalendar(year, 1, 1).toJavaUtilGregorianCalendar().getTime()
-        def permitAmounts = PermissionAmount_T.findAllByBranch(branch, [max: 1, sort: "permissionDate", order: "desc"])
+        def permitAmounts = PermissionAmount_T.findAllByBranch(branch, [sort: "permissionDate", order: "desc"])
         def permitAmount = permitAmounts.find()?: new PermissionAmount_T()
         def usedAmountBranch = cashmanagement.LoanRequest_T.findAllByBranchAndLoanRequestStatusInList(branch, [LoanRequest_T.Confirm, LoanRequest_T.Paid]).sum { it.loanAmount } ?: 0
         def paidAmount = cashmanagement.LoanRequest_T.findAllByBranchAndLoanRequestStatus(branch, LoanRequest_T.Paid).sum { it.loanAmount } ?: 0

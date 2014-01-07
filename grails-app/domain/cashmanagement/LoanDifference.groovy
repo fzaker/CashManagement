@@ -1,6 +1,6 @@
 package cashmanagement
 
-class LoanDifference {
+class LoanDifference implements Serializable {
     Integer branchCode
     String acctNo
     String firstName
@@ -11,7 +11,7 @@ class LoanDifference {
 
     static mapping = {
         table 'vwloan_difference'
-        id column: 'ACC_No', insertable: false, updateable: false
+        id composite: ['branchCode', 'acctNo', 'melliCode', 'openDate', 'balance'], insertable: false, updateable: false
         version(false)
         branchCode column: 'BranchCode'
         acctNo column: 'ACC_No', insertable: false, updateable: false
